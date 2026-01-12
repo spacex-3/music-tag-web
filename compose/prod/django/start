@@ -1,10 +1,17 @@
 #!/bin/bash
 
+# Symlink persistence DB
+ln -sf /app/data/db.sqlite3 /app/db.sqlite3
+
 set -o errexit
 set -o pipefail
 set -o nounset
 
 
 python manage.py migrate --run-syncdb
-gunicorn -w 2 -b 0.0.0.0:8001 django_vue_cli.wsgi:application --timeout 120 --worker-class=gevent
-#python manage.py runserver 0.0.0.0:8001
+
+# Seed Periodic Task
+python manage.py shell -c "from django_celery_beat.models import PeriodicTask, IntervalSchedule; import json; schedule, _ = IntervalSchedule.objects.get_or_create(every=1, period=IntervalSchedule.HOURS); PeriodicTask.objects.update_or_create(name='auto_scrape_new_files', defaults={'interval': schedule, 'task': 'applications.task.tasks.batch_auto_tag_task', 'kwargs': json.dumps({'batch': 'scheduled', 'source_list': ['netease'], 'select_mode': 'strict_album', 'overwrite_policy': 'overwrite_missing', 'skip_scraped': True}), 'enabled': True})"
+
+# Run insecure server to serve static files without Nginx
+python manage.py runserver 0.0.0.0:8001 --insecure

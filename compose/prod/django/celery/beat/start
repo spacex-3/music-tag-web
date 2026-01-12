@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Symlink persistence DB
+ln -sf /app/data/db.sqlite3 /app/db.sqlite3
+
 set -o errexit
 set -o nounset
 
