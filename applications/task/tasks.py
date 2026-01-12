@@ -447,17 +447,23 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
 
                             # Overwrite Policy Logic
                             if overwrite_policy == 'overwrite_missing':
+                                for key in ['title', 'artist', 'album', 'year']:
+                                    try:
+                                        # Check if tag exists and has a value
+                                        if f[key].value:
+                                            # If exists, remove from updates (preserve original)
+                                            # 'name' maps to 'title', so we pop 'name' if title exists
+                                            if key == 'title':
+                                                matched_song.pop('name', None)
+                                            matched_song.pop(key, None)
+                                    except Exception:
+                                        # Tag doesn't exist or has no value - safe to overwrite
+                                        pass
+                                
                                 try:
-                                    if f['title'].value: matched_song.pop('name', None)
-                                    
-                                    if f['title'].value: matched_song.pop('title', None)
-                                    if f['artist'].value: matched_song.pop('artist', None)
-                                    if f['album'].value: matched_song.pop('album', None)
-                                    if f['year'].value: matched_song.pop('year', None)
-                                    # Album img checking is complex, assume if we have artwork we skip
                                     if f['artwork'].value: matched_song.pop('album_img', None)
-                                except Exception as e:
-                                    log(f"Overwrite check error: {e}")
+                                except Exception:
+                                    pass
 
                             save_music(f, matched_song, False)
                             
