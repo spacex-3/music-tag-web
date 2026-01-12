@@ -10,14 +10,31 @@
             </span>
         </div>
         <div style="display: flex;justify-content: center;align-items: center;">
+            <span v-if="scheduleCountdown" style="color: #63656E; font-size: 12px; margin-right: 15px;">
+                下次运行: {{ scheduleCountdown }}
+            </span>
+            <bk-button :text="true" title="配置网易 Cookies" @click="openCookieConfig" style="color: #63656E; margin-right: 20px;">
+                <bk-icon type="cog"></bk-icon> 配置 Cookies
+            </bk-button>
             <bk-button :text="true" title="定时刮削" @click="openSchedule" style="color: #63656E; margin-right: 20px;">
                 <bk-icon type="clock"></bk-icon> 定时刮削
             </bk-button>
             <bk-button :text="true" title="刮削记录" @click="openHistory" style="color: #63656E;">
-                <bk-icon type="unordered-list"></bk-icon> 历史记录
+                <bk-icon type="list"></bk-icon> 历史记录
             </bk-button>
         </div>
 
+
+
+        <!-- Netease Cookie Config Dialog -->
+        <bk-dialog v-model="cookieVisible"
+            theme="primary"
+            :mask-close="false"
+            title="更新网易云 Cookies"
+            @confirm="handleUpdateCookies">
+            <p style="margin-bottom: 10px;">粘贴完整的 Cookie 字符串 (key=value; key2=value2) 或 JSON 格式。</p>
+            <bk-input type="textarea" :rows="5" v-model="cookieStr" placeholder="MUSIC_U=...; __csrf=..."></bk-input>
+        </bk-dialog>
     </div>
 </template>
 
@@ -31,7 +48,13 @@
                 logout_url: 'https://github.com/xhongc/music-tag-web',
                 pageTitle: '测试',
                 userData: {},
+                scheduleCountdown: '',
+                timer: null,
+                pollTimer: null,
+                scheduleConfig: {},
                 msgList: [],
+                cookieVisible: false,
+                cookieStr: '',
                 user: {
                     list: [
                         '关于作者'
@@ -54,9 +77,110 @@
         created() {
             this.loginUser()
             this.fetchRecord()
+            this.initSchedulePolling()
+        },
+
+        watch: {
+            getShowSchedule(val) {
+                // When dialog closes (val becomes false), refresh the schedule
+                // because user might have updated the settings.
+                if (!val) {
+                    this.fetchSchedule()
+                }
+            }
+        },
+        destroyed() {
+            if (this.timer) clearInterval(this.timer)
+            if (this.pollTimer) clearInterval(this.pollTimer)
         },
         methods: {
+            updateCountdown() {
+                const config = this.scheduleConfig
+                
+                // Use last_run_at if available, otherwise use date_changed (creation/update time)
+                const anchorTime = config.last_run_at || config.date_changed
+                if (!anchorTime) {
+                     this.scheduleCountdown = '准备中...' 
+                     return
+                }
+
+                const lastRun = new Date(anchorTime).getTime()
+                let intervalMs = 0
+                if (config.interval_unit === 'minutes') {
+                    intervalMs = config.interval_hours * 60 * 1000
+                } else {
+                    // Default to hours
+                    intervalMs = config.interval_hours * 60 * 60 * 1000
+                }
+                let nextRun = lastRun + intervalMs
+                const now = new Date().getTime()
+                
+                let diff = nextRun - now
+                
+                // If diff is negative (overdue), calculate the NEXT future run time 
+                // by adding intervals until it's future.
+                if (diff <= 0) {
+                   const missedIntervals = Math.ceil(Math.abs(diff) / intervalMs)
+                   // If diff is exactly 0 or multiple, add 1 more to be safe? 
+                   // Usually Math.ceil on abs helps. 
+                   // Example: diff = -100, interval = 1000. abs/int = 0.1 -> ceil = 1. next = last + 1*1000.
+                   // diff = -1100. abs/int = 1.1 -> ceil = 2. next = last + 2*1000.
+                   // However, missedIntervals might start from 0 if just slightly past.
+                   // We want nextRun to be > now.
+                   
+                   // Simplest: just add intervalMs until > now (avoid loop for large diffs using math)
+                   // nextRun_future = lastRun + (floor((now - lastRun) / interval) + 1) * interval
+                   const intervalsPassed = Math.floor((now - lastRun) / intervalMs) + 1
+                   nextRun = lastRun + (intervalsPassed * intervalMs)
+                   diff = nextRun - now
+                }
+
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+                
+                this.scheduleCountdown = `${hours}h ${minutes}m ${seconds}s`
+            },
+            startTicker() {
+                if (this.timer) clearInterval(this.timer)
+                this.updateCountdown()
+                this.timer = setInterval(this.updateCountdown, 1000)
+            },
+            fetchSchedule() {
+                this.$api.Task.getScheduleConfig().then((res) => {
+                    if (res.result) {
+                        this.scheduleConfig = res.data
+                        // Even if disabled, we update config so the watcher/timer sees it.
+                        this.updateCountdown() 
+                    }
+                })
+            },
+            initSchedulePolling() {
+                 this.fetchSchedule()
+                 this.startTicker()
+                 // Poll server every 30s to check for 'last_run_at' updates
+                 if (this.pollTimer) clearInterval(this.pollTimer)
+                 this.pollTimer = setInterval(this.fetchSchedule, 30000)
+            },
             changeTitle() {
+            },
+            openCookieConfig() {
+                this.cookieVisible = true
+            },
+            handleUpdateCookies() {
+                if (!this.cookieStr) {
+                    this.$cwMessage('Cookies 不能为空', 'error')
+                    return
+                }
+                this.$api.Task.updateCookies({ cookies: this.cookieStr }).then((res) => {
+                    if (res.result) {
+                        this.$cwMessage('Cookies 更新成功', 'success')
+                        this.cookieStr = '' 
+                        this.cookieVisible = false
+                    } else {
+                        this.$cwMessage('Cookies 更新失败: ' + res.message, 'error')
+                    }
+                })
             },
             handleRedirect(item) {
                 console.log(item.parent_path)

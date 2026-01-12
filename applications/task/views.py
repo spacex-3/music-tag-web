@@ -22,7 +22,7 @@ from applications.task.services.music_resource import MusicResource
 from applications.task.services.update_ids import update_music_info
 from applications.task.tasks import full_scan_folder, scan, clear_music, batch_auto_tag_task, tidy_folder_task
 from applications.utils.translation import translation_lyc_text
-from applications.task.utils import recursive_scandir
+from applications.task.utils import recursive_scandir, detect_language
 from component.drf.viewsets import GenericViewSet
 from django_vue_cli.celery_app import app as celery_app
 
@@ -249,11 +249,14 @@ class TaskViewSets(GenericViewSet):
             # Default values if not present
             config = {
                 "enabled": enabled,
-                "interval_hours": interval.every if interval.period == 'hours' else 1,
+                "interval_hours": interval.every,  # Kept key name for compatibility, but represents value
+                "interval_unit": interval.period,  # 'hours' or 'minutes'
                 "source_list": kwargs.get("source_list", ["netease"]),
                 "select_mode": kwargs.get("select_mode", "strict_album"),
                 "overwrite_policy": kwargs.get("overwrite_policy", "overwrite_all"),
-                "skip_scraped": kwargs.get("skip_scraped", True)
+                "skip_scraped": kwargs.get("skip_scraped", True),
+                "last_run_at": task.last_run_at,
+                "date_changed": task.date_changed
             }
             return self.success_response(data=config)
         except PeriodicTask.DoesNotExist:
@@ -261,6 +264,7 @@ class TaskViewSets(GenericViewSet):
             return self.success_response(data={
                 "enabled": False,
                 "interval_hours": 1,
+                "interval_unit": "hours",
                 "source_list": ["netease"],
                 "select_mode": "strict_album",
                 "overwrite_policy": "overwrite_all",
@@ -271,12 +275,17 @@ class TaskViewSets(GenericViewSet):
     def update_schedule_config(self, request):
         data = request.data
         enabled = data.get("enabled", False)
-        interval_hours = int(data.get("interval_hours", 1))
+        interval_value = int(data.get("interval_hours", 1)) # Value
+        interval_unit = data.get("interval_unit", "hours") # 'hours' or 'minutes'
+        
+        period = IntervalSchedule.HOURS
+        if interval_unit == "minutes":
+            period = IntervalSchedule.MINUTES
         
         # Schedule
         schedule, _ = IntervalSchedule.objects.get_or_create(
-            every=interval_hours,
-            period=IntervalSchedule.HOURS,
+            every=interval_value,
+            period=period,
         )
         
         # Task Arguments - Using a special batch ID "scheduled"
@@ -414,7 +423,18 @@ class TaskViewSets(GenericViewSet):
             raw_lyc_list.append(line)
             clean_lyc_list.append(clean_line)
         clean_lyc_str = "\n".join(clean_lyc_list)
-        results = translation_lyc_text(clean_lyc_str)
+
+        # Smart Translation Logic
+        try:
+             # Assume Chinese if detection fails or is ambiguous (fallback)
+            lang = detect_language(clean_lyc_str)
+            target_lang = "en" if lang == "中文" else "zh-CHS"
+            print(f"Lyrics Language: {lang}, Translating to: {target_lang}")
+        except Exception as e:
+            print(f"Language detection failed: {e}")
+            target_lang = "zh-CHS"
+
+        results = translation_lyc_text(clean_lyc_str, to_language=target_lang)
         new_lyc = []
         results_list = results.split("\n")
         for index, result in enumerate(results_list):

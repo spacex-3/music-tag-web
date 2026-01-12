@@ -17,7 +17,7 @@ from applications.task.services.music_ids import MusicIDS
 from applications.task.services.music_resource import MusicResource
 from applications.task.services.scan_utils import ScanMusic, MusicInfo
 from applications.task.services.scan_utils import ScanMusic, MusicInfo
-from applications.task.utils import folder_update_time, exists_dir, match_song, match_album_song
+from applications.task.utils import folder_update_time, exists_dir, match_song, match_album_song, recursive_scandir
 from applications.task.services.update_ids import save_music
 from django_vue_cli.celery_app import app
 
@@ -264,25 +264,63 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
     def log(msg, type="info"):
         logs.append({"msg": msg, "type": type})
         print(msg)
+    
+    log(f"Batch Auto Tag Task Started with batch={batch}, source_list={source_list}")
 
-    folder_list = TaskRecord.objects.filter(batch=batch, icon="icon-folder").all()
-    for folder in folder_list:
-        data = os.scandir(folder.full_path)
+    if batch == "scheduled":
+        # Clear previous scheduled records to avoid duplication
+        TaskRecord.objects.filter(batch=batch).delete()
+        
+        # Get all configured music folders
+        # Get all configured music folders
+        dirs = Folder.objects.all()
+        scan_dirs = [d.path for d in dirs if os.path.exists(d.path)]
+        
+        # Fallback if no folders are configured in DB (e.g. fresh install)
+        if not scan_dirs:
+            default_media = settings.MEDIA_ROOT
+            if os.path.exists(default_media):
+                scan_dirs.append(default_media)
+            # Also try /app/media/music as per full_scan defaults
+            default_music = os.path.join(settings.MEDIA_ROOT, "music")
+            if os.path.exists(default_music) and default_music not in scan_dirs:
+                scan_dirs.append(default_music)
+        
+        log(f"Scheduled Scan Dirs: {scan_dirs}")
+        
+        # Recursive scan
+        files = recursive_scandir(scan_dirs, ALLOW_TYPE)
+        
         bulk_set = []
-        for entry in data:
-            each = entry.name
-            file_type = each.split(".")[-1]
-            file_name = ".".join(each.split(".")[:-1])
-            if file_type not in ALLOW_TYPE:
-                continue
+        for f in files:
+            file_name = os.path.basename(f)
             bulk_set.append(TaskRecord(**{
                 "batch": batch,
-                "song_name": file_name,
-                "full_path": f"{folder.full_path}/{each}",
+                "song_name": file_name.rsplit('.', 1)[0],
+                "full_path": f,
                 "icon": "icon-music",
-
             }))
         TaskRecord.objects.bulk_create(bulk_set)
+    else:
+        # Manual Mode: User selected folders in UI (which creates TaskRecord with icon-folder)
+        folder_list = TaskRecord.objects.filter(batch=batch, icon="icon-folder").all()
+        for folder in folder_list:
+            data = os.scandir(folder.full_path)
+            bulk_set = []
+            for entry in data:
+                each = entry.name
+                file_type = each.split(".")[-1]
+                file_name = ".".join(each.split(".")[:-1])
+                if file_type not in ALLOW_TYPE:
+                    continue
+                bulk_set.append(TaskRecord(**{
+                    "batch": batch,
+                    "song_name": file_name,
+                    "full_path": f"{folder.full_path}/{each}",
+                    "icon": "icon-music",
+    
+                }))
+            TaskRecord.objects.bulk_create(bulk_set)
 
     task_list = TaskRecord.objects.filter(batch=batch).exclude(icon="icon-folder").all()
     total_tasks = len(task_list)
@@ -440,6 +478,7 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
                             "song_name": task.song_name,
                             "artist_name": task.artist_name,
                         })
+                        time.sleep(2)
                     else:
                         task.state = "failed"
                         task.save()
@@ -457,6 +496,7 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
                             "song_name": task.song_name,
                             "artist_name": task.artist_name,
                         })
+                        time.sleep(2)
             else:
                 log(f"Album not found for {folder_path}, falling back to single song match")
                 log(f"Album not found for {folder_path}, falling back to single song match")
@@ -515,9 +555,9 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
                 })
             elif s > 0:
                 success_items.append({
-                    "name": os.path.basename(task.full_path),
                     "full_path": task.full_path
                 })
+            time.sleep(2)
 
     return {
         "logs": logs,

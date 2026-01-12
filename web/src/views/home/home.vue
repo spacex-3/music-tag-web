@@ -610,11 +610,11 @@
 
                 <div style="margin-bottom: 15px; display: flex; align-items: center;">
                     <span style="width: 100px; text-align: right; margin-right: 20px;">执行间隔</span>
-                    <bk-input type="number" :min="1" style="width: 250px;" v-model="scheduleConfig.interval_hours">
-                        <template slot="append">
-                            <div class="group-text">小时</div>
-                        </template>
-                    </bk-input>
+                    <bk-input type="number" :min="1" style="width: 160px; margin-right: 10px;" v-model="scheduleConfig.interval_hours"></bk-input>
+                    <bk-select v-model="scheduleConfig.interval_unit" style="width: 80px;" :clearable="false">
+                        <bk-option id="hours" name="小时"></bk-option>
+                        <bk-option id="minutes" name="分钟"></bk-option>
+                    </bk-select>
                 </div>
 
                 <div style="margin-bottom: 15px; display: flex; align-items: center;">
@@ -678,11 +678,7 @@
                     :name="option.name">
                 </bk-option>
             </bk-select>
-            <div style="margin-top: 20px;">
-                <bk-button :theme="'warning'" @click="cookieSetting.visible = true">
-                    配置 Netease Cookies
-                </bk-button>
-            </div>
+
         </bk-dialog>
 
         <!-- Scrape Result Log Dialog -->
@@ -805,6 +801,9 @@
                         <div style="color: #666; margin-top: 4px;">{{ albumSearchResults.album_artist }}</div>
                         <div style="color: #999; font-size: 12px;">{{ albumSearchResults.year }} · {{ albumSearchResults.tracks.length }} 首</div>
                     </div>
+                    <div style="margin-left: auto;">
+                        <bk-button :theme="'success'" size="small" @click="handleAutoMatchScores">一键自动匹配</bk-button>
+                    </div>
                 </div>
                 <div v-for="(track, idx) in albumSearchResults.tracks" :key="'track-' + idx"
                     style="padding: 10px 12px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; align-items: center;"
@@ -829,14 +828,6 @@
             </div>
         </bk-dialog>
 
-        <bk-dialog v-model="cookieSetting.visible"
-            theme="primary"
-            :mask-close="false"
-            @confirm="handleUpdateCookies"
-            title="更新网易云 Cookies">
-            <p style="margin-bottom: 10px;">粘贴完整的 Cookie 字符串 (key=value; key2=value2) 或 JSON 格式。</p>
-            <bk-input v-model="cookieStr" type="textarea" :rows="5" placeholder="MUSIC_U=...; __csrf=..."></bk-input>
-        </bk-dialog>
     </div>
 </template>
 <script>
@@ -990,6 +981,7 @@
                 scheduleConfig: {
                     enabled: false,
                     interval_hours: 1,
+                    interval_unit: 'hours',
                     select_mode: 'strict_album',
                     overwrite_policy: 'overwrite_all',
                     source_list: ['netease'],
@@ -1011,9 +1003,7 @@
                         headerPosition: 'left'
                     }
                 },
-                cookieSetting: {
-                    visible: false
-                },
+
                 cookieStr: '',
                 sortedField: localStorage.getItem('sortedField') ? JSON.parse(localStorage.getItem('sortedField')) : []
             }
@@ -1511,6 +1501,123 @@
                     }
                 })
             },
+            async handleAutoMatchScores() {
+                const tracks = this.albumSearchResults.tracks
+                // treeListOne is [{ children: [...] }]
+                const root = this.treeListOne[0]
+                if (!root || !root.children) {
+                    this.$cwMessage('文件列表为空', 'warning')
+                    return
+                }
+                const files = root.children // These are the files in the current folder
+
+                const updates = []
+                const separator = this.filePath.endsWith('/') ? '' : '/'
+
+                // Matches to process
+                const matches = []
+
+                files.forEach(file => {
+                    // Try to match file -> track
+                    // 1. Match by leading number "01" -> 1
+                    if (file.children) return // Skip folders
+
+                    let fileNum = null
+                    // Match any number at start, possibly followed by space or dot
+                    const match = file.name.match(/^(\d+)/)
+                    if (match) {
+                        fileNum = parseInt(match[1], 10)
+                    }
+
+                    if (fileNum !== null) {
+                        const track = tracks.find(t => parseInt(t.idx, 10) === fileNum)
+                        if (track) {
+                            const fullPath = file.full_path || (this.filePath + separator + file.name)
+                            matches.push({
+                                file: file,
+                                fullPath: fullPath,
+                                track: track
+                            })
+                        }
+                    }
+                })
+
+                if (matches.length === 0) {
+                    this.$cwMessage('未找到可匹配的曲目编号 (例如: 01 xxx.mp3)', 'warning')
+                    return
+                }
+
+                this.$bkInfo({
+                    title: `确认匹配 ${matches.length} 个文件？`,
+                    subTitle: `即将应用元数据并抓取歌词 (每首间隔 2秒 以防反爬，预计耗时 ${matches.length * 2}秒)`,
+                    confirmFn: async() => {
+                        this.isLoading = true
+                        const resource = this.resource || 'netease'
+
+                        try {
+                            for (let i = 0; i < matches.length; i++) {
+                                const m = matches[i]
+                                // Update loading text if possible (using a temporary message or verify if bkInfo closes)
+
+                                let lyrics = ''
+                                try {
+                                    const res = await this.$api.Task.fetchLyric({
+                                        'song_id': m.track.id,
+                                        'resource': resource
+                                    })
+                                    if (res.result) {
+                                        lyrics = res.data
+                                    }
+                                } catch (e) {
+                                    console.warn('Lyrics fetch failed', e)
+                                }
+
+                                updates.push({
+                                    file_full_path: m.fullPath,
+                                    title: m.track.name,
+                                    artist: m.track.artist,
+                                    album: this.albumSearchResults.album_name,
+                                    albumartist: this.albumSearchResults.album_artist,
+                                    year: this.albumSearchResults.year,
+                                    album_img: this.albumSearchResults.album_img,
+                                    tracknumber: m.track.idx,
+                                    lyrics: lyrics,
+                                    genre: '',
+                                    comment: '',
+                                    discnumber: null,
+                                    is_save_lyrics_file: true,
+                                    is_save_album_cover: true
+                                })
+
+                                // Wait 2s to be safe, except for the last one
+                                if (i < matches.length - 1) {
+                                    await new Promise(resolve => setTimeout(resolve, 2000))
+                                }
+                            }
+
+                            // Batch save
+                            const res = await this.$api.Task.updateId3({'music_id3_info': updates})
+                            this.isLoading = false
+                            if (res.result) {
+                                this.$cwMessage('批量匹配成功', 'success')
+                                this.albumSearchVisible = false
+                                this.$store.commit('setHasMsg', true)
+                                this.handleSearchFile()
+                            } else {
+                                let msg = res.message
+                                if (typeof msg === 'object') {
+                                    msg = JSON.stringify(msg)
+                                }
+                                this.$cwMessage('部分失败: ' + msg, 'error')
+                            }
+                        } catch (e) {
+                            this.isLoading = false
+                            console.error(e)
+                            this.$cwMessage('批量处理出错', 'error')
+                        }
+                    }
+                })
+            },
             handleTidy() {
                 this.$bkInfo({
                     title: '确认要整理文件夹？',
@@ -1616,24 +1723,8 @@
                         }))
                     }
                 })
-            },
-            handleUpdateCookies() {
-                if (!this.cookieStr) {
-                    this.$cwMessage('Cookies 不能为空', 'error')
-                    // Prevent closing if wanted? The dialog component might close automatically on confirm.
-                    return
-                }
-                this.isLoading = true
-                this.$api.Task.updateCookies({ cookies: this.cookieStr }).then((res) => {
-                    this.isLoading = false
-                    if (res.result) {
-                        this.$cwMessage('Cookies 更新成功', 'success')
-                        this.cookieStr = '' // Clear on success
-                    } else {
-                        this.$cwMessage('Cookies 更新失败: ' + res.message, 'error')
-                    }
-                })
             }
+
         }
     }
 </script>
