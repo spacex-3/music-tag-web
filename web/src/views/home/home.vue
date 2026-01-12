@@ -1711,16 +1711,22 @@
                 this.$api.Task.getRecord({ page_size: 1000 }).then(res => {
                     if (res.result) {
                         const tasks = res.data.results
-                        this.successItems = tasks.filter(t => t.state === 'success').map(t => ({
-                            name: t.song_name ? `${t.artist_name} - ${t.song_name}` : t.filename,
-                            msg: t.full_path,
-                            type: 'success'
-                        }))
-                        this.failedItems = tasks.filter(t => t.state === 'fail').map(t => ({
-                            name: t.song_name ? `${t.artist_name} - ${t.song_name}` : t.filename,
-                            msg: t.full_path,
-                            type: 'error'
-                        }))
+                        this.successItems = tasks.filter(t => t.state === 'success').map(t => {
+                            const time = t.created_at ? t.created_at.replace('T', ' ').split('.')[0] : ''
+                            return {
+                                name: t.song_name ? `${t.artist_name} - ${t.song_name}` : t.filename,
+                                msg: `${time} - ${t.full_path}`,
+                                type: 'success'
+                            }
+                        })
+                        this.failedItems = tasks.filter(t => t.state === 'fail').map(t => {
+                            const time = t.created_at ? t.created_at.replace('T', ' ').split('.')[0] : ''
+                            return {
+                                name: t.song_name ? `${t.artist_name} - ${t.song_name}` : t.filename,
+                                msg: `${time} - ${t.full_path}`,
+                                type: 'error'
+                            }
+                        })
                     }
                 })
             }

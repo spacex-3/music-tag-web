@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import os
 import shutil
 import time
@@ -466,6 +466,7 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
                                 "filename": os.path.basename(task.full_path),
                                 "song_name": task.song_name,
                                 "artist_name": task.artist_name,
+                                "created_at": datetime.now()
                             })
                         except Exception as e:
                             log(f"Save ID3 Error: {e}")
@@ -477,10 +478,11 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
                             "filename": os.path.basename(task.full_path),
                             "song_name": task.song_name,
                             "artist_name": task.artist_name,
+                            "created_at": datetime.now()
                         })
                         time.sleep(2)
                     else:
-                        task.state = "failed"
+                        task.state = "fail"
                         task.save()
                         fail_count += 1
                         log(f"Match Failed: {os.path.basename(task.full_path)}", "error")
@@ -495,6 +497,7 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
                             "filename": os.path.basename(task.full_path),
                             "song_name": task.song_name,
                             "artist_name": task.artist_name,
+                            "created_at": datetime.now()
                         })
                         time.sleep(2)
             else:
@@ -594,6 +597,7 @@ def _process_single_task(task, source_list, select_mode, log=print, overwrite_po
                 "filename": os.path.basename(task.full_path),
                 "song_name": task.song_name,
                 "artist_name": task.artist_name,
+                "created_at": datetime.now()
             })
             log(f"Success: {os.path.basename(task.full_path)}")
             break
@@ -601,7 +605,7 @@ def _process_single_task(task, source_list, select_mode, log=print, overwrite_po
              pass
 
     if not is_match:
-        task.state = "failed"
+        task.state = "fail"
         task.save()
         log(f"Failed: {os.path.basename(task.full_path)}", "error")
         parent_path = os.path.dirname(task.full_path)
@@ -611,6 +615,7 @@ def _process_single_task(task, source_list, select_mode, log=print, overwrite_po
             "filename": os.path.basename(task.full_path),
             "song_name": task.song_name,
             "artist_name": task.artist_name,
+            "created_at": datetime.now()
         })
         return 0, 1, cw
     return 1, 0, cw
