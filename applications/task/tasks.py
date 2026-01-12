@@ -347,11 +347,12 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
                         })
                         skip_count += 1
                         current_index += 1 # Update progress even if skipped
-                        self.update_state(state='PROGRESS', meta={
-                            'current': current_index,
-                            'total': total_tasks,
-                            'filename': os.path.basename(task.full_path) + " (Skipped)"
-                        })
+                        if self.request.id:
+                            self.update_state(state='PROGRESS', meta={
+                                'current': current_index,
+                                'total': total_tasks,
+                                'filename': os.path.basename(task.full_path) + " (Skipped)"
+                            })
                     else:
                         tasks_to_process.append(task)
                 tasks = tasks_to_process
@@ -411,11 +412,12 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
                 tracks = remote_album['tracks']
                 for task in tasks:
                     current_index += 1
-                    self.update_state(state='PROGRESS', meta={
-                        'current': current_index,
-                        'total': total_tasks,
-                        'filename': os.path.basename(task.full_path)
-                    })
+                    if self.request.id:
+                        self.update_state(state='PROGRESS', meta={
+                            'current': current_index,
+                            'total': total_tasks,
+                            'filename': os.path.basename(task.full_path)
+                        })
                     matched_song = match_album_song(resource, task.full_path, tracks)
                     
                     if matched_song:
@@ -505,11 +507,12 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
                 log(f"Album not found for {folder_path}, falling back to single song match")
                 for task in tasks:
                     current_index += 1
-                    self.update_state(state='PROGRESS', meta={
-                        'current': current_index,
-                        'total': total_tasks,
-                        'filename': os.path.basename(task.full_path)
-                    })
+                    if self.request.id:
+                        self.update_state(state='PROGRESS', meta={
+                            'current': current_index,
+                            'total': total_tasks,
+                            'filename': os.path.basename(task.full_path)
+                        })
                     s, f, cw = _process_single_task(task, source_list, select_mode, log, overwrite_policy)
                     success_count += s
                     fail_count += f
@@ -535,18 +538,20 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
                     "full_path": task.full_path
                 })
                 skip_count += 1
+                if self.request.id:
+                    self.update_state(state='PROGRESS', meta={
+                        'current': current_index,
+                        'total': total_tasks,
+                        'filename': os.path.basename(task.full_path) + " (Skipped)"
+                    })
+                continue
+
+            if self.request.id:
                 self.update_state(state='PROGRESS', meta={
                     'current': current_index,
                     'total': total_tasks,
-                    'filename': os.path.basename(task.full_path) + " (Skipped)"
+                    'filename': os.path.basename(task.full_path)
                 })
-                continue
-
-            self.update_state(state='PROGRESS', meta={
-                'current': current_index,
-                'total': total_tasks,
-                'filename': os.path.basename(task.full_path)
-            })
             s, f, cw = _process_single_task(task, source_list, select_mode, log, overwrite_policy)
             success_count += s
             fail_count += f
