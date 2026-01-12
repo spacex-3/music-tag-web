@@ -14,11 +14,9 @@ services:
       dockerrun: "yes"
     depends_on:
       - redis
-    # 1. Inject DB config to use /app/data/db.sqlite3 (persisted in ./data)
-    # 2. Run migrations
-    # 3. Start server
+    # Symlink default DB path to persisted volume path, then migrate and run
     command: >
-      sh -c "echo \"DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': '/app/data/db.sqlite3'}}\" > django_vue_cli/local_settings.py &&
+      sh -c "ln -sf /app/data/db.sqlite3 /app/db.sqlite3 &&
              python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8001 --insecure"
 
@@ -27,16 +25,16 @@ services:
     container_name: music_celeryworker
     environment:
       dockerrun: "yes"
-      C_FORCE_ROOT: "1" # Fix root execution error
+      C_FORCE_ROOT: "1"
     volumes:
       - ./media:/app/media:z
       - ./data:/app/data:z
     depends_on:
       - redis
     restart: always
-    # Inject DB config so celery sees the same DB as django
+    # Symlink default DB path to persisted volume path
     command: >
-      sh -c "echo \"DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': '/app/data/db.sqlite3'}}\" > django_vue_cli/local_settings.py &&
+      sh -c "ln -sf /app/data/db.sqlite3 /app/db.sqlite3 &&
              /start-celeryworker"
 
   celerybeat:
@@ -50,9 +48,9 @@ services:
     depends_on:
       - redis
     restart: always
-    # Inject DB config
+    # Symlink default DB path to persisted volume path
     command: >
-      sh -c "echo \"DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': '/app/data/db.sqlite3'}}\" > django_vue_cli/local_settings.py &&
+      sh -c "ln -sf /app/data/db.sqlite3 /app/db.sqlite3 &&
              /start-celerybeat"
 
   redis:
