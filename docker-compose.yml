@@ -1,0 +1,84 @@
+version: '3'
+
+services:
+  django:
+    image: ghcr.io/spacex-3/music-tag-web:dev_1.0
+    container_name: music-tag-web
+    expose:
+      - "8001"
+    volumes:
+      - ./media:/app/media:z
+      - ./data:/app/data:z
+    restart: always
+    environment:
+      dockerrun: "yes"
+      # If using MySQL (default in local.yml)
+      MYSQL_DATABASE: music3
+      MYSQL_ROOT_PASSWORD: music_tag_web_PassWord
+      # If you want to use SQLite, you might need to adjust settings or env vars if supported
+    depends_on:
+      - redis
+      - db
+    command: /start
+
+  celeryworker:
+    image: ghcr.io/spacex-3/music-tag-web:dev_1.0
+    container_name: music_celeryworker
+    environment:
+      dockerrun: "yes"
+      MYSQL_DATABASE: music3
+      MYSQL_ROOT_PASSWORD: music_tag_web_PassWord
+    volumes:
+      - ./media:/app/media:z
+      - ./data:/app/data:z
+    depends_on:
+      - redis
+      - db
+    restart: always
+    command: /start-celeryworker
+
+  celerybeat:
+    image: ghcr.io/spacex-3/music-tag-web:dev_1.0
+    container_name: music_celerybeat
+    environment:
+      dockerrun: "yes"
+      MYSQL_DATABASE: music3
+      MYSQL_ROOT_PASSWORD: music_tag_web_PassWord
+    volumes:
+      - ./media:/app/media:z
+      - ./data:/app/data:z
+    depends_on:
+      - redis
+      - db
+    restart: always
+    command: /start-celerybeat
+
+  redis:
+    image: redis:6-alpine
+    restart: always
+    container_name: music_redis
+
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_DATABASE: music3
+      MYSQL_ROOT_PASSWORD: music_tag_web_PassWord
+    volumes:
+      - db_data:/var/lib/mysql
+
+  nginx:
+    image: nginx:alpine
+    restart: always
+    container_name: music_nginx
+    ports:
+      - "8001:80"
+    depends_on:
+      - django
+    volumes:
+      # Mount the updated nginx.conf
+      - ./compose/prod/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./media:/app/media:ro
+
+volumes:
+  db_data:
