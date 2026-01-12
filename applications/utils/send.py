@@ -1,10 +1,13 @@
 import requests
+import urllib3
 from time import time
 from json import loads
 from random import randint
 from .public import readFile, getCookie
 from .encrypt import weEncrypt, linuxEncrypt, eEncrypt
 
+# Suppress InsecureRequestWarning
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 userAgents = [
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
@@ -88,7 +91,8 @@ class send:
                                      data=self.encrypt(self.data),
                                      headers=self.headers,
                                      cookies=self.__cookies(cookie),
-                                     timeout=self.timeout)
+                                     timeout=self.timeout,
+                                     verify=False)
         return response
 
     def GET(self, url, cookie={}):
@@ -97,5 +101,6 @@ class send:
         response = self.session.get(self.__url(url),
                                     headers=self.headers,
                                     cookies=self.__cookies(cookie),
-                                    timeout=self.timeout)
+                                    timeout=self.timeout,
+                                    verify=False)
         return response

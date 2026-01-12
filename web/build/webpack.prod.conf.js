@@ -27,15 +27,17 @@ const webpackConfig = merge(baseWebpackConfig, {
         path: config.build.assetsRoot,
         // filename: utils.assetsPath('js/[name].js'),
         // chunkFilename: utils.assetsPath('js/[id].js')
-        filename: utils.assetsPath('js/[name].[chunkhash].js'),
-        chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+        filename: utils.assetsPath('js/[name].js'),
+        chunkFilename: utils.assetsPath('js/[id].js'),
+        /* filename: utils.assetsPath('js/[name].[chunkhash].js'),
+        chunkFilename: utils.assetsPath('js/[id].[chunkhash].js'), */
     },
     plugins: [
         // http://vuejs.github.io/vue-loader/en/workflow/production.html
         new webpack.DefinePlugin({
             'process.env': env
         }),
-        new UglifyJsPlugin({
+        /* new UglifyJsPlugin({
             uglifyOptions: {
                 compress: {
                     warnings: false
@@ -44,7 +46,7 @@ const webpackConfig = merge(baseWebpackConfig, {
             sourceMap: config.build.productionSourceMap,
             parallel: true,
             cache: true
-        }),
+        }), */
         // extract css into its own file
         new ExtractTextPlugin({
             filename: utils.assetsPath('css/[name].css'), // chace
@@ -57,11 +59,11 @@ const webpackConfig = merge(baseWebpackConfig, {
         }),
         // Compress extracted CSS. We are using this plugin so that possible
         // duplicated CSS from different components can be deduped.
-        new OptimizeCSSPlugin({
+        /* new OptimizeCSSPlugin({
             cssProcessorOptions: config.build.productionSourceMap
-                ? {safe: true, map: {inline: false}, autoprefixer: {remove: false} }
-                : {safe: true}
-        }),
+                ? { safe: true, map: { inline: false }, autoprefixer: { remove: false } }
+                : { safe: true }
+        }), */
         // generate dist index.html with correct asset hash for caching.
         // you can customize output by editing /index.html
         // see https://github.com/ampedandwired/html-webpack-plugin

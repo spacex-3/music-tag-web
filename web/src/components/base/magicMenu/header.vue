@@ -10,52 +10,12 @@
             </span>
         </div>
         <div style="display: flex;justify-content: center;align-items: center;">
-            <bk-popover theme="light navigation-message" :arrow="false" offset="-150, 5" trigger="mouseenter"
-                :tippy-options="{ 'hideOnClick': false }">
-                <div class="header-mind">
-                    <bk-badge class="" :theme="'danger'" :max="99" :val="msgList.length" :visible="msgList.length > 0">
-                    <svg style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;"
-                        viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M32,56c-1.3,0-2.6-0.6-3.4-1.6h-4.5c0.5,1.5,1.4,2.7,2.6,3.7c3.1,2.5,7.5,2.5,10.6,0c1.2-1,2.1-2.3,2.6-3.7h-4.5C34.6,55.4,33.3,56,32,56z"></path>
-                        <path
-                            d="M53.8,49.1L50,41.5V28c0-8.4-5.8-15.7-14-17.6V8c0-2.2-1.8-4-4-4s-4,1.8-4,4v2.4c-8.2,1.9-14,9.2-14,17.6v13.5l-3.8,7.6c-0.3,0.6-0.3,1.3,0.1,1.9c0.4,0.6,1,1,1.7,1h40c0.7,0,1.3-0.4,1.7-1C54,50.4,54.1,49.7,53.8,49.1z"></path>
-                    </svg>
-                    </bk-badge>
-                </div>
-                <template slot="content">
-                    <div class="monitor-navigation-message">
-                        <h5 class="message-title">消息中心</h5>
-                        <ul class="message-list">
-                            <li class="message-list-item" v-for="(item,index) in msgList" :key="index"
-                                @click="handleRedirect(item)">
-                                <span class="item-message">{{ item.message }}</span>
-                                <span class="item-date">{{ item.created_at }}</span>
-                            </li>
-                        </ul>
-                    </div>
-                </template>
-            </bk-popover>
-            <bk-popover theme="light navigation-message" :arrow="false" placement="bottom"
-                :tippy-options="{ 'hideOnClick': false }">
-                <div class="header-user">
-                    {{ userData.username }}
-                    <i class="bk-icon icon-down-shape"></i>
-                </div>
-                <template slot="content">
-                    <ul class="monitor-navigation-admin">
-                        <li class="nav-item" @click="handleUserListClic2k">
-                            后台管理{{refresh}}
-                        </li>
-                        <li class="nav-item" @click="handleUserListClic3k">
-                            使用手册
-                        </li>
-                        <li class="nav-item" @click="handleUserListClick">
-                            关于作者
-                        </li>
-                    </ul>
-                </template>
-            </bk-popover>
+            <bk-button :text="true" title="定时刮削" @click="openSchedule" style="color: #63656E; margin-right: 20px;">
+                <bk-icon type="clock"></bk-icon> 定时刮削
+            </bk-button>
+            <bk-button :text="true" title="刮削记录" @click="openHistory" style="color: #63656E;">
+                <bk-icon type="unordered-list"></bk-icon> 历史记录
+            </bk-button>
         </div>
 
     </div>
@@ -142,6 +102,12 @@
                         this.msgList = res.data.items
                     }
                 })
+            },
+            openHistory() {
+                this.$store.commit('setShowHistory', true)
+            },
+            openSchedule() {
+                this.$store.commit('setShowSchedule', true)
             },
         }
     }

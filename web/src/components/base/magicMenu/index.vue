@@ -5,9 +5,7 @@
         <template slot="header">
             <top-header></top-header>
         </template>
-        <template slot="side-icon" class="monitor-logo">
-            <img class="monitor-logo-icon" src="/static/dist/img/favicon_64.ico">
-        </template>
+        <!-- Logo removed -->
         <container>
         </container>
     </bk-navigation>
@@ -15,7 +13,7 @@
 
 <script>
     import topHeader from './header.vue'
-    import leftMenu from './leftMenu.vue'
+    import leftMenu from './LeftMenu.vue'
     import container from './container.vue'
 
     export default {
@@ -26,7 +24,7 @@
         },
         data() {
             return {
-                title: '音乐标签Web版',
+                title: 'tag me!',
                 headerTitle: '',
                 imgSrc: '',
             }

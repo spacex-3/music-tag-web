@@ -18,9 +18,23 @@ def saveFile(path, content, mode="w"):
 
 
 def getCookie():
-    return loads(
-        readFile("read", "cookies").replace("'", '"').encode()
-    )
+    try:
+        content = readFile("read", "cookies")
+        if not content:
+            return {}
+        return loads(content.replace("'", '"'))
+    except Exception:
+        return {}
+
+
+def saveCookie(cookie_dict):
+    try:
+        content = str(cookie_dict).replace("'", '"')
+        saveFile("cookies", content)
+        return True
+    except Exception as e:
+        print(f"Error saving cookies: {e}")
+        return False
 
 
 def request_query(r, *args):

@@ -3,6 +3,8 @@ import copy
 import copy
 import os
 import time
+import json
+from django_celery_beat.models import PeriodicTask, IntervalSchedule
 
 from django.utils.decorators import method_decorator
 from django.views.decorators.gzip import gzip_page
@@ -20,6 +22,7 @@ from applications.task.services.music_resource import MusicResource
 from applications.task.services.update_ids import update_music_info
 from applications.task.tasks import full_scan_folder, scan, clear_music, batch_auto_tag_task, tidy_folder_task
 from applications.utils.translation import translation_lyc_text
+from applications.task.utils import recursive_scandir
 from component.drf.viewsets import GenericViewSet
 from django_vue_cli.celery_app import app as celery_app
 
@@ -195,18 +198,180 @@ class TaskViewSets(GenericViewSet):
         source_list = music_info.get("source_list", [])
         timestamp = str(int(time.time() * 1000))
         bulk_set = []
+        input_paths = []
         for each in select_data:
-            name = each.get("name")
+             if each.get("icon") == "icon-folder":
+                 input_paths.append(f"{full_path}/{each.get('name')}")
+             else:
+                 input_paths.append(f"{full_path}/{each.get('name')}")
+        
+        # Recursively find all music files
+        all_music_files = recursive_scandir(input_paths)
+        
+        for music_path in all_music_files:
+            name = os.path.basename(music_path)
             song_name = ".".join(name.split(".")[:-1])
             bulk_set.append(TaskRecord(**{
                 "song_name": song_name,
-                "full_path": f"{full_path}/{name}",
-                "icon": each.get("icon"),
+                "full_path": music_path,
+                "icon": "icon-file", # Treat all as files now
                 "batch": timestamp
             }))
         TaskRecord.objects.bulk_create(bulk_set, batch_size=500)
-        batch_auto_tag_task(timestamp, source_list, select_mode)
+        overwrite_policy = music_info.get("overwrite_policy", "overwrite_all")
+        skip_scraped = music_info.get("skip_scraped", False)
+        # Using apply_async to pass kwargs explicitly or just ensuring order is correct
+        task = batch_auto_tag_task.delay(timestamp, source_list, select_mode, overwrite_policy, skip_scraped)
+        return self.success_response(data={"task_id": task.id})
+
+    @action(methods=['POST'], detail=False)
+    def upload_image(self, request, *args, **kwargs):
+        image = request.FILES.get('upload_file')
+        if not image:
+            return self.failure_response(msg="没有上传图片")
+        
+        # Save image
+        save_path = os.path.join(settings.BASE_DIR, "static", "dist", "img", image.name)
+        with open(save_path, 'wb+') as destination:
+            for chunk in image.chunks():
+                destination.write(chunk)
+                
+        return self.success_response(data={"url": f"/static/dist/img/{image.name}"})
+
+    @action(methods=['GET'], detail=False)
+    def get_schedule_config(self, request):
+        try:
+            task = PeriodicTask.objects.get(name='auto_scrape_new_files')
+            interval = task.interval
+            enabled = task.enabled
+            # Parse kwargs to get current config
+            kwargs = json.loads(task.kwargs)
+            # Default values if not present
+            config = {
+                "enabled": enabled,
+                "interval_hours": interval.every if interval.period == 'hours' else 1,
+                "source_list": kwargs.get("source_list", ["netease"]),
+                "select_mode": kwargs.get("select_mode", "strict_album"),
+                "overwrite_policy": kwargs.get("overwrite_policy", "overwrite_all"),
+                "skip_scraped": kwargs.get("skip_scraped", True)
+            }
+            return self.success_response(data=config)
+        except PeriodicTask.DoesNotExist:
+            # Return default config
+            return self.success_response(data={
+                "enabled": False,
+                "interval_hours": 1,
+                "source_list": ["netease"],
+                "select_mode": "strict_album",
+                "overwrite_policy": "overwrite_all",
+                "skip_scraped": True
+            })
+
+    @action(methods=['POST'], detail=False)
+    def update_schedule_config(self, request):
+        data = request.data
+        enabled = data.get("enabled", False)
+        interval_hours = int(data.get("interval_hours", 1))
+        
+        # Schedule
+        schedule, _ = IntervalSchedule.objects.get_or_create(
+            every=interval_hours,
+            period=IntervalSchedule.HOURS,
+        )
+        
+        # Task Arguments - Using a special batch ID "scheduled"
+        kwargs = {
+            "batch": "scheduled", 
+            "source_list": data.get("source_list", ["netease"]),
+            "select_mode": data.get("select_mode", "strict_album"),
+            "overwrite_policy": data.get("overwrite_policy", "overwrite_all"),
+            "skip_scraped": data.get("skip_scraped", True)
+        }
+        
+        PeriodicTask.objects.update_or_create(
+            name='auto_scrape_new_files',
+            defaults={
+                'interval': schedule,
+                'task': 'applications.task.tasks.batch_auto_tag_task',
+                'kwargs': json.dumps(kwargs),
+                'enabled': enabled
+            }
+        )
         return self.success_response()
+
+    @action(methods=['GET'], detail=False)
+    def task_status(self, request, *args, **kwargs):
+        task_id = request.query_params.get('task_id')
+        if not task_id:
+            return self.failure_response(msg="task_id is required")
+        
+        task = celery_app.AsyncResult(task_id)
+        if task.state == 'PENDING':
+            response = {
+                'state': task.state,
+                'current': 0,
+                'total': 1,
+                'status': 'Pending...'
+            }
+        elif task.state == 'PROGRESS':
+            response = {
+                'state': task.state,
+                'current': task.info.get('current', 0),
+                'total': task.info.get('total', 1),
+                'filename': task.info.get('filename', ''),
+                'status': 'In Progress...'
+            }
+        elif task.state == 'SUCCESS':
+            response = {
+                'state': task.state,
+                'result': task.result,  # This will contain our structured result (logs, etc.)
+                'status': 'Success'
+            }
+        else:
+            # FAILURE or other states
+            response = {
+                'state': task.state,
+                'result': str(task.info),
+                'status': str(task.state)
+            }
+        return self.success_response(data=response)
+
+    @action(methods=['POST'], detail=False)
+    def search_albums(self, request, *args, **kwargs):
+        """搜索专辑列表"""
+        validate_data = request.data
+        resource = validate_data.get("resource", "netease")
+        album_name = validate_data.get("album_name", "")
+        try:
+            client = MusicResource(resource)
+            if hasattr(client.resource, 'search_albums'):
+                albums = client.resource.search_albums(album_name)
+            else:
+                return self.failure_response(msg="该平台暂不支持专辑搜索")
+            return self.success_response(data=albums)
+        except Exception as e:
+            return self.failure_response(msg=str(e))
+
+    @action(methods=['POST'], detail=False)
+    def fetch_album_details(self, request, *args, **kwargs):
+        validate_data = request.data
+        resource = validate_data.get("resource", "netease")
+        album_name = validate_data.get("album_name")
+        album_id = validate_data.get("album_id")
+        try:
+            client = MusicResource(resource)
+            # 优先使用 album_id
+            if album_id and hasattr(client.resource, 'fetch_album_by_id'):
+                album_data = client.resource.fetch_album_by_id(album_id)
+            elif album_name:
+                album_data = client.fetch_album_by_name(album_name)
+            else:
+                return self.failure_response(msg="请提供专辑名称或ID")
+            if not album_data:
+                return self.failure_response(msg="Album not found")
+            return self.success_response(data=album_data)
+        except Exception as e:
+            return self.failure_response(msg=str(e))
 
     @action(methods=['POST'], detail=False)
     def fetch_lyric(self, request, *args, **kwargs):
@@ -276,20 +441,27 @@ class TaskViewSets(GenericViewSet):
         select_data = validate_data["select_data"]
         second_dir = validate_data.get("second_dir", "")
         music_id3_info = []
+        source_dirs = []
+        input_paths = []
+
         for data in select_data:
             if data.get('icon') == 'icon-folder':
                 file_full_path = f"{full_path}/{data.get('name')}"
-                data = os.scandir(file_full_path)
-                for index, entry in enumerate(data, 1):
-                    each = entry.name
-                    file_type = each.split(".")[-1]
-                    if file_type not in ALLOW_TYPE:
-                        continue
-                    music_id3_info.append(f"{file_full_path}/{each}")
+                source_dirs.append(file_full_path)
+                input_paths.append(file_full_path)
             else:
-                music_id3_info.append(f"{full_path}/{data.get('name')}")
-        tidy_folder_task(music_id3_info, {"root_path": root_path, "first_dir": first_dir, "second_dir": second_dir})
-        return self.success_response()
+                p = f"{full_path}/{data.get('name')}"
+                input_paths.append(p)
+        
+        music_id3_info = recursive_scandir(input_paths)
+        result = tidy_folder_task(music_id3_info, {
+            "root_path": root_path,
+            "first_dir": first_dir,
+            "second_dir": second_dir,
+            "source_dirs": source_dirs,
+            "base_path": full_path
+        })
+        return self.success_response(data=result)
 
     @action(methods=['POST'], detail=False)
     def upload_image(self, request, *args, **kwargs):
@@ -334,6 +506,44 @@ class TaskViewSets(GenericViewSet):
     def full_scan_folder(self, request, *args, **kwargs):
         full_scan_folder.delay()
         return self.success_response()
+
+
+    @action(methods=['POST'], detail=False)
+    def update_cookies(self, request, *args, **kwargs):
+        """Update Netease Cloud Music Cookies"""
+        validate_data = request.data
+        cookies = validate_data.get("cookies", "")
+        if not cookies:
+            return self.failure_response(msg="Cookies cannot be empty")
+        
+        # Simple parsing logic assuming raw cookie string or JSON
+        try:
+            if isinstance(cookies, str):
+                # If it's a raw cookie string (key=value; key2=value2)
+                if "=" in cookies and ";" in cookies:
+                    cookie_dict = {}
+                    for item in cookies.split(";"):
+                        if "=" in item:
+                            k, v = item.strip().split("=", 1)
+                            cookie_dict[k] = v
+                else:
+                    try:
+                        import json
+                        cookie_dict = json.loads(cookies)
+                    except:
+                        return self.failure_response(msg="Invalid cookie format")
+            elif isinstance(cookies, dict):
+                cookie_dict = cookies
+            else:
+                return self.failure_response(msg="Invalid cookie data type")
+            
+            from applications.utils.public import saveCookie
+            if saveCookie(cookie_dict):
+                return self.success_response(msg="Cookies updated successfully")
+            else:
+                return self.failure_response(msg="Failed to save cookies")
+        except Exception as e:
+            return self.failure_response(msg=f"Error processing cookies: {str(e)}")
 
 
 class TaskModelViewSets(mixins.ListModelMixin,

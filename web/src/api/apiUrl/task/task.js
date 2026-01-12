@@ -1,4 +1,4 @@
-import {GET, POST, reUrl} from '../../axiosconfig/axiosconfig'
+import { GET, POST, reUrl } from '../../axiosconfig/axiosconfig'
 
 export default {
     login: function(params) {
@@ -39,5 +39,23 @@ export default {
     },
     getRecord: function(params) {
         return GET(reUrl + '/api/record/', params)
+    },
+    updateCookies: function(params) {
+        return POST(reUrl + '/api/update_cookies/', params)
+    },
+    taskStatus: function(params) {
+        return GET(reUrl + '/api/task_status/', params)
+    },
+    fetchAlbumDetails: function(params) {
+        return POST(reUrl + '/api/fetch_album_details/', params)
+    },
+    searchAlbums: function(params) {
+        return POST(reUrl + '/api/search_albums/', params)
+    },
+    getScheduleConfig: function(params) {
+        return GET(reUrl + '/api/get_schedule_config/', params)
+    },
+    updateScheduleConfig: function(params) {
+        return POST(reUrl + '/api/update_schedule_config/', params)
     }
 }

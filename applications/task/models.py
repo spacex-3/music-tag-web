@@ -5,7 +5,7 @@ class Task(models.Model):
     song_name = models.CharField(max_length=255, default="")
     artist_name = models.CharField(max_length=255, default="")
 
-    full_path = models.CharField(max_length=255)
+    full_path = models.CharField(max_length=255, db_index=True)
     state = models.CharField(max_length=255, default="wait")
     parent_path = models.CharField(max_length=255, default="")
     filename = models.CharField(max_length=255, default="")

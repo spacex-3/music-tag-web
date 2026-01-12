@@ -3,7 +3,9 @@ const common = {
         defaultTableHeight: 800,
         userRole: '',
         fullPath: '',
-        hasMsg: false
+        hasMsg: false,
+        showHistory: false,
+        showSchedule: false
     },
     mutations: {
         setDefaultTableHeight: (state, val) => {
@@ -17,6 +19,12 @@ const common = {
         },
         setHasMsg: (state, val) => {
             state.hasMsg = val
+        },
+        setShowHistory: (state, val) => {
+            state.showHistory = val
+        },
+        setShowSchedule: (state, val) => {
+            state.showSchedule = val
         }
     }
 }

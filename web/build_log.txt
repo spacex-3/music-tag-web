@@ -1,0 +1,242 @@
+
+> cw-vue-1.0@1.0.0 build
+> node build/build.js
+
+(node:44179) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:44179) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+(node:44179) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+Hash: [1m7bb81d3e685f08616532[39m[22m
+Version: webpack [1m3.12.0[39m[22m
+Time: [1m3487[39m[22mms
+                                             [1mAsset[39m[22m       [1mSize[39m[22m  [1mChunks[39m[22m  [1m[39m[22m           [1m[39m[22m       [1mChunk Names[39m[22m
+   [1m[33mstatic/dist/img/fontawesome-webfont.912ec66.svg[39m[22m     [1m[33m444 kB[39m[22m        [1m[39m[22m  [1m[32m[emitted][39m[22m  [1m[33m[big][39m[22m  
+ [1m[32mstatic/dist/fonts/fontawesome-webfont.b06871f.ttf[39m[22m     166 kB        [1m[39m[22m  [1m[32m[emitted][39m[22m         
+ [1m[32mstatic/dist/fonts/fontawesome-webfont.674f50d.eot[39m[22m     166 kB        [1m[39m[22m  [1m[32m[emitted][39m[22m         
+[1m[32mstatic/dist/fonts/fontawesome-webfont.fee66e7.woff[39m[22m      98 kB        [1m[39m[22m  [1m[32m[emitted][39m[22m         
+              [1m[32mstatic/dist/img/iconcool.b620d6d.svg[39m[22m     220 kB        [1m[39m[22m  [1m[32m[emitted][39m[22m         
+                          [1m[33mstatic/dist/js/vendor.js[39m[22m    [1m[33m2.14 MB[39m[22m       [1m0[39m[22m  [1m[32m[emitted][39m[22m  [1m[33m[big][39m[22m  vendor
+                             [1m[33mstatic/dist/js/app.js[39m[22m     [1m[33m945 kB[39m[22m       [1m1[39m[22m  [1m[32m[emitted][39m[22m  [1m[33m[big][39m[22m  app
+                        [1m[32mstatic/dist/js/manifest.js[39m[22m    3.84 kB       [1m2[39m[22m  [1m[32m[emitted][39m[22m         manifest
+                           [1m[32mstatic/dist/css/app.css[39m[22m    21.3 kB       [1m1[39m[22m  [1m[32m[emitted][39m[22m         app
+                       [1m[32mstatic/dist/index.prod.html[39m[22m  677 bytes        [1m[39m[22m  [1m[32m[emitted][39m[22m         
+                    [1m[32mstatic/dist/img/favicon_64.ico[39m[22m    17.5 kB        [1m[39m[22m  [1m[32m[emitted][39m[22m         
+                     [1m[32mstatic/dist/img/music-tag.png[39m[22m    6.89 kB        [1m[39m[22m  [1m[32m[emitted][39m[22m         
+             [1m[33mstatic/dist/img/music_null-cutout.png[39m[22m    [1m[33m1.08 MB[39m[22m        [1m[39m[22m  [1m[32m[emitted][39m[22m  [1m[33m[big][39m[22m  
+chunk    {[1m[33m0[39m[22m} [1m[32mstatic/dist/js/vendor.js[39m[22m (vendor) 2.13 MB {[1m[33m2[39m[22m}[1m[33m [initial][39m[22m[1m[32m [rendered][39m[22m
+ [+8+3] [1m./node_modules/vee-validate/dist/locale/zh_CN.js[39m[22m 2.79 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+ [/ocq] [1m./node_modules/vue-router/dist/vue-router.esm.js[39m[22m 83.6 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+ [7+uW] [1m./node_modules/vue/dist/vue.esm.js[39m[22m 419 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+ [Dd8w] [1m./node_modules/babel-runtime/helpers/extends.js[39m[22m 544 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+ [DuR2] [1m(webpack)/buildin/global.js[39m[22m 509 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+ [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+ [NYxO] [1m./node_modules/vuex/dist/vuex.esm.js[39m[22m 26.1 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+ [VU/8] [1m./node_modules/vue-loader/lib/component-normalizer.js[39m[22m 2.9 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+ [Vvmx] [1m./node_modules/bk-magic-vue/dist/bk-magic-vue.min.js[39m[22m 1.08 MB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+ [mtWM] [1m./node_modules/axios/index.js[39m[22m 40 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+ [mvHQ] [1m./node_modules/babel-runtime/core-js/json/stringify.js[39m[22m 95 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+ [o/zv] [1m./node_modules/path-browserify/index.js[39m[22m 8.74 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+ [rjj0] [1m./node_modules/vue-style-loader/lib/addStylesClient.js[39m[22m 6.22 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+ [sUu7] [1m./node_modules/vee-validate/dist/vee-validate.esm.js[39m[22m 334 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+ [tIFN] [1m./node_modules/axios/lib/axios.js[39m[22m 1.37 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+     + 122 hidden modules
+chunk    {[1m[33m1[39m[22m} [1m[32mstatic/dist/js/app.js, static/dist/css/app.css[39m[22m (app) 945 kB {[1m[33m0[39m[22m}[1m[33m [initial][39m[22m[1m[32m [rendered][39m[22m
+ [0p0H] [1m./src/assets/custom_icon/iconfont.woff2?t=1622427656520[39m[22m 36.2 kB {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+ [3Hgs] [1m./node_modules/extract-text-webpack-plugin/dist/loader.js?{"omit":1,"remove":true,"publicPath":"../../"}!./node_modules/vue-style-loader!./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-008b286e","scoped":false,"hasInlineConfig":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/views/user/index.vue[39m[22m 41 bytes {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+ [8EFN] [1m./node_modules/bk-magic-vue/dist/fonts/iconcool.ttf[39m[22m 70.1 kB {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+ [9dNl] [1m./src/assets/custom_icon/iconfont.css[39m[22m 510 bytes {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+ [CsBk] [1m./node_modules/bk-magic-vue/dist/images/spinner.svg[39m[22m 9.27 kB {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+ [DhRf] [1m./node_modules/bk-magic-vue/dist/bk-magic-vue.min.css[39m[22m 470 bytes {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+ [Fqd/] [1m./node_modules/font-awesome/fonts/fontawesome-webfont.svg?v=4.7.0[39m[22m 93 bytes {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+ [IMLV] [1m./node_modules/font-awesome/fonts/fontawesome-webfont.ttf?v=4.7.0[39m[22m 95 bytes {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+ [INC5] [1m./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/lib??ref--6-2!./node_modules/font-awesome/css/font-awesome.min.css[39m[22m 33.3 kB {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+ [NHnr] [1m./src/main.js + 37 modules[39m[22m 111 kB {[1m[33m1[39m[22m}[1m[32m [built][39m[22m[1m[31m [1 error][39m[22m
+ [TzS4] [1m./node_modules/bk-magic-vue/dist/fonts/iconcool.woff[39m[22m 36.2 kB {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+ [e0XP] [1m./node_modules/font-awesome/css/font-awesome.min.css[39m[22m 470 bytes {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+ [oQs+] [1m./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/lib??ref--6-2!./node_modules/bk-magic-vue/dist/bk-magic-vue.min.css[39m[22m 330 kB {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+ [qBc4] [1m./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/lib??ref--6-2!./src/assets/custom_icon/iconfont.css[39m[22m 17.3 kB {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+ [uIyq] [1m./node_modules/extract-text-webpack-plugin/dist/loader.js?{"omit":1,"remove":true,"publicPath":"../../"}!./node_modules/vue-style-loader!./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-a0709388","scoped":false,"hasInlineConfig":false}!./node_modules/fast-sass-loader/lib?{"data":"@import /"/Users/ks/Documents/GitHub/music-tag-web/web/src/assets/base/css/color.scss/";","sourceMap":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/App.vue[39m[22m 41 bytes {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+     + 18 hidden modules
+chunk    {[1m[33m2[39m[22m} [1m[32mstatic/dist/js/manifest.js[39m[22m (manifest) 0 bytes[1m[33m [entry][39m[22m[1m[32m [rendered][39m[22m
+[/ocq] [1m./node_modules/vue-router/dist/vue-router.esm.js[39m[22m 83.6 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+[7+uW] [1m./node_modules/vue/dist/vue.esm.js[39m[22m 419 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+[9dNl] [1m./src/assets/custom_icon/iconfont.css[39m[22m 510 bytes {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+[Dd8w] [1m./node_modules/babel-runtime/helpers/extends.js[39m[22m 544 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+[DhRf] [1m./node_modules/bk-magic-vue/dist/bk-magic-vue.min.css[39m[22m 470 bytes {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+[DuR2] [1m(webpack)/buildin/global.js[39m[22m 509 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+[INC5] [1m./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/lib??ref--6-2!./node_modules/font-awesome/css/font-awesome.min.css[39m[22m 33.3 kB {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+[NHnr] [1m./src/main.js + 37 modules[39m[22m 111 kB {[1m[33m1[39m[22m}[1m[32m [built][39m[22m[1m[31m [1 error][39m[22m
+[NYxO] [1m./node_modules/vuex/dist/vuex.esm.js[39m[22m 26.1 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+[VU/8] [1m./node_modules/vue-loader/lib/component-normalizer.js[39m[22m 2.9 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+[Vvmx] [1m./node_modules/bk-magic-vue/dist/bk-magic-vue.min.js[39m[22m 1.08 MB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+[e0XP] [1m./node_modules/font-awesome/css/font-awesome.min.css[39m[22m 470 bytes {[1m[33m1[39m[22m}[1m[32m [built][39m[22m
+[mtWM] [1m./node_modules/axios/index.js[39m[22m 40 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+[mvHQ] [1m./node_modules/babel-runtime/core-js/json/stringify.js[39m[22m 95 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+[sUu7] [1m./node_modules/vee-validate/dist/vee-validate.esm.js[39m[22m 334 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    + 155 hidden modules
+
+[1m[31mERROR in ./src/views/home/home.vue
+
+  ✘  http://eslint.org/docs/rules/no-trailing-spaces  Trailing spaces not allowed  
+  src/views/home/home.vue:610:1
+          
+   ^
+
+
+✘ 1 problem (1 error, 0 warnings)
+
+
+Errors:
+  1  http://eslint.org/docs/rules/no-trailing-spaces
+ @ ./src/promission.js 5:0-37
+ @ ./src/main.js[39m[22m
+Child [1mhtml-webpack-plugin for "static/dist/index.prod.html"[39m[22m:
+                          [1mAsset[39m[22m    [1mSize[39m[22m  [1mChunks[39m[22m  [1m[39m[22m[1m[39m[22m[1mChunk Names[39m[22m
+    [1m[32mstatic/dist/index.prod.html[39m[22m  549 kB       [1m0[39m[22m  [1m[32m[39m[22m
+    chunk    {[1m[33m0[39m[22m} [1m[32mstatic/dist/index.prod.html[39m[22m 546 kB[1m[33m [entry][39m[22m[1m[32m [rendered][39m[22m
+     [3IRH] [1m(webpack)/buildin/module.js[39m[22m 517 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+     [DuR2] [1m(webpack)/buildin/global.js[39m[22m 509 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+     [M4fF] [1m./node_modules/lodash/lodash.js[39m[22m 544 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+     [iAb0] [1m./node_modules/html-webpack-plugin/lib/loader.js!./index.template.html[39m[22m 919 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [3IRH] [1m(webpack)/buildin/module.js[39m[22m 517 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [DuR2] [1m(webpack)/buildin/global.js[39m[22m 509 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [M4fF] [1m./node_modules/lodash/lodash.js[39m[22m 544 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [iAb0] [1m./node_modules/html-webpack-plugin/lib/loader.js!./index.template.html[39m[22m 919 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+Child [1mextract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/index.js?{"sourceMap":false}!node_modules/vue-loader/lib/style-compiler/index.js?{"vue":true,"id":"data-v-acb0944a","scoped":true,"hasInlineConfig":false}!node_modules/vue-loader/lib/selector.js?type=styles&index=0!src/views/user/login.vue[39m[22m:
+    chunk    {[1m[33m0[39m[22m} [1m[32mextract-text-webpack-plugin-output-filename[39m[22m 7.68 kB[1m[33m [entry][39m[22m[1m[32m [rendered][39m[22m
+     [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+     [lAl4] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-acb0944a","scoped":true,"hasInlineConfig":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/views/user/login.vue[39m[22m 5.42 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [lAl4] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-acb0944a","scoped":true,"hasInlineConfig":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/views/user/login.vue[39m[22m 5.42 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+Child [1mextract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/index.js?{"sourceMap":false}!node_modules/vue-loader/lib/style-compiler/index.js?{"vue":true,"id":"data-v-008b286e","scoped":false,"hasInlineConfig":false}!node_modules/vue-loader/lib/selector.js?type=styles&index=0!src/views/user/index.vue[39m[22m:
+    chunk    {[1m[33m0[39m[22m} [1m[32mextract-text-webpack-plugin-output-filename[39m[22m 2.65 kB[1m[33m [entry][39m[22m[1m[32m [rendered][39m[22m
+     [2a0Y] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-008b286e","scoped":false,"hasInlineConfig":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/views/user/index.vue[39m[22m 389 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+     [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [2a0Y] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-008b286e","scoped":false,"hasInlineConfig":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/views/user/index.vue[39m[22m 389 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+Child [1mextract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/index.js?{"sourceMap":false}!node_modules/vue-loader/lib/style-compiler/index.js?{"vue":true,"id":"data-v-e502eaca","scoped":false,"hasInlineConfig":false}!node_modules/vue-loader/lib/selector.js?type=styles&index=0!src/views/home/home.vue[39m[22m:
+    chunk    {[1m[33m0[39m[22m} [1m[32mextract-text-webpack-plugin-output-filename[39m[22m 8.08 kB[1m[33m [entry][39m[22m[1m[32m [rendered][39m[22m
+     [9S9e] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-e502eaca","scoped":false,"hasInlineConfig":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/views/home/home.vue[39m[22m 5.82 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+     [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [9S9e] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-e502eaca","scoped":false,"hasInlineConfig":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/views/home/home.vue[39m[22m 5.82 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+Child [1mextract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/index.js?{"sourceMap":false}!node_modules/vue-loader/lib/style-compiler/index.js?{"vue":true,"id":"data-v-5a6b2c88","scoped":true,"hasInlineConfig":false}!node_modules/vue-loader/lib/selector.js?type=styles&index=0!src/components/base/magicMenu/header.vue[39m[22m:
+    chunk    {[1m[33m0[39m[22m} [1m[32mextract-text-webpack-plugin-output-filename[39m[22m 10.1 kB[1m[33m [entry][39m[22m[1m[32m [rendered][39m[22m
+     [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+     [zb3d] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-5a6b2c88","scoped":true,"hasInlineConfig":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/components/base/magicMenu/header.vue[39m[22m 7.8 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [zb3d] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-5a6b2c88","scoped":true,"hasInlineConfig":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/components/base/magicMenu/header.vue[39m[22m 7.8 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+Child [1mextract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/index.js?{"sourceMap":false}!node_modules/vue-loader/lib/style-compiler/index.js?{"vue":true,"id":"data-v-5a6b2c88","scoped":false,"hasInlineConfig":false}!node_modules/vue-loader/lib/selector.js?type=styles&index=1!src/components/base/magicMenu/header.vue[39m[22m:
+    chunk    {[1m[33m0[39m[22m} [1m[32mextract-text-webpack-plugin-output-filename[39m[22m 2.58 kB[1m[33m [entry][39m[22m[1m[32m [rendered][39m[22m
+     [0edy] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-5a6b2c88","scoped":false,"hasInlineConfig":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=1!./src/components/base/magicMenu/header.vue[39m[22m 324 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+     [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [0edy] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-5a6b2c88","scoped":false,"hasInlineConfig":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=1!./src/components/base/magicMenu/header.vue[39m[22m 324 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+Child [1mextract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/index.js?{"sourceMap":false}!node_modules/vue-loader/lib/style-compiler/index.js?{"vue":true,"id":"data-v-4babfc6f","scoped":true,"hasInlineConfig":false}!node_modules/vue-loader/lib/selector.js?type=styles&index=0!src/components/base/magicMenu/container.vue[39m[22m:
+    chunk    {[1m[33m0[39m[22m} [1m[32mextract-text-webpack-plugin-output-filename[39m[22m 2.5 kB[1m[33m [entry][39m[22m[1m[32m [rendered][39m[22m
+     [8Dib] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-4babfc6f","scoped":true,"hasInlineConfig":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/components/base/magicMenu/container.vue[39m[22m 237 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+     [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [8Dib] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-4babfc6f","scoped":true,"hasInlineConfig":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/components/base/magicMenu/container.vue[39m[22m 237 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+Child [1mextract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/index.js?{"sourceMap":false}!node_modules/vue-loader/lib/style-compiler/index.js?{"vue":true,"id":"data-v-1aa1d174","scoped":false,"hasInlineConfig":false}!node_modules/vue-loader/lib/selector.js?type=styles&index=0!src/components/base/magicMenu/LeftMenu.vue[39m[22m:
+    chunk    {[1m[33m0[39m[22m} [1m[32mextract-text-webpack-plugin-output-filename[39m[22m 3.88 kB[1m[33m [entry][39m[22m[1m[32m [rendered][39m[22m
+     [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+     [oT6s] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-1aa1d174","scoped":false,"hasInlineConfig":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/components/base/magicMenu/LeftMenu.vue[39m[22m 1.62 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [oT6s] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-1aa1d174","scoped":false,"hasInlineConfig":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/components/base/magicMenu/LeftMenu.vue[39m[22m 1.62 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+Child [1mextract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/index.js?{"sourceMap":false}!node_modules/vue-loader/lib/style-compiler/index.js?{"vue":true,"id":"data-v-a0709388","scoped":false,"hasInlineConfig":false}!node_modules/fast-sass-loader/lib/index.js?{"data":"@import \"/Users/ks/Documents/GitHub/music-tag-web/web/src/assets/base/css/color.scss\";","sourceMap":false}!node_modules/vue-loader/lib/selector.js?type=styles&index=0!src/App.vue[39m[22m:
+    chunk    {[1m[33m0[39m[22m} [1m[32mextract-text-webpack-plugin-output-filename[39m[22m 3.72 kB[1m[33m [entry][39m[22m[1m[32m [rendered][39m[22m
+     [7F/t] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-a0709388","scoped":false,"hasInlineConfig":false}!./node_modules/fast-sass-loader/lib?{"data":"@import /"/Users/ks/Documents/GitHub/music-tag-web/web/src/assets/base/css/color.scss/";","sourceMap":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/App.vue[39m[22m 1.46 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+     [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [7F/t] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-a0709388","scoped":false,"hasInlineConfig":false}!./node_modules/fast-sass-loader/lib?{"data":"@import /"/Users/ks/Documents/GitHub/music-tag-web/web/src/assets/base/css/color.scss/";","sourceMap":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/App.vue[39m[22m 1.46 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+Child [1mextract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/index.js?{"sourceMap":false}!node_modules/vue-loader/lib/style-compiler/index.js?{"vue":true,"id":"data-v-7fd1a28d","scoped":true,"hasInlineConfig":false}!node_modules/fast-sass-loader/lib/index.js?{"data":"@import \"/Users/ks/Documents/GitHub/music-tag-web/web/src/assets/base/css/color.scss\";","sourceMap":false}!node_modules/vue-loader/lib/selector.js?type=styles&index=0!src/components/base/magicMenu/index.vue[39m[22m:
+    chunk    {[1m[33m0[39m[22m} [1m[32mextract-text-webpack-plugin-output-filename[39m[22m 2.57 kB[1m[33m [entry][39m[22m[1m[32m [rendered][39m[22m
+     [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+     [NRuQ] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-7fd1a28d","scoped":true,"hasInlineConfig":false}!./node_modules/fast-sass-loader/lib?{"data":"@import /"/Users/ks/Documents/GitHub/music-tag-web/web/src/assets/base/css/color.scss/";","sourceMap":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/components/base/magicMenu/index.vue[39m[22m 313 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [NRuQ] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-7fd1a28d","scoped":true,"hasInlineConfig":false}!./node_modules/fast-sass-loader/lib?{"data":"@import /"/Users/ks/Documents/GitHub/music-tag-web/web/src/assets/base/css/color.scss/";","sourceMap":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/components/base/magicMenu/index.vue[39m[22m 313 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+Child [1mextract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/index.js?{"sourceMap":false}!node_modules/vue-loader/lib/style-compiler/index.js?{"vue":true,"id":"data-v-7fd1a28d","scoped":false,"hasInlineConfig":false}!node_modules/fast-sass-loader/lib/index.js?{"data":"@import \"/Users/ks/Documents/GitHub/music-tag-web/web/src/assets/base/css/color.scss\";","sourceMap":false}!node_modules/vue-loader/lib/selector.js?type=styles&index=1!src/components/base/magicMenu/index.vue[39m[22m:
+    chunk    {[1m[33m0[39m[22m} [1m[32mextract-text-webpack-plugin-output-filename[39m[22m 2.73 kB[1m[33m [entry][39m[22m[1m[32m [rendered][39m[22m
+     [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+     [Fs4a] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-7fd1a28d","scoped":false,"hasInlineConfig":false}!./node_modules/fast-sass-loader/lib?{"data":"@import /"/Users/ks/Documents/GitHub/music-tag-web/web/src/assets/base/css/color.scss/";","sourceMap":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=1!./src/components/base/magicMenu/index.vue[39m[22m 471 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [FZ+f] [1m./node_modules/css-loader/lib/css-base.js[39m[22m 2.26 kB {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+    [Fs4a] [1m./node_modules/css-loader?{"sourceMap":false}!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-7fd1a28d","scoped":false,"hasInlineConfig":false}!./node_modules/fast-sass-loader/lib?{"data":"@import /"/Users/ks/Documents/GitHub/music-tag-web/web/src/assets/base/css/color.scss/";","sourceMap":false}!./node_modules/vue-loader/lib/selector.js?type=styles&index=1!./src/components/base/magicMenu/index.vue[39m[22m 471 bytes {[1m[33m0[39m[22m}[1m[32m [built][39m[22m
+
+  Build failed with errors.
+
+--- ERROR START ---
+Message: 
+  ✘  http://eslint.org/docs/rules/no-trailing-spaces  Trailing spaces not allowed  
+  src/views/home/home.vue:610:1
+          
+   ^
+
+
+✘ 1 problem (1 error, 0 warnings)
+
+
+Errors:
+  1  http://eslint.org/docs/rules/no-trailing-spaces
+Stack: ModuleError: 
+  ✘  http://eslint.org/docs/rules/no-trailing-spaces  Trailing spaces not allowed  
+  src/views/home/home.vue:610:1
+          
+   ^
+
+
+✘ 1 problem (1 error, 0 warnings)
+
+
+Errors:
+  1  http://eslint.org/docs/rules/no-trailing-spaces
+    at emitError (/Users/ks/Documents/GitHub/music-tag-web/web/node_modules/webpack/lib/NormalModule.js:123:22)
+    at printLinterOutput (/Users/ks/Documents/GitHub/music-tag-web/web/node_modules/eslint-loader/index.js:123:9)
+    at module.exports (/Users/ks/Documents/GitHub/music-tag-web/web/node_modules/eslint-loader/index.js:213:3)
+    at LOADER_EXECUTION (/Users/ks/Documents/GitHub/music-tag-web/web/node_modules/loader-runner/lib/LoaderRunner.js:119:14)
+    at runSyncOrAsync (/Users/ks/Documents/GitHub/music-tag-web/web/node_modules/loader-runner/lib/LoaderRunner.js:120:4)
+    at iterateNormalLoaders (/Users/ks/Documents/GitHub/music-tag-web/web/node_modules/loader-runner/lib/LoaderRunner.js:232:2)
+    at Array.<anonymous> (/Users/ks/Documents/GitHub/music-tag-web/web/node_modules/loader-runner/lib/LoaderRunner.js:205:4)
+    at Storage.finished (/Users/ks/Documents/GitHub/music-tag-web/web/node_modules/enhanced-resolve/lib/CachedInputFileSystem.js:40:15)
+    at /Users/ks/Documents/GitHub/music-tag-web/web/node_modules/enhanced-resolve/lib/CachedInputFileSystem.js:77:9
+    at /Users/ks/Documents/GitHub/music-tag-web/web/node_modules/graceful-fs/graceful-fs.js:123:16
+    at FSReqCallback.readFileAfterClose [as oncomplete] (node:internal/fs/read/context:68:3)
+Inner Error: [ESLintError: 
+  ✘  http://eslint.org/docs/rules/no-trailing-spaces  Trailing spaces not allowed  
+  src/views/home/home.vue:610:1
+          
+   ^
+
+
+✘ 1 problem (1 error, 0 warnings)
+
+
+Errors:
+  1  http://eslint.org/docs/rules/no-trailing-spaces]
+--- ERROR END ---

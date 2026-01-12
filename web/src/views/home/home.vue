@@ -29,6 +29,9 @@
                             </ul>
                         </bk-dropdown-menu>
                     </div>
+                    <div style="margin-left: 5px;" title="刷新列表">
+                        <bk-button :theme="'default'" @click="handleSearchFile" :icon="'refresh'"></bk-button>
+                    </div>
                 </div>
                 <transition name="bk-slide-fade-down">
                     <div style="margin-top: 10px;" v-show="fadeShowDir">
@@ -50,6 +53,10 @@
             </div>
         </div>
         <div class="edit-section">
+            <div v-if="isScraping" style="padding: 20px; width: 100%; text-align: center; color: #3c96ff; font-weight: bold; font-size: 16px; background-color: #f0f8ff;">
+                <bk-icon type="refresh" style="display: inline-block; animation: spin 2s linear infinite; margin-right: 8px;"></bk-icon>
+                {{ progressText }}
+            </div>
             <transition name="bk-slide-fade-left">
                 <div style="margin-left: 40px;width: 500px;margin-top: 20px;"
                     v-show="musicInfo.title && checkedIds.length === 0">
@@ -61,7 +68,9 @@
                         <div style="margin-left: 6px;cursor: pointer;" @click="exampleSetting3.primary.visible = true">
                             <bk-icon type="cog-shape"></bk-icon>
                         </div>
+
                     </div>
+
                     <div style="display: flex;margin-bottom: 10px;align-items: center;margin-top: 10px;">
                         <div class="label1 can-copy" v-bk-tooltips="'变量名:${title}'" v-bk-copy="'${title}'">标题：</div>
                         <div style="width: 70%;">
@@ -90,8 +99,11 @@
                         </div>
                         <div class="edit-item can-copy" v-else-if="item === 'album'">
                             <div class="label1" v-bk-tooltips="'变量名:${album}'" v-bk-copy="'${album}'">专辑：</div>
-                            <div style="width: 70%;">
-                                <bk-input :clearable="true" v-model="musicInfo.album"></bk-input>
+                            <div style="width: 70%; display: flex;">
+                                <bk-input :clearable="true" v-model="musicInfo.album" style="flex: 1;"></bk-input>
+                                <bk-button :theme="'primary'" :text="true" size="small" style="margin-left: 5px;" @click="openAlbumSearch">
+                                    <bk-icon type="search" />
+                                </bk-button>
                             </div>
                         </div>
                         <div class="edit-item can-copy" v-else-if="item === 'albumartist'">
@@ -253,26 +265,24 @@
             </transition>
             <transition name="bk-slide-fade-left">
                 <div style="margin-left: 40px;width: 500px;margin-top: 20px;" v-show="checkedIds.length > 0">
-                    <div style="width: 100%;display: flex;">
-                        <bk-button :theme="'primary'" :loading="isLoading" @click="handleBatch" class="mr10"
-                            style="width: 100%;">
-                            手动修改
-                        </bk-button>
-                    </div>
-                    <div style="width: 100%;display: flex;margin-top: 10px;">
+                    <div style="width: 100%; display: flex;">
                         <bk-button :theme="'success'" :loading="isLoading"
                             @click="exampleSetting1.primary.visible = true" class="mr10"
-                            style="width: 50%;">
-                            自动修改
+                            style="flex: 1;">
+                            自动刮削
+                        </bk-button>
+                        <bk-button :theme="'primary'" :loading="isLoading" @click="handleBatch" class="mr10"
+                            style="flex: 1;">
+                            手动批量调整
                         </bk-button>
                         <bk-button :theme="'success'" :loading="isLoading"
                             @click="exampleSetting2.primary.visible = true" class="mr10"
-                            style="width: 50%;">
+                            style="flex: 1;">
                             整理文件夹
                         </bk-button>
                     </div>
                     <bk-divider>
-                        <div style="color: gray;font-size: 12px;">手动修改参数</div>
+                        <div style="color: gray;font-size: 12px;">手动刮削参数</div>
                     </bk-divider>
                     <div style="display: flex;margin-bottom: 10px;align-items: center;margin-top: 10px;">
                         <div class="label1 can-copy" v-bk-tooltips="'变量名:${title}'" v-bk-copy="'${title}'">标题：</div>
@@ -455,6 +465,7 @@
                                 </bk-image>
                             </div>
                             <div @click="handleCopy('title',item.name)" class="music-item">
+                                <span v-if="item.source" :style="{ background: item.source === 'netease' ? '#c20c0c' : '#31c27c', color: 'white', padding: '1px 4px', borderRadius: '3px', fontSize: '10px', marginRight: '4px' }">{{ item.source === 'netease' ? '网易云' : 'QQ音乐' }}</span>
                                 {{
                                     item.name
                                 }}
@@ -499,7 +510,7 @@
             </transition>
             <div v-show="!fadeShowDetail && !showTranslation"
                 style="width: 90%;height: 90%; margin: 50px 20px 20px 50px;">
-                <bk-image fit="contain" :src="'/static/dist/img/music_null-cutout.png'"
+                <bk-image fit="contain" :src="'/static/img/bg.png'"
                     style="width: 100%;height: 98%;"></bk-image>
             </div>
         </div>
@@ -518,6 +529,9 @@
                 <bk-radio-button value="hard">
                     严格模式
                 </bk-radio-button>
+                <bk-radio-button value="strict_album">
+                    严格专辑模式 (按文件夹)
+                </bk-radio-button>
             </bk-radio-group>
             <div>音乐源顺序</div>
             <bk-select style="width: 250px;"
@@ -531,6 +545,19 @@
                     :name="option.name">
                 </bk-option>
             </bk-select>
+            <div style="margin-top: 10px;">覆盖策略</div>
+            <bk-radio-group v-model="overwritePolicy" style="margin-top: 5px;">
+                <bk-radio-button value="overwrite_all">
+                    完全覆盖 (默认)
+                </bk-radio-button>
+                <bk-radio-button value="overwrite_missing">
+                    仅补充缺失
+                </bk-radio-button>
+            </bk-radio-group>
+            <div style="margin-top: 15px;">
+                <bk-checkbox v-model="skipScraped">跳过已刮削文件 (历史记录中存在即跳过)</bk-checkbox>
+            </div>
+
         </bk-dialog>
         <bk-dialog v-model="exampleSetting2.primary.visible"
             theme="primary"
@@ -538,7 +565,8 @@
             @confirm="handleTidy"
             :header-position="exampleSetting2.primary.headerPosition"
             title="整理文件夹">
-            <p>整理文件夹，按一级目录，二级目录选定的信息分类</p>
+            <p>整理文件夹，按一级目录，二级目录选定的信息分类。</p>
+            <p style="color: #666; font-size: 12px; margin-top: 5px;">注意：整理完成后，未成功刮削的文件及残留文件夹将自动移动到当前目录下的【未整理文件】中。</p>
             <div>整理后的根目录</div>
             <div class="input-demo">
                 <bk-input v-model="tidyFormData.root_path">
@@ -563,6 +591,58 @@
                     :name="option.name">
                 </bk-option>
             </bk-select>
+        </bk-dialog>
+        <bk-dialog v-model="scheduleVisible"
+            theme="primary"
+            :mask-close="false"
+            width="600"
+            @confirm="saveScheduleConfig"
+            title="定时刮削配置">
+            <div style="margin-bottom: 20px;">
+                <p style="color: #666; margin-bottom: 10px;">定时任务将自动扫描媒体库新增文件，并执行刮削。</p>
+            </div>
+
+            <div style="display: flex; flex-direction: column;">
+                <div style="margin-bottom: 15px; display: flex; align-items: center;">
+                    <span style="width: 100px; text-align: right; margin-right: 20px;">开启任务</span>
+                    <bk-switcher v-model="scheduleConfig.enabled"></bk-switcher>
+                </div>
+
+                <div style="margin-bottom: 15px; display: flex; align-items: center;">
+                    <span style="width: 100px; text-align: right; margin-right: 20px;">执行间隔</span>
+                    <bk-input type="number" :min="1" style="width: 250px;" v-model="scheduleConfig.interval_hours">
+                        <template slot="append">
+                            <div class="group-text">小时</div>
+                        </template>
+                    </bk-input>
+                </div>
+
+                <div style="margin-bottom: 15px; display: flex; align-items: center;">
+                    <span style="width: 100px; text-align: right; margin-right: 20px;">刮削模式</span>
+                    <bk-select v-model="scheduleConfig.select_mode" style="width: 250px;">
+                        <bk-option v-for="option in selectAutoModeList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+                    </bk-select>
+                </div>
+
+                <div style="margin-bottom: 15px; display: flex; align-items: center;">
+                    <span style="width: 100px; text-align: right; margin-right: 20px;">覆盖策略</span>
+                    <bk-select v-model="scheduleConfig.overwrite_policy" style="width: 250px;">
+                        <bk-option v-for="option in overwritePolicyList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+                    </bk-select>
+                </div>
+
+                <div style="margin-bottom: 15px; display: flex; align-items: center;">
+                    <span style="width: 100px; text-align: right; margin-right: 20px;">数据源</span>
+                    <bk-checkbox-group v-model="scheduleConfig.source_list">
+                        <bk-checkbox :value="'netease'" style="margin-right: 20px;">网易云音乐</bk-checkbox>
+                        <bk-checkbox :value="'qmusic'">QQ音乐</bk-checkbox>
+                    </bk-checkbox-group>
+                </div>
+
+                <div style="margin-bottom: 15px; margin-left: 120px;">
+                    <bk-checkbox v-model="scheduleConfig.skip_scraped">跳过已刮削文件 (历史记录中存在的)</bk-checkbox>
+                </div>
+            </div>
         </bk-dialog>
         <bk-dialog v-model="exampleSetting3.primary.visible"
             theme="primary"
@@ -598,6 +678,164 @@
                     :name="option.name">
                 </bk-option>
             </bk-select>
+            <div style="margin-top: 20px;">
+                <bk-button :theme="'warning'" @click="cookieSetting.visible = true">
+                    配置 Netease Cookies
+                </bk-button>
+            </div>
+        </bk-dialog>
+
+        <!-- Scrape Result Log Dialog -->
+        <bk-dialog v-model="logVisible"
+            theme="primary"
+            :mask-close="false"
+            width="800"
+            :show-footer="false"
+            title="刮削结果">
+            <div style="margin-bottom: 10px;">
+                <bk-alert type="success" :title="'成功: ' + (summaryData.success_count || 0)"></bk-alert>
+                <bk-alert type="error" :title="'失败: ' + (summaryData.fail_count || 0)" style="margin-top: 5px;"></bk-alert>
+                <bk-alert v-if="summaryData.cookie_warning" type="warning" title="警告: 网易云音乐由于缺少Cookie导致搜索失败，请配置Cookie!" style="margin-top: 5px;"></bk-alert>
+            </div>
+            <div v-if="failedItems.length > 0" style="margin-top: 10px; max-height: 200px; overflow-y: auto;">
+                <p><strong>失败列表 (点击跳转):</strong></p>
+                <div v-for="(item, idx) in failedItems" :key="'fail-' + idx" style="cursor: pointer; color: red;" @click="handleJump(item)">
+                    {{ item.name }}
+                </div>
+            </div>
+            <div style="max-height: 500px; overflow-y: auto; background: #f5f5f5; padding: 10px; border-radius: 4px; font-family: monospace; margin-top: 10px;">
+                <div v-for="(log, idx) in scrapeLogs" :key="idx" style="margin-bottom: 2px;" :style="{ color: log.type === 'error' ? 'red' : (log.type === 'warning' ? '#ff9c01' : 'black') }">
+                    {{ log.msg }}
+                </div>
+            </div>
+            <div style="margin-top: 10px; text-align: right;">
+                <bk-button @click="logVisible = false">关闭</bk-button>
+            </div>
+        </bk-dialog>
+
+        <!-- History Dialog -->
+        <bk-dialog v-model="historyVisible"
+            theme="primary"
+            :mask-close="true"
+            width="800"
+            :show-footer="false"
+            title="刮削记录">
+            <div style="margin-bottom: 15px;">
+                <bk-button-group>
+                    <bk-button :theme="historyFilter === 'all' ? 'primary' : 'default'" @click="historyFilter = 'all'">
+                        全部 ({{ successItems.length + failedItems.length + skippedItems.length }})
+                    </bk-button>
+                    <bk-button :theme="historyFilter === 'success' ? 'primary' : 'default'" @click="historyFilter = 'success'">
+                        成功 ({{ successItems.length }})
+                    </bk-button>
+                    <bk-button :theme="historyFilter === 'failed' ? 'primary' : 'default'" @click="historyFilter = 'failed'">
+                        失败 ({{ failedItems.length }})
+                    </bk-button>
+                    <bk-button :theme="historyFilter === 'skipped' ? 'primary' : 'default'" @click="historyFilter = 'skipped'">
+                        跳过 ({{ skippedItems.length }})
+                    </bk-button>
+                </bk-button-group>
+            </div>
+            <div v-if="filteredHistoryItems.length > 0" style="max-height: 400px; overflow-y: auto;">
+                <div v-for="(item, idx) in filteredHistoryItems" :key="'hist-' + idx"
+                    :style="{ cursor: 'pointer', padding: '8px 12px', borderBottom: '1px solid #eee', color: item.type === 'failed' ? '#ea3636' : (item.type === 'skipped' ? '#ff9c01' : '#2dcb56') }"
+                    @click="handleJump(item)">
+                    <span style="margin-right: 8px;">
+                        <bk-icon v-if="item.type === 'success'" type="check-circle-shape"></bk-icon>
+                        <bk-icon v-else-if="item.type === 'failed'" type="close-circle-shape"></bk-icon>
+                        <bk-icon v-else type="exclamation-circle-shape"></bk-icon>
+                    </span>
+                    {{ item.name }}
+                </div>
+            </div>
+            <div v-else style="text-align: center; padding: 40px; color: #999;">
+                暂无记录
+            </div>
+            <div style="margin-top: 15px; text-align: right;">
+                <bk-button @click="historyVisible = false">关闭</bk-button>
+            </div>
+        </bk-dialog>
+
+        <!-- Album Search Dialog -->
+        <bk-dialog v-model="albumSearchVisible"
+            theme="primary"
+            :mask-close="false"
+            width="900"
+            :show-footer="false"
+            title="搜索专辑">
+            <div style="display: flex; margin-bottom: 10px;">
+                <bk-input v-model="albumSearchQuery" placeholder="输入专辑名称" @enter="searchAlbum" style="flex: 1; margin-right: 10px;"></bk-input>
+                <bk-button :theme="'primary'" @click="searchAlbum" :loading="isAlbumSearching">搜索</bk-button>
+                <bk-button v-if="selectedAlbum" @click="backToAlbumList" style="margin-left: 10px;">返回专辑列表</bk-button>
+            </div>
+
+            <!-- Step 1: Album List -->
+            <div v-if="!selectedAlbum && albumList.length > 0" style="max-height: 450px; overflow-y: auto;">
+                <div style="margin-bottom: 10px; color: #666;">
+                    找到 {{ albumList.length }} 个专辑
+                    <span :style="{ background: resource === 'netease' ? '#c20c0c' : '#31c27c', color: 'white', padding: '2px 6px', borderRadius: '3px', fontSize: '12px', marginLeft: '8px' }">
+                        {{ resource === 'netease' ? '网易云' : 'QQ音乐' }}
+                    </span>
+                </div>
+                <div v-for="(album, idx) in albumList" :key="'album-' + idx"
+                    style="padding: 12px; border: 1px solid #eee; border-radius: 4px; margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; transition: background 0.2s;"
+                    @click="selectAlbum(album)"
+                    @mouseover="$event.target.style.background = '#f5f7fa'"
+                    @mouseout="$event.target.style.background = 'white'">
+                    <img :src="album.cover" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px; margin-right: 12px;" />
+                    <div style="flex: 1;">
+                        <div style="font-weight: bold; font-size: 14px;">{{ album.name }}</div>
+                        <div style="color: #666; font-size: 12px; margin-top: 4px;">{{ album.artist }}</div>
+                        <div style="color: #999; font-size: 12px;">{{ album.year }} · {{ album.size }} 首</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Track List -->
+            <div v-if="selectedAlbum && albumSearchResults" style="max-height: 450px; overflow-y: auto;">
+                <div style="display: flex; align-items: center; margin-bottom: 15px; padding: 10px; background: #f5f7fa; border-radius: 4px;">
+                    <img :src="albumSearchResults.album_img" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; margin-right: 15px;" />
+                    <div>
+                        <div style="font-weight: bold; font-size: 16px;">
+                            {{ albumSearchResults.album_name }}
+                            <span :style="{ background: resource === 'netease' ? '#c20c0c' : '#31c27c', color: 'white', padding: '2px 6px', borderRadius: '3px', fontSize: '11px', marginLeft: '8px' }">
+                                {{ resource === 'netease' ? '网易云' : 'QQ音乐' }}
+                            </span>
+                        </div>
+                        <div style="color: #666; margin-top: 4px;">{{ albumSearchResults.album_artist }}</div>
+                        <div style="color: #999; font-size: 12px;">{{ albumSearchResults.year }} · {{ albumSearchResults.tracks.length }} 首</div>
+                    </div>
+                </div>
+                <div v-for="(track, idx) in albumSearchResults.tracks" :key="'track-' + idx"
+                    style="padding: 10px 12px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; align-items: center;"
+                    @click="applyAlbumTrack(track)"
+                    @mouseover="$event.target.style.background = '#f5f7fa'"
+                    @mouseout="$event.target.style.background = 'white'">
+                    <div style="width: 30px; color: #999;">{{ track.idx }}</div>
+                    <div style="flex: 1;">
+                        <div>{{ track.name }}</div>
+                        <div style="color: #999; font-size: 12px;">{{ track.artist }}</div>
+                    </div>
+                    <bk-button :theme="'primary'" :text="true" size="small">应用</bk-button>
+                </div>
+            </div>
+
+            <div v-if="albumList.length === 0 && !selectedAlbum && !isAlbumSearching" style="text-align: center; color: #999; padding: 40px;">
+                输入专辑名称搜索
+            </div>
+
+            <div style="margin-top: 15px; text-align: right;">
+                <bk-button @click="albumSearchVisible = false">关闭</bk-button>
+            </div>
+        </bk-dialog>
+
+        <bk-dialog v-model="cookieSetting.visible"
+            theme="primary"
+            :mask-close="false"
+            @confirm="handleUpdateCookies"
+            title="更新网易云 Cookies">
+            <p style="margin-bottom: 10px;">粘贴完整的 Cookie 字符串 (key=value; key2=value2) 或 JSON 格式。</p>
+            <bk-input v-model="cookieStr" type="textarea" :rows="5" placeholder="MUSIC_U=...; __csrf=..."></bk-input>
         </bk-dialog>
     </div>
 </template>
@@ -649,18 +887,20 @@
                 resource: localStorage.getItem('resource') ? localStorage.getItem('resource') : 'netease',
                 translationText: '',
                 resourceList: [
-                    {id: 'acoustid', name: '指纹识别'},
                     {id: 'netease', name: '网易云音乐'},
-                    {id: 'migu', name: '咪咕音乐'},
-                    {id: 'qmusic', name: 'QQ音乐'},
-                    {id: 'kugou', name: '酷狗音乐'},
-                    {id: 'smart_tag', name: '智能刮削'}
+                    {id: 'qmusic', name: 'QQ音乐'}
                 ],
                 resourceListBatch: [
                     {id: 'netease', name: '网易云音乐'},
-                    {id: 'migu', name: '咪咕音乐'},
-                    {id: 'qmusic', name: 'QQ音乐'},
-                    {id: 'kugou', name: '酷狗音乐'}
+                    {id: 'qmusic', name: 'QQ音乐'}
+                ],
+                selectAutoModeList: [
+                    { id: 'normal', name: '普通模式' },
+                    { id: 'strict_album', name: '严格专辑模式' }
+                ],
+                overwritePolicyList: [
+                    { id: 'overwrite_all', name: '完全覆盖' },
+                    { id: 'overwrite_missing', name: '仅覆盖缺失' }
                 ],
                 tidyList: [
                     {id: 'title', name: '标题'},
@@ -718,8 +958,17 @@
                 ],
                 checkedIds: [],
                 checkedData: [],
-                selectAutoMode: 'hard',
-                sourceList: [],
+                selectAutoMode: 'strict_album',
+                sourceList: ['netease'],
+                overwritePolicy: 'overwrite_all',
+                skipScraped: false,
+                logVisible: false,
+                scrapeLogs: [],
+                summaryData: {},
+                failedItems: [],
+                successItems: [],
+                skippedItems: [],
+                historyFilter: 'all',
                 tidyFormData: {
                     root_path: '/app/media/',
                     first_dir: 'artist',
@@ -731,6 +980,25 @@
                         headerPosition: 'left'
                     }
                 },
+                isScraping: false,
+                progressText: '',
+                historyVisible: false,
+                albumSearchVisible: false,
+                albumSearchQuery: '',
+                isAlbumSearching: false,
+                scheduleVisible: false,
+                scheduleConfig: {
+                    enabled: false,
+                    interval_hours: 1,
+                    select_mode: 'strict_album',
+                    overwrite_policy: 'overwrite_all',
+                    source_list: ['netease'],
+                    skip_scraped: true
+                },
+                albumSearchResults: null,
+                albumList: [],
+                selectedAlbum: null,
+                timer: null,
                 exampleSetting2: {
                     primary: {
                         visible: false,
@@ -743,11 +1011,15 @@
                         headerPosition: 'left'
                     }
                 },
+                cookieSetting: {
+                    visible: false
+                },
+                cookieStr: '',
                 sortedField: localStorage.getItem('sortedField') ? JSON.parse(localStorage.getItem('sortedField')) : []
             }
         },
         computed: {
-            ...mapGetters(['geFullPath']),
+            ...mapGetters(['geFullPath', 'getShowHistory', 'getShowSchedule']),
             filePath: {
                 get() {
                     if (this.geFullPath) {
@@ -764,6 +1036,34 @@
                 },
                 set(value) {
                     this.$store.commit('setFullPath', value)
+                }
+            },
+            filteredHistoryItems() {
+                const all = [
+                    ...this.successItems.map(i => ({ ...i, type: 'success' })),
+                    ...this.failedItems.map(i => ({ ...i, type: 'failed' })),
+                    ...this.skippedItems.map(i => ({ ...i, type: 'skipped' }))
+                ]
+                if (this.historyFilter === 'all') return all
+                return all.filter(i => i.type === this.historyFilter)
+            }
+        },
+        watch: {
+            getShowSchedule(val) {
+                if (val) {
+                    this.openScheduleDialog()
+                    this.$store.commit('setShowSchedule', false)
+                }
+            },
+            getShowHistory(val) {
+                if (val) {
+                    this.historyVisible = true
+                    this.$store.commit('setShowHistory', false)
+                }
+            },
+            historyVisible(val) {
+                if (val) {
+                    this.loadHistory()
                 }
             }
         },
@@ -816,7 +1116,11 @@
             },
             nodeClickOne(node) {
                 if (node.icon === 'icon-folder') {
-                    this.filePath = this.filePath + '/' + node.name
+                    if (this.filePath.endsWith('/')) {
+                        this.filePath = this.filePath + node.name
+                    } else {
+                        this.filePath = this.filePath + '/' + node.name
+                    }
                     // this.handleSearchFile()
                 } else {
                     if (node.children && node.children.length > 0) {
@@ -824,7 +1128,8 @@
                     }
                     this.musicInfo = this.baseMusicInfo
                     this.fileName = node.name
-                    this.fullPath = this.filePath + '/' + node.name
+                    const separator = this.filePath.endsWith('/') ? '' : '/'
+                    this.fullPath = this.filePath + separator + node.name
                     this.$api.Task.musicId3({'file_path': this.filePath, 'file_name': node.name}).then((res) => {
                         console.log(res)
                         if (res.result) {
@@ -980,8 +1285,9 @@
             // 保存音乐信息
             handleClick() {
                 console.log(this.musicInfo)
+                const separator = this.filePath.endsWith('/') ? '' : '/'
                 const params = [{
-                    'file_full_path': this.filePath + '/' + this.fileName,
+                    'file_full_path': this.filePath + separator + this.fileName,
                     ...this.musicInfo
                 }]
                 this.isLoading = true
@@ -1031,6 +1337,8 @@
                             this.isLoading = true
                             this.musicInfoManual['select_mode'] = this.selectAutoMode
                             this.musicInfoManual['source_list'] = this.sourceList
+                            this.musicInfoManual['overwrite_policy'] = this.overwritePolicy
+                            this.musicInfoManual['skip_scraped'] = this.skipScraped
                             this.$api.Task.batchAutoUpdateId3({
                                 'file_full_path': this.filePath,
                                 'select_data': this.checkedData,
@@ -1039,8 +1347,44 @@
                                 this.isLoading = false
                                 console.log(res)
                                 if (res.result) {
-                                    this.$cwMessage('创建成功', 'success')
-                                    this.$store.commit('setHasMsg', true)
+                                    // Start Polling
+                                    const taskId = res.data.task_id
+                                    this.gameover = false
+                                    this.isScraping = true
+                                    this.progressText = '开始刮削...'
+                                    this.exampleSetting1.primary.visible = false
+
+                                    this.timer = setInterval(() => {
+                                        this.$api.Task.taskStatus({ task_id: taskId }).then(statusRes => {
+                                            if (statusRes.result) {
+                                                const status = statusRes.data
+                                                if (status.state === 'PROGRESS') {
+                                                    this.progressText = `正在刮削: ${status.filename} (${status.current}/${status.total})`
+                                                } else if (status.state === 'SUCCESS') {
+                                                    clearInterval(this.timer)
+                                                    this.isScraping = false
+                                                    this.progressText = ''
+
+                                                    const result = status.result
+                                                    this.scrapeLogs = result.logs || []
+                                                    this.summaryData = result
+                                                    this.failedItems = result.failed_items || []
+                                                    this.successItems = result.success_items || []
+                                                    this.skippedItems = result.skipped_items || []
+                                                    this.logVisible = true
+                                                    this.$store.commit('setHasMsg', true)
+                                                    this.handleSearchFile()
+                                                } else if (status.state === 'FAILURE' || status.state === 'REVOKED') {
+                                                    clearInterval(this.timer)
+                                                    this.isScraping = false
+                                                    this.progressText = ''
+                                                    this.$cwMessage('任务失败', 'error')
+                                                }
+                                            }
+                                        })
+                                    }, 1000)
+                                } else {
+                                    this.$cwMessage(res.message || '任务启动失败', 'error')
                                 }
                             })
                             return true
@@ -1048,6 +1392,122 @@
                             console.warn(e)
                             return false
                         }
+                    }
+                })
+            },
+            handleJump(item) {
+                const parentPath = item.full_path.substring(0, item.full_path.lastIndexOf('/'))
+                this.filePath = parentPath
+                this.logVisible = false
+
+                this.fadeShowDir = false
+                this.checkedData = []
+                this.checkedIds = []
+                this.$api.Task.fileList({ 'file_path': this.filePath, sorted_fields: this.sortedField }).then((res) => {
+                    if (res.result) {
+                        this.treeListOne = res.data
+                        this.fadeShowDir = true
+
+                        this.$nextTick(() => {
+                            const targetNode = this.treeListOne.find(node => node.name === item.name || node.full_path === item.full_path)
+                            if (targetNode) {
+                                this.nodeClickOne(targetNode)
+                                setTimeout(() => {
+                                    this.toggleLock('title')
+                                }, 500)
+                            }
+                        })
+                    } else {
+                        this.$cwMessage(res.message, 'error')
+                    }
+                })
+            },
+            openAlbumSearch() {
+                this.albumSearchQuery = this.musicInfo.album || ''
+                this.albumSearchResults = null
+                this.albumList = []
+                this.selectedAlbum = null
+                this.albumSearchVisible = true
+            },
+            searchAlbum() {
+                if (!this.albumSearchQuery) return
+                this.isAlbumSearching = true
+                this.selectedAlbum = null
+                this.albumSearchResults = null
+                const resource = this.resource || 'netease'
+                this.$api.Task.searchAlbums({
+                    resource: resource,
+                    album_name: this.albumSearchQuery
+                }).then(res => {
+                    this.isAlbumSearching = false
+                    if (res.result && res.data.length > 0) {
+                        this.albumList = res.data
+                    } else {
+                        this.albumList = []
+                        this.$cwMessage(res.message || '未找到专辑', 'warning')
+                    }
+                }).catch(e => {
+                    this.isAlbumSearching = false
+                    this.$cwMessage('搜索失败: ' + (e.message || 'Wait Timeout'), 'error')
+                })
+            },
+            selectAlbum(album) {
+                this.selectedAlbum = album
+                this.isAlbumSearching = true
+                const resource = this.resource || 'netease'
+                this.$api.Task.fetchAlbumDetails({
+                    resource: resource,
+                    album_id: album.id
+                }).then(res => {
+                    this.isAlbumSearching = false
+                    if (res.result) {
+                        this.albumSearchResults = res.data
+                    } else {
+                        this.$cwMessage(res.message || '获取专辑详情失败', 'error')
+                    }
+                }).catch(e => {
+                    this.isAlbumSearching = false
+                    this.$cwMessage('获取专辑详情失败: ' + (e.message || 'Wait Timeout'), 'error')
+                })
+            },
+            backToAlbumList() {
+                this.selectedAlbum = null
+                this.albumSearchResults = null
+            },
+            applyAlbumTrack(track) {
+                // Apply metadata
+                this.musicInfo.title = track.name
+                this.musicInfo.artist = track.artist
+                this.musicInfo.album = this.albumSearchResults.album_name
+                this.musicInfo.albumartist = this.albumSearchResults.album_artist
+                this.musicInfo.year = this.albumSearchResults.year
+                this.musicInfo.album_img = this.albumSearchResults.album_img
+                this.musicInfo.tracknumber = track.idx
+
+                // Update Cover Preview
+                this.files1 = [{
+                    name: 'cover.png',
+                    status: 'done',
+                    url: this.albumSearchResults.album_img
+                }]
+                this.reloadImg = false
+                this.$nextTick(() => {
+                    this.reloadImg = true
+                })
+
+                this.albumSearchVisible = false
+
+                // Fetch Lyric
+                const resource = this.resource || 'netease'
+                this.$api.Task.fetchLyric({
+                    'song_id': track.id,
+                    'resource': resource
+                }).then((res) => {
+                    if (res.result) {
+                        this.musicInfo.lyrics = res.data
+                        this.$cwMessage('已应用元数据和歌词', 'success')
+                    } else {
+                        this.$cwMessage('已应用元数据，但歌词获取失败', 'warning')
                     }
                 })
             },
@@ -1060,16 +1520,31 @@
                             this.isLoading = true
                             this.tidyFormData['file_full_path'] = this.filePath
                             this.tidyFormData['select_data'] = this.checkedData
-                            this.$api.Task.tidyFolder(this.tidyFormData).then((res) => {
+                            try {
+                                this.$api.Task.tidyFolder(this.tidyFormData).then((res) => {
+                                    this.isLoading = false
+                                    if (res.result) {
+                                        const movedCount = res.data.moved_unorganized_count || 0
+                                        let msg = '文件夹整理完成！'
+                                        if (movedCount > 0) {
+                                            msg += ` 已将 ${movedCount} 个未整理文件夹/文件移动到 "未整理文件" 目录。`
+                                            this.$bkInfo({
+                                                type: 'success',
+                                                title: '整理完成',
+                                                subTitle: msg
+                                            })
+                                        } else {
+                                            this.$cwMessage(msg, 'success')
+                                        }
+                                        this.exampleSetting2.primary.visible = false
+                                        this.handleSearchFile()
+                                    } else {
+                                        this.$cwMessage('整理失败: ' + res.message, 'error')
+                                    }
+                                })
+                            } catch (e) {
                                 this.isLoading = false
-                                console.log(res)
-                                if (res.result) {
-                                    this.$cwMessage('创建成功', 'success')
-                                    this.handleSearchFile()
-                                } else {
-                                    this.$cwMessage('创建失败', 'error')
-                                }
-                            })
+                            }
                             return true
                         } catch (e) {
                             console.warn(e)
@@ -1108,6 +1583,56 @@
                 } else {
                     return false
                 }
+            },
+            openScheduleDialog() {
+                this.scheduleVisible = true
+                this.$api.Task.getScheduleConfig().then(res => {
+                    if (res.result) {
+                        this.scheduleConfig = res.data
+                    }
+                })
+            },
+            saveScheduleConfig() {
+                this.$api.Task.updateScheduleConfig(this.scheduleConfig).then(res => {
+                    if (res.result) {
+                        this.$cwMessage('定时任务配置已保存', 'success')
+                        this.scheduleVisible = false
+                    }
+                })
+            },
+            loadHistory() {
+                this.$api.Task.getRecord({ page_size: 1000 }).then(res => {
+                    if (res.result) {
+                        const tasks = res.data.results
+                        this.successItems = tasks.filter(t => t.state === 'success').map(t => ({
+                            name: t.song_name ? `${t.artist_name} - ${t.song_name}` : t.filename,
+                            msg: t.full_path,
+                            type: 'success'
+                        }))
+                        this.failedItems = tasks.filter(t => t.state === 'fail').map(t => ({
+                            name: t.song_name ? `${t.artist_name} - ${t.song_name}` : t.filename,
+                            msg: t.full_path,
+                            type: 'error'
+                        }))
+                    }
+                })
+            },
+            handleUpdateCookies() {
+                if (!this.cookieStr) {
+                    this.$cwMessage('Cookies 不能为空', 'error')
+                    // Prevent closing if wanted? The dialog component might close automatically on confirm.
+                    return
+                }
+                this.isLoading = true
+                this.$api.Task.updateCookies({ cookies: this.cookieStr }).then((res) => {
+                    this.isLoading = false
+                    if (res.result) {
+                        this.$cwMessage('Cookies 更新成功', 'success')
+                        this.cookieStr = '' // Clear on success
+                    } else {
+                        this.$cwMessage('Cookies 更新失败: ' + res.message, 'error')
+                    }
+                })
             }
         }
     }
@@ -1357,5 +1882,10 @@ button.bk-button-text {
 
 .can-copy {
     cursor: pointer;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 </style>

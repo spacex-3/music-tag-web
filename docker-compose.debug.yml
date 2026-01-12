@@ -1,0 +1,83 @@
+# ==========================================
+# 修改下面 3 处音乐目录路径（标记 <-- 的地方）
+# ==========================================
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: music_tag_web_local
+    container_name: music-tag-web
+    ports:
+      - "8001:8001"
+    volumes:
+      - /Users/ks/Downloads/Music:/app/media:z # <-- 修改这里
+      - .:/app
+      - sqlite_data:/app/data
+    restart: always
+    environment:
+      dockerrun: "yes"
+      USE_DOCKER: "yes"
+    depends_on:
+      - redis
+    command: >
+      sh -c "
+        mkdir -p /app/data &&
+        python manage.py migrate --run-syncdb &&
+        touch /app/data/.db_ready &&
+        python manage.py runserver 0.0.0.0:8001
+      "
+
+  celeryworker:
+    image: music_tag_web_local
+    container_name: music_celeryworker
+    environment:
+      dockerrun: "yes"
+      C_FORCE_ROOT: "1"
+    volumes:
+      - /Users/ks/Downloads/Music:/app/media:z # <-- 修改这里（保持和上面一致）
+      - .:/app
+      - sqlite_data:/app/data
+    depends_on:
+      - redis
+      - django
+    restart: on-failure
+    command: >
+      sh -c "
+        echo 'Waiting for database migrations...' &&
+        while [ ! -f /app/data/.db_ready ]; do sleep 1; done &&
+        echo 'Database ready, starting worker...' &&
+        /start-celeryworker
+      "
+
+  celerybeat:
+    image: music_tag_web_local
+    container_name: music_celerybeat
+    environment:
+      dockerrun: "yes"
+    volumes:
+      - /Users/ks/Downloads/Music:/app/media:z # <-- 修改这里（保持和上面一致）
+      - .:/app
+      - sqlite_data:/app/data
+    depends_on:
+      - redis
+      - django
+    restart: on-failure
+    command: >
+      sh -c "
+        echo 'Waiting for database migrations...' &&
+        while [ ! -f /app/data/.db_ready ]; do sleep 1; done &&
+        echo 'Database ready, starting beat...' &&
+        /start-celerybeat
+      "
+
+  redis:
+    image: redis:latest
+    restart: always
+    container_name: music_redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  sqlite_data:

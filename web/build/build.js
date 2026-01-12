@@ -21,14 +21,26 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
     if (err) throw err
     process.stdout.write(stats.toString({
       colors: true,
-      modules: false,
-      children: false, // If you are using ts-loader, setting this to true will make TypeScript errors show up during build.
-      chunks: false,
-      chunkModules: false
+      modules: true,
+      children: true,
+      chunks: true,
+      chunkModules: true,
+      errorDetails: true
     }) + '\n\n')
 
     if (stats.hasErrors()) {
       console.log(chalk.red('  Build failed with errors.\n'))
+      stats.compilation.errors.forEach(error => {
+        console.error('--- ERROR START ---');
+        if (typeof error === 'string') {
+          console.error(error);
+        } else {
+          console.error('Message:', error.message);
+          console.error('Stack:', error.stack);
+          if (error.error) console.error('Inner Error:', error.error);
+        }
+        console.error('--- ERROR END ---');
+      });
       process.exit(1)
     }
 
