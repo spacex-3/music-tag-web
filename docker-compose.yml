@@ -12,24 +12,32 @@ services:
     restart: always
     environment:
       dockerrun: "yes"
-      # Using SQLite by default (no MYSQL_* vars needed)
     depends_on:
       - redis
-    # Use runserver with --insecure to serve static files without Nginx
-    command: python manage.py runserver 0.0.0.0:8001 --insecure
+    # 1. Inject DB config to use /app/data/db.sqlite3 (persisted in ./data)
+    # 2. Run migrations
+    # 3. Start server
+    command: >
+      sh -c "echo \"DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': '/app/data/db.sqlite3'}}\" > django_vue_cli/local_settings.py &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8001 --insecure"
 
   celeryworker:
     image: ghcr.io/spacex-3/music-tag-web:dev_1.0
     container_name: music_celeryworker
     environment:
       dockerrun: "yes"
+      C_FORCE_ROOT: "1" # Fix root execution error
     volumes:
       - ./media:/app/media:z
       - ./data:/app/data:z
     depends_on:
       - redis
     restart: always
-    command: /start-celeryworker
+    # Inject DB config so celery sees the same DB as django
+    command: >
+      sh -c "echo \"DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': '/app/data/db.sqlite3'}}\" > django_vue_cli/local_settings.py &&
+             /start-celeryworker"
 
   celerybeat:
     image: ghcr.io/spacex-3/music-tag-web:dev_1.0
@@ -42,7 +50,10 @@ services:
     depends_on:
       - redis
     restart: always
-    command: /start-celerybeat
+    # Inject DB config
+    command: >
+      sh -c "echo \"DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': '/app/data/db.sqlite3'}}\" > django_vue_cli/local_settings.py &&
+             /start-celerybeat"
 
   redis:
     image: redis:6-alpine
