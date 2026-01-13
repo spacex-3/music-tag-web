@@ -1530,10 +1530,21 @@
                     let matchedTrack = null
                     const fullPath = file.full_path || (this.filePath + separator + file.name)
 
-                    // Method 1: Match by leading number "01" -> track.idx = 1
-                    const numMatch = file.name.match(/^(\d+)/)
-                    if (numMatch) {
-                        const fileNum = parseInt(numMatch[1], 10)
+                    // Method 1: Match by track number from various formats
+                    // Formats: "01 Song", "1-01 Song" (disc-track), "2-03 Song", etc.
+                    let fileNum = null
+                    // First try disc-track format: "1-01" -> extract "01"
+                    const discTrackMatch = file.name.match(/^\d+-(\d+)/)
+                    if (discTrackMatch) {
+                        fileNum = parseInt(discTrackMatch[1], 10)
+                    } else {
+                        // Fallback: just leading number "01" or "1"
+                        const numMatch = file.name.match(/^(\d+)/)
+                        if (numMatch) {
+                            fileNum = parseInt(numMatch[1], 10)
+                        }
+                    }
+                    if (fileNum !== null) {
                         matchedTrack = tracks.find(t => parseInt(t.idx, 10) === fileNum)
                     }
 
