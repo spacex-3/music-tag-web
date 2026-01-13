@@ -87,6 +87,15 @@ class TaskSerializer(serializers.ModelSerializer):
         else:
             Task.objects.filter(id=ret["id"]).delete()
             ret["is_exists"] = False
+        
+        # Inject error message into filename/song_name so it appears in frontend list
+        if instance.state == 'fail' and instance.error_msg:
+             # Frontend prioritizes song_name, then filename. 
+             # We append error to whichever is displayed or just filename just in case.
+             ret["filename"] = f"{ret['filename']} (失败原因: {instance.error_msg})"
+             if ret.get("song_name"):
+                 ret["song_name"] = f"{ret['song_name']} (失败原因: {instance.error_msg})"
+                 
         return ret
 
 
