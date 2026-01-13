@@ -377,16 +377,16 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
             
             # Determine search query
             search_query = None
+            search_artist = None  # Keep artist for reference but don't include in search
             if album_votes:
                 # Get the most common album name
                 best_album = max(album_votes.items(), key=lambda x: x[1])[0]
                 # If usage > 50% or it's the only one
                 if album_votes[best_album] > len(tasks) * 0.5:
+                    # Use album name ONLY for search (APIs work better without artist prefix)
                     search_query = best_album
-                    # Append artist if available for better precision
                     if artist_votes:
-                        best_artist = max(artist_votes.items(), key=lambda x: x[1])[0]
-                        search_query = f"{best_artist} {best_album}"
+                        search_artist = max(artist_votes.items(), key=lambda x: x[1])[0]
             
             # Fallback to folder name
             if not search_query:

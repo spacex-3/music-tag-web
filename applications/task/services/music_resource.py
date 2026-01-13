@@ -286,6 +286,19 @@ class QmusicClient:
             song["source"] = "qmusic"
         return songs
 
+    def fetch_album_by_name(self, album_name):
+        """Search for album by name and return first match with tracks"""
+        albums = self.search_albums(album_name)
+        if not albums:
+            return None
+        # Use the first match
+        first_album = albums[0]
+        album_id = first_album.get("id")
+        if not album_id:
+            return None
+        return self.fetch_album_by_id(album_id)
+
+
     def search_albums(self, album_name):
         """搜索专辑列表"""
         import requests
