@@ -494,21 +494,21 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
                             })
                         except Exception as e:
                             log(f"Save ID3 Error: {e}")
-
-                        parent_path = os.path.dirname(task.full_path)
-                        Task.objects.update_or_create(full_path=task.full_path, defaults={
-                            "state": task.state,
-                            "parent_path": parent_path,
-                            "filename": os.path.basename(task.full_path),
-                            "song_name": task.song_name,
-                            "state": task.state,
-                            "parent_path": os.path.dirname(task.full_path),
-                            "filename": os.path.basename(task.full_path),
-                            "song_name": task.song_name,
-                            "artist_name": task.artist_name,
-                            "created_at": datetime.now(),
-                            "error_msg": str(e)
-                        })
+                            # Record error to history
+                            Task.objects.update_or_create(full_path=task.full_path, defaults={
+                                "state": "fail",
+                                "parent_path": os.path.dirname(task.full_path),
+                                "filename": os.path.basename(task.full_path),
+                                "song_name": task.song_name,
+                                "artist_name": task.artist_name,
+                                "created_at": datetime.now(),
+                                "error_msg": str(e)
+                            })
+                            fail_count += 1
+                            failed_items.append({
+                                "name": os.path.basename(task.full_path),
+                                "full_path": task.full_path
+                            })
                         time.sleep(2)
                     else:
                         task.state = "fail"
