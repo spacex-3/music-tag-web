@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { GET, POST, reUrl } from '../../axiosconfig/axiosconfig'
 
 export default {
