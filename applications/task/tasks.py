@@ -1,49 +1,25 @@
+from datetime import datetime
+import os
+import shutil
+import time
+import uuid
+from collections import defaultdict
 
-def clean_folder_name(name):
-    """
-    Clean folder name by removing year, format, etc.
-    e.g. "Adele - 25 [2015] FLAC" -> "Adele - 25"
-    """
-    import re
-    # Remove (Year) or [Year]
-    name = re.sub(r'[\[\(]\d{4}[\]\)]', '', name)
-    # Remove [Format] e.g. [FLAC], [MP3]
-    name = re.sub(r'\[.*?\]', '', name)
-    # Remove CD/Disc number if it's part of the album name string (rare, but happens)
-    # But main logic handles CD folders separately.
-    return name.strip()
+from component import music_tag
+from django.conf import settings
+from django.db import transaction
 
-def is_cd_folder(name):
-    """Check if folder name indicates a CD/Disc subfolder"""
-    import re
-    return bool(re.search(r'^(cd|disc)\s*\d+$', name, re.IGNORECASE))
-
-# ... (Existing imports and code) ...
-
-# Inside match_album_song or batch_auto_tag_task (I need to find the right place)
-# Let's verify where 'album_name' comes from.
-# It comes from folder name.
-
-@app.task(bind=True)
-def batch_auto_tag_task(self, batch=None, source_list=None, select_mode='strict_album', overwrite_policy='overwrite_missing', skip_scraped=False):
-    # ... (existing code) ...
-    
-    # Inside the loop:
-    for folder_path, tasks in tasks_by_folder.items():
-        # ...
-        folder_name = os.path.basename(folder_path)
-        
-        # FEATURE: CD Subfolder Handling
-        if is_cd_folder(folder_name):
-            parent_name = os.path.basename(os.path.dirname(folder_path))
-            search_name = parent_name
-        else:
-            search_name = folder_name
-            
-        # FEATURE: Clean Folder Name
-        search_name = clean_folder_name(search_name)
-        
-        # ... (Rest of logic) ...
+from applications.music.models import Folder, Track, Album, Genre, Artist, Attachment
+from applications.subsonic.constants import AUDIO_EXTENSIONS_AND_MIMETYPE, COVER_TYPE
+from applications.task.constants import ALLOW_TYPE
+from applications.task.models import TaskRecord, Task
+from applications.task.services.music_ids import MusicIDS
+from applications.task.services.music_resource import MusicResource
+from applications.task.services.scan_utils import ScanMusic, MusicInfo
+from applications.task.services.scan_utils import ScanMusic, MusicInfo
+from applications.task.utils import folder_update_time, exists_dir, match_song, match_album_song, recursive_scandir, clean_folder_name, is_cd_folder
+from applications.task.services.update_ids import save_music
+from django_vue_cli.celery_app import app
 
 import os
 import shutil

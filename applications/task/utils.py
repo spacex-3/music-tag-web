@@ -66,6 +66,28 @@ def clean_title(name):
     name = re.sub(r'[\[\(].*?[\]\)]', '', name)
     return name.strip()
 
+
+def clean_folder_name(name):
+    """
+    Clean folder name by removing year, format, etc.
+    e.g. "Adele - 25 [2015] FLAC" -> "Adele - 25"
+    """
+    import re
+    # Remove (Year) or [Year]
+    name = re.sub(r'[\[\(]\d{4}[\]\)]', '', name)
+    # Remove [Format] e.g. [FLAC], [MP3]
+    name = re.sub(r'\[.*?\]', '', name)
+    # Remove CD/Disc number if it's part of the album name string (rare, but happens)
+    # But main logic handles CD folders separately.
+    return name.strip()
+
+
+def is_cd_folder(name):
+    """Check if folder name indicates a CD/Disc subfolder"""
+    import re
+    return bool(re.search(r'^(cd|disc)\s*\d+$', name, re.IGNORECASE))
+
+
 def match_song(resource, song_path, select_mode, overwrite_policy="overwrite_all"):
     from applications.task.services.music_resource import MusicResource
 
