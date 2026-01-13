@@ -14,14 +14,9 @@ services:
       dockerrun: "yes"
     depends_on:
       - redis
-    # 1. Soft link DB to persistence
-    # 2. Migrate DB
-    # 3. Seed Periodic Task (as it's missing in new DB)
-    # 4. Start Server
     command: >
       sh -c "ln -sf /app/data/db.sqlite3 /app/db.sqlite3 &&
              python manage.py migrate &&
-             python manage.py shell -c \"from django_celery_beat.models import PeriodicTask, IntervalSchedule; import json; schedule, _ = IntervalSchedule.objects.get_or_create(every=1, period=IntervalSchedule.HOURS); PeriodicTask.objects.update_or_create(name='auto_scrape_new_files', defaults={'interval': schedule, 'task': 'applications.task.tasks.batch_auto_tag_task', 'kwargs': json.dumps({'batch': 'scheduled', 'source_list': ['netease'], 'select_mode': 'strict_album', 'overwrite_policy': 'overwrite_missing', 'skip_scraped': True}), 'enabled': True})\" &&
              python manage.py runserver 0.0.0.0:8001 --insecure"
 
   celeryworker:
@@ -33,9 +28,6 @@ services:
     volumes:
       - ./media:/app/media:z
       - ./data:/app/data:z
-      - ./applications:/app/applications:z
-      - ./django_vue_cli:/app/django_vue_cli:z
-      - ./manage.py:/app/manage.py:z
     depends_on:
       - redis
     restart: always
@@ -51,9 +43,6 @@ services:
     volumes:
       - ./media:/app/media:z
       - ./data:/app/data:z
-      - ./applications:/app/applications:z
-      - ./django_vue_cli:/app/django_vue_cli:z
-      - ./manage.py:/app/manage.py:z
     depends_on:
       - redis
     restart: always

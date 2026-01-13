@@ -100,6 +100,12 @@
             updateCountdown() {
                 const config = this.scheduleConfig
                 
+                // Hide countdown if schedule is disabled
+                if (!config.enabled) {
+                    this.scheduleCountdown = ''
+                    return
+                }
+                
                 // Use last_run_at if available, otherwise use date_changed (creation/update time)
                 const anchorTime = config.last_run_at || config.date_changed
                 if (!anchorTime) {

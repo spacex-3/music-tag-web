@@ -16,30 +16,7 @@ from applications.task.models import TaskRecord, Task
 from applications.task.services.music_ids import MusicIDS
 from applications.task.services.music_resource import MusicResource
 from applications.task.services.scan_utils import ScanMusic, MusicInfo
-from applications.task.services.scan_utils import ScanMusic, MusicInfo
 from applications.task.utils import folder_update_time, exists_dir, match_song, match_album_song, recursive_scandir, clean_folder_name, is_cd_folder
-from applications.task.services.update_ids import save_music
-from django_vue_cli.celery_app import app
-
-import os
-import shutil
-import time
-import uuid
-from collections import defaultdict
-
-from component import music_tag
-from django.conf import settings
-from django.db import transaction
-
-from applications.music.models import Folder, Track, Album, Genre, Artist, Attachment
-from applications.subsonic.constants import AUDIO_EXTENSIONS_AND_MIMETYPE, COVER_TYPE
-from applications.task.constants import ALLOW_TYPE
-from applications.task.models import TaskRecord, Task
-from applications.task.services.music_ids import MusicIDS
-from applications.task.services.music_resource import MusicResource
-from applications.task.services.scan_utils import ScanMusic, MusicInfo
-from applications.task.services.scan_utils import ScanMusic, MusicInfo
-from applications.task.utils import folder_update_time, exists_dir, match_song, match_album_song, recursive_scandir
 from applications.task.services.update_ids import save_music
 from django_vue_cli.celery_app import app
 
