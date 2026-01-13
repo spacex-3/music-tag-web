@@ -1033,7 +1033,12 @@
                     ...this.successItems.map(i => ({ ...i, type: 'success' })),
                     ...this.failedItems.map(i => ({ ...i, type: 'failed' })),
                     ...this.skippedItems.map(i => ({ ...i, type: 'skipped' }))
-                ]
+                ].sort((a, b) => {
+                    // Sort by created_at descending (newest first)
+                    const timeA = a.created_at || ''
+                    const timeB = b.created_at || ''
+                    return timeB.localeCompare(timeA)
+                })
                 if (this.historyFilter === 'all') return all
                 return all.filter(i => i.type === this.historyFilter)
             }
@@ -1742,13 +1747,15 @@
                 this.$api.Task.getRecord({ page_size: 10000 }).then(res => {
                     if (res.result) {
                         const tasks = res.data.results
+                        // Filter preserves original order from API (sorted by -created_at)
                         this.successItems = tasks.filter(t => t.state === 'success').map(t => {
                             const time = t.created_at ? t.created_at.replace('T', ' ').split('.')[0] : ''
                             return {
                                 name: t.song_name ? `${t.artist_name} - ${t.song_name}` : t.filename,
                                 msg: `${time} - ${t.full_path}`,
                                 type: 'success',
-                                parent_path: t.parent_path
+                                parent_path: t.parent_path,
+                                created_at: t.created_at
                             }
                         })
                         this.failedItems = tasks.filter(t => t.state === 'fail').map(t => {
@@ -1757,7 +1764,18 @@
                                 name: t.song_name ? `${t.artist_name} - ${t.song_name}` : t.filename,
                                 msg: `${time} - ${t.full_path}`,
                                 type: 'error',
-                                parent_path: t.parent_path
+                                parent_path: t.parent_path,
+                                created_at: t.created_at
+                            }
+                        })
+                        this.skippedItems = tasks.filter(t => t.state === 'skipped').map(t => {
+                            const time = t.created_at ? t.created_at.replace('T', ' ').split('.')[0] : ''
+                            return {
+                                name: t.song_name ? `${t.artist_name} - ${t.song_name}` : t.filename,
+                                msg: `${time} - ${t.full_path}`,
+                                type: 'skipped',
+                                parent_path: t.parent_path,
+                                created_at: t.created_at
                             }
                         })
                     }

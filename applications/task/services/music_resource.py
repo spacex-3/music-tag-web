@@ -131,7 +131,7 @@ class NetEaseMusicClient:
 
         # Process songs into the standard format
         processed_songs = []
-        for song in songs:
+        for list_idx, song in enumerate(songs, start=1):
             artists = song.get("artists") or song.get("ar", [])
             album_obj = song.get("album", {})
             if artists:
@@ -148,6 +148,9 @@ class NetEaseMusicClient:
             song_name = song.get("name") or song.get("n") or ""
             song_name = re.sub(r'^\d+[\s\.\-]+', '', song_name)  # Clean leading numbers
 
+            # Use API track number if available, otherwise use list position
+            track_no = song.get("no") or list_idx
+
             processed_songs.append({
                 "id": song.get("id"),
                 "name": song_name,
@@ -157,7 +160,7 @@ class NetEaseMusicClient:
                 "album_img": album_info.get("picUrl", ""),
                 "year": year or "",
                 "duration": song.get("duration") or song.get("dt", 0),  # Duration in ms
-                "idx": song.get("no", 0)  # Track number
+                "idx": track_no
             })
             
         return {
@@ -357,9 +360,11 @@ class QmusicClient:
         songs = data.get("list", [])
 
         processed_songs = []
-        for song in songs:
+        for list_idx, song in enumerate(songs, start=1):
             singers = song.get("singer", [])
             artist = ",".join([s.get("name", "") for s in singers]) if singers else ""
+            # Use API index if available, otherwise use list position
+            track_no = song.get("index") or list_idx
             processed_songs.append({
                 "id": song.get("songmid", ""),
                 "name": re.sub(r'^\d+[\s\.\-]+', '', song.get("songname", "")),
@@ -369,7 +374,7 @@ class QmusicClient:
                 "album_img": self.QQMUSIC_ALBUM_COVER.format(id=album_id),
                 "year": album_info.get("aDate", "")[:4] if album_info.get("aDate") else "",
                 "duration": song.get("interval", 0) * 1000,
-                "idx": song.get("index", 0)
+                "idx": track_no
             })
 
         return {
