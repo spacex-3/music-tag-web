@@ -1,61 +1,64 @@
 import { GET, POST, reUrl } from '../../axiosconfig/axiosconfig'
 
 export default {
-    login: function(params) {
+    login: function (params) {
         return POST(reUrl + '/api/token/', params)
     },
-    loginInfo: function(params) {
+    loginInfo: function (params) {
         return GET(reUrl + '/user/info/', params)
     },
-    logout: function(params) {
+    logout: function (params) {
         return POST(reUrl + '/logout/', params)
     },
-    fileList: function(params) {
+    fileList: function (params) {
         return POST(reUrl + '/api/file_list/', params)
     },
-    musicId3: function(params) {
+    musicId3: function (params) {
         return POST(reUrl + '/api/music_id3/', params)
     },
-    updateId3: function(params) {
+    updateId3: function (params) {
         return POST(reUrl + '/api/update_id3/', params)
     },
-    batchUpdateId3: function(params) {
+    batchUpdateId3: function (params) {
         return POST(reUrl + '/api/batch_update_id3/', params)
     },
-    batchAutoUpdateId3: function(params) {
+    batchAutoUpdateId3: function (params) {
         return POST(reUrl + '/api/batch_auto_update_id3/', params)
     },
-    tidyFolder: function(params) {
+    tidyFolder: function (params) {
         return POST(reUrl + '/api/tidy_folder/', params)
     },
-    fetchId3Title: function(params) {
+    fetchId3Title: function (params) {
         return POST(reUrl + '/api/fetch_id3_by_title/', params)
     },
-    fetchLyric: function(params) {
+    fetchLyric: function (params) {
         return POST(reUrl + '/api/fetch_lyric/', params)
     },
-    translationLyc: function(params) {
+    translationLyc: function (params) {
         return POST(reUrl + '/api/translation_lyc/', params)
     },
-    getRecord: function(params) {
+    getRecord: function (params) {
         return GET(reUrl + '/api/record/', params)
     },
-    updateCookies: function(params) {
+    updateCookies: function (params) {
         return POST(reUrl + '/api/update_cookies/', params)
     },
-    taskStatus: function(params) {
+    taskStatus: function (params) {
         return GET(reUrl + '/api/task_status/', params)
     },
-    fetchAlbumDetails: function(params) {
+    stopAll: function (params) {
+        return POST(reUrl + '/api/stop_all_tasks/', params)
+    },
+    fetchAlbumDetails: function (params) {
         return POST(reUrl + '/api/fetch_album_details/', params)
     },
-    searchAlbums: function(params) {
+    searchAlbums: function (params) {
         return POST(reUrl + '/api/search_albums/', params)
     },
-    getScheduleConfig: function(params) {
+    getScheduleConfig: function (params) {
         return GET(reUrl + '/api/get_schedule_config/', params)
     },
-    updateScheduleConfig: function(params) {
+    updateScheduleConfig: function (params) {
         return POST(reUrl + '/api/update_schedule_config/', params)
     }
 }

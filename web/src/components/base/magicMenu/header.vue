@@ -19,6 +19,9 @@
             <bk-button :text="true" title="定时刮削" @click="openSchedule" style="color: #63656E; margin-right: 20px;">
                 <bk-icon type="clock"></bk-icon> 定时刮削
             </bk-button>
+            <bk-button :text="true" title="停止刮削" @click="handleStopTasks" style="color: #ff5656; margin-right: 20px;">
+                <bk-icon type="close-circle-shape"></bk-icon> 停止刮削
+            </bk-button>
             <bk-button :text="true" title="刮削记录" @click="openHistory" style="color: #63656E;">
                 <bk-icon type="list"></bk-icon> 历史记录
             </bk-button>
@@ -179,6 +182,23 @@
                         this.cookieVisible = false
                     } else {
                         this.$cwMessage('Cookies 更新失败: ' + res.message, 'error')
+                    }
+                })
+            },
+            handleStopTasks() {
+                this.$bkInfo({
+                    type: 'warning',
+                    title: '确认停止？',
+                    subTitle: '这将强制停止所有正在运行的任务、清空队列，并关闭定时刮削。',
+                    confirmFn: () => {
+                         this.$api.Task.stopAll().then((res) => {
+                            if (res.result) {
+                                this.$cwMessage('已停止所有任务并清空队列', 'success')
+                                this.fetchSchedule() // Refresh UI status
+                            } else {
+                                this.$cwMessage('操作失败: ' + res.message, 'error')
+                            }
+                        })
                     }
                 })
             },

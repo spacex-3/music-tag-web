@@ -427,6 +427,14 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
             log(f"Searching Album: {search_query}")
             
             # Step 2: Search for Album
+            # Update Progress to show what we are searching for (Fixes "Frozen" UI perception)
+            if self.request.id:
+                 self.update_state(state='PROGRESS', meta={
+                    'current': current_index,
+                    'total': total_tasks,
+                    'filename': f"Searching Album: {search_query}..."
+                })
+
             remote_album = None
             for resource in source_list:
                 if resource == "netease" or True: 
