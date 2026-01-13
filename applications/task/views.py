@@ -491,17 +491,33 @@ class TaskViewSets(GenericViewSet):
         # bs64_img_str = "data:image/jpeg;base64," + bs64_img
         return self.success_response(data=bs64_img)
 
+    @action(methods=["post"], detail=False)
+    def stop_all_tasks(self, request, *args, **kwargs):
+        """
+        Stop all running tasks, purge queue, and disable scheduled tasks.
+        """
+        # 1. Revoke active tasks
+        active_tasks = celery_app.control.inspect().active()
+        if active_tasks:
+            for worker, tasks in active_tasks.items():
+                for task in tasks:
+                    celery_app.control.revoke(task["id"], terminate=True)
+        
+        # 2. Purge pending queue
+        celery_app.control.purge()
+        
+        # 3. Disable scheduled task
+        try:
+            PeriodicTask.objects.filter(name='auto_scrape_new_files').update(enabled=False)
+        except Exception:
+            pass
+            
+        return self.success_response(msg="已停止所有任务并关闭定时刮削")
+
     @action(methods=["get"], detail=False)
     def clear_celery(self, request, *args, **kwargs):
-        active_tasks = celery_app.control.inspect().active()
-        try:
-            active_tasks_data = list(active_tasks.values())[0]
-        except Exception:
-            return self.success_response()
-        for task in active_tasks_data:
-            celery_app.control.revoke(task["id"], terminate=True)
-        celery_app.control.purge()
-        return self.success_response()
+        # Kept for backward compatibility if needed, else can be alias
+        return self.stop_all_tasks(request)
 
     @action(methods=["get"], detail=False)
     def active_queue(self, request, *args, **kwargs):
