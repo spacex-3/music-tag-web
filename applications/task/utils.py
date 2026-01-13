@@ -58,6 +58,14 @@ def match_artist(my_value, u_value):
         return match_score(my_value, u_value)
 
 
+
+def clean_title(name):
+    """Clean title for better matching"""
+    import re
+    # Remove (Year), [Format], etc.
+    name = re.sub(r'[\[\(].*?[\]\)]', '', name)
+    return name.strip()
+
 def match_song(resource, song_path, select_mode, overwrite_policy="overwrite_all"):
     from applications.task.services.music_resource import MusicResource
 
@@ -65,6 +73,10 @@ def match_song(resource, song_path, select_mode, overwrite_policy="overwrite_all
     file_name = song_path.split("/")[-1]
     file_title = file_name.split('.')[0]
     title = file["title"].value or file_title
+    
+    # Feature: Clean Title
+    title = clean_title(title)
+    
     artist = file["artist"].value or ""
     album = file["album"].value or ""
 

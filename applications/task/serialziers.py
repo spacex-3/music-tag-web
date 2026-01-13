@@ -76,6 +76,8 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_message(self, obj):
+        if obj.error_msg:
+            return f"【{obj.song_name}】 {obj.error_msg}"
         return f"【{obj.song_name}】 未找到标签或修改失败！"
 
     def to_representation(self, instance):
