@@ -6,6 +6,7 @@ import uuid
 from collections import defaultdict
 
 from component import music_tag
+from component.zhconv import convert as zhconv_convert
 from django.conf import settings
 from django.db import transaction
 
@@ -404,24 +405,43 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
             log(f"Searching Album: {search_query}")
             
             # Step 2: Search for Album
+            # Convert Traditional Chinese to Simplified for better matching (esp. Netease)
+            search_query_simplified = zhconv_convert(search_query, 'zh-cn')
+            if search_query_simplified != search_query:
+                log(f"Also trying Simplified: {search_query_simplified}")
+            
             # Update Progress to show what we are searching for (Fixes "Frozen" UI perception)
             if self.request.id:
                  self.update_state(state='PROGRESS', meta={
                     'current': current_index,
                     'total': total_tasks,
-                    'filename': f"Searching Album: {search_query}..."
+                    'filename': f"Searching Album: {search_query_simplified}..."
                 })
 
             remote_album = None
+            used_resource = None
+            
+            # Try each source with Simplified Chinese first
             for resource in source_list:
-                if resource == "netease" or True: 
-                     remote_album = MusicResource(resource).fetch_album_by_name(search_query)
-                     if remote_album:
-                         log(f"Found Album: {remote_album['album_name']} by {remote_album['album_artist']}")
-                         break
-                     else:
-                         if resource == "netease":
-                            cookie_warning = True
+                remote_album = MusicResource(resource).fetch_album_by_name(search_query_simplified)
+                if remote_album:
+                    log(f"Found Album ({resource}): {remote_album['album_name']} by {remote_album['album_artist']}")
+                    used_resource = resource
+                    break
+                else:
+                    log(f"Album not found on {resource} with query: {search_query_simplified}")
+                    if resource == "netease":
+                        cookie_warning = True
+            
+            # If Simplified didn't work and we had Traditional, try original query
+            if not remote_album and search_query_simplified != search_query:
+                log(f"Retrying with original query: {search_query}")
+                for resource in source_list:
+                    remote_album = MusicResource(resource).fetch_album_by_name(search_query)
+                    if remote_album:
+                        log(f"Found Album ({resource}): {remote_album['album_name']} by {remote_album['album_artist']}")
+                        used_resource = resource
+                        break
 
             # Step 3: Match and Save
             if remote_album:
