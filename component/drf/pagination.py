@@ -21,7 +21,7 @@ class CustomPageNumberPagination(PageNumberPagination):
                     ("page", self.page.number),
                     ("total_page", self.page.paginator.num_pages),
                     ("count", self.page.paginator.count),
-                    ("items", data),
+                    ("results", data),
                 ]
             )
         )
@@ -32,6 +32,6 @@ class CustomPageNumberPagination(PageNumberPagination):
                 ("page", self.page.number),
                 ("total_page", self.page.paginator.num_pages),
                 ("count", self.page.paginator.count),
-                ("items", data),
+                ("results", data),
             ]
         )
