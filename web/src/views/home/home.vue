@@ -1386,9 +1386,15 @@
                 })
             },
             handleJump(item) {
-                const parentPath = item.full_path.substring(0, item.full_path.lastIndexOf('/'))
+                // Use parent_path if available (from history), otherwise extract from full_path
+                const parentPath = item.parent_path || (item.full_path ? item.full_path.substring(0, item.full_path.lastIndexOf('/')) : null)
+                if (!parentPath) {
+                    this.$cwMessage('无法获取文件路径', 'error')
+                    return
+                }
                 this.filePath = parentPath
                 this.logVisible = false
+                this.historyVisible = false // Close history dialog
 
                 this.fadeShowDir = false
                 this.checkedData = []
@@ -1519,56 +1525,42 @@
 
                 files.forEach(file => {
                     // Try to match file -> track
-                    // 1. Match by leading number "01" -> 1
                     if (file.children) return // Skip folders
 
-                    let fileNum = null
-                    // Match any number at start, possibly followed by space or dot
-                    const match = file.name.match(/^(\d+)/)
-                    if (match) {
-                        fileNum = parseInt(match[1], 10)
+                    let matchedTrack = null
+                    const fullPath = file.full_path || (this.filePath + separator + file.name)
+
+                    // Method 1: Match by leading number "01" -> track.idx = 1
+                    const numMatch = file.name.match(/^(\d+)/)
+                    if (numMatch) {
+                        const fileNum = parseInt(numMatch[1], 10)
+                        matchedTrack = tracks.find(t => parseInt(t.idx, 10) === fileNum)
                     }
 
-                    if (fileNum !== null) {
-                        const track = tracks.find(t => parseInt(t.idx, 10) === fileNum)
-                        if (track) {
-                            const fullPath = file.full_path || (this.filePath + separator + file.name)
-                            matches.push({
-                                file: file,
-                                fullPath: fullPath,
-                                track: track
-                            })
-                        }
-                    }
-                })
-
-                // Fallback: if no matches by track number, try to match by filename
-                if (matches.length === 0) {
-                    files.forEach(file => {
-                        if (file.children) return // Skip folders
-                        // Clean the filename: remove extension, leading numbers, common prefixes
+                    // Method 2: If no number match, try filename matching
+                    if (!matchedTrack) {
                         const cleanName = file.name
                             .replace(/\.[^.]+$/, '')
                             .replace(/^\d+[\s.\-_]+/, '')
                             .replace(/^\d+/, '')
                             .trim()
                             .toLowerCase()
-                        if (!cleanName) return
-                        // Try to find a track whose name contains the filename or vice versa
-                        const track = tracks.find(t => {
-                            const trackName = (t.name || '').toLowerCase().trim()
-                            return cleanName.includes(trackName) || trackName.includes(cleanName) || cleanName === trackName
-                        })
-                        if (track) {
-                            const fullPath = file.full_path || (this.filePath + separator + file.name)
-                            matches.push({
-                                file: file,
-                                fullPath: fullPath,
-                                track: track
+                        if (cleanName) {
+                            matchedTrack = tracks.find(t => {
+                                const trackName = (t.name || '').toLowerCase().trim()
+                                return cleanName.includes(trackName) || trackName.includes(cleanName) || cleanName === trackName
                             })
                         }
-                    })
-                }
+                    }
+
+                    if (matchedTrack) {
+                        matches.push({
+                            file: file,
+                            fullPath: fullPath,
+                            track: matchedTrack
+                        })
+                    }
+                })
 
                 if (matches.length === 0) {
                     this.$cwMessage('未找到可匹配的曲目 (按编号或文件名均无匹配)', 'warning')
@@ -1736,7 +1728,7 @@
                 })
             },
             loadHistory() {
-                this.$api.Task.getRecord({ page_size: 1000 }).then(res => {
+                this.$api.Task.getRecord({ page_size: 10000 }).then(res => {
                     if (res.result) {
                         const tasks = res.data.results
                         this.successItems = tasks.filter(t => t.state === 'success').map(t => {
