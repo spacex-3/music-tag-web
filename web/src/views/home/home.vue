@@ -1542,8 +1542,36 @@
                     }
                 })
 
+                // Fallback: if no matches by track number, try to match by filename
                 if (matches.length === 0) {
-                    this.$cwMessage('未找到可匹配的曲目编号 (例如: 01 xxx.mp3)', 'warning')
+                    files.forEach(file => {
+                        if (file.children) return // Skip folders
+                        // Clean the filename: remove extension, leading numbers, common prefixes
+                        const cleanName = file.name
+                            .replace(/\.[^.]+$/, '')
+                            .replace(/^\d+[\s.\-_]+/, '')
+                            .replace(/^\d+/, '')
+                            .trim()
+                            .toLowerCase()
+                        if (!cleanName) return
+                        // Try to find a track whose name contains the filename or vice versa
+                        const track = tracks.find(t => {
+                            const trackName = (t.name || '').toLowerCase().trim()
+                            return cleanName.includes(trackName) || trackName.includes(cleanName) || cleanName === trackName
+                        })
+                        if (track) {
+                            const fullPath = file.full_path || (this.filePath + separator + file.name)
+                            matches.push({
+                                file: file,
+                                fullPath: fullPath,
+                                track: track
+                            })
+                        }
+                    })
+                }
+
+                if (matches.length === 0) {
+                    this.$cwMessage('未找到可匹配的曲目 (按编号或文件名均无匹配)', 'warning')
                     return
                 }
 
@@ -1716,7 +1744,8 @@
                             return {
                                 name: t.song_name ? `${t.artist_name} - ${t.song_name}` : t.filename,
                                 msg: `${time} - ${t.full_path}`,
-                                type: 'success'
+                                type: 'success',
+                                parent_path: t.parent_path
                             }
                         })
                         this.failedItems = tasks.filter(t => t.state === 'fail').map(t => {
@@ -1724,11 +1753,20 @@
                             return {
                                 name: t.song_name ? `${t.artist_name} - ${t.song_name}` : t.filename,
                                 msg: `${time} - ${t.full_path}`,
-                                type: 'error'
+                                type: 'error',
+                                parent_path: t.parent_path
                             }
                         })
                     }
                 })
+            },
+            navigateToPath(item) {
+                if (item && item.parent_path) {
+                    this.filePath = item.parent_path
+                    this.handleSearchFile()
+                    // Close the history dialog if open
+                    this.scheduleVisible = false
+                }
             }
 
         }
@@ -1984,5 +2022,14 @@ button.bk-button-text {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* File state colors: black=unscraped, green=success, red=fail */
+.node-title.success {
+    color: #28a745 !important;
+}
+
+.node-title.fail {
+    color: #dc3545 !important;
 }
 </style>

@@ -584,6 +584,6 @@ class TaskViewSets(GenericViewSet):
 
 class TaskModelViewSets(mixins.ListModelMixin,
                         GenericViewSet):
-    queryset = Task.objects.order_by("-id")
+    queryset = Task.objects.order_by("-created_at")
     serializer_class = TaskSerializer
     filterset_class = TaskFilters

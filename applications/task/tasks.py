@@ -407,6 +407,8 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
             # Step 2: Search for Album
             # Convert Traditional Chinese to Simplified for better matching (esp. Netease)
             search_query_simplified = zhconv_convert(search_query, 'zh-cn')
+            search_artist_simplified = zhconv_convert(search_artist, 'zh-cn') if search_artist else None
+            
             if search_query_simplified != search_query:
                 log(f"Also trying Simplified: {search_query_simplified}")
             
@@ -421,15 +423,23 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
             remote_album = None
             used_resource = None
             
-            # Try each source with Simplified Chinese first
+            # Search strategy: Netease needs artist+album (to avoid 翻唱), QQ Music uses album-only
             for resource in source_list:
-                remote_album = MusicResource(resource).fetch_album_by_name(search_query_simplified)
+                if resource == "netease" and search_artist_simplified:
+                    # Netease: use "artist album" to avoid cover versions
+                    netease_query = f"{search_artist_simplified} {search_query_simplified}"
+                    log(f"Searching Netease with artist: {netease_query}")
+                    remote_album = MusicResource(resource).fetch_album_by_name(netease_query)
+                else:
+                    # QQ Music and others: album name only
+                    remote_album = MusicResource(resource).fetch_album_by_name(search_query_simplified)
+                
                 if remote_album:
                     log(f"Found Album ({resource}): {remote_album['album_name']} by {remote_album['album_artist']}")
                     used_resource = resource
                     break
                 else:
-                    log(f"Album not found on {resource} with query: {search_query_simplified}")
+                    log(f"Album not found on {resource}")
                     if resource == "netease":
                         cookie_warning = True
             
@@ -437,7 +447,11 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
             if not remote_album and search_query_simplified != search_query:
                 log(f"Retrying with original query: {search_query}")
                 for resource in source_list:
-                    remote_album = MusicResource(resource).fetch_album_by_name(search_query)
+                    if resource == "netease" and search_artist:
+                        netease_query = f"{search_artist} {search_query}"
+                        remote_album = MusicResource(resource).fetch_album_by_name(netease_query)
+                    else:
+                        remote_album = MusicResource(resource).fetch_album_by_name(search_query)
                     if remote_album:
                         log(f"Found Album ({resource}): {remote_album['album_name']} by {remote_album['album_artist']}")
                         used_resource = resource

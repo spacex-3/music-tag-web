@@ -938,6 +938,14 @@ button.bk-button-text {
 }
 }
 
+/* File state colors: black=unscraped, green=success, red=fail */
+.node-title.success {
+    color: #28a745 !important;
+}
+.node-title.fail {
+    color: #dc3545 !important;
+}
+
 .bk-table-header .custom-header-cell {
     color: inherit;
     text-decoration: underline;
