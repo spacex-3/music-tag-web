@@ -6,7 +6,7 @@ import uuid
 from collections import defaultdict
 
 from component import music_tag
-from component.zhconv import convert as zhconv_convert
+from component.zhconv.zhconv import convert as zhconv_convert
 from django.conf import settings
 from django.db import transaction
 
