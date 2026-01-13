@@ -1535,37 +1535,40 @@
                     let matchedTrack = null
                     const fullPath = file.full_path || (this.filePath + separator + file.name)
 
-                    // Method 1: Match by track number from various formats
-                    // Formats: "01 Song", "1-01 Song" (disc-track), "2-03 Song", etc.
-                    let fileNum = null
-                    // First try disc-track format: "1-01" -> extract "01"
-                    const discTrackMatch = file.name.match(/^\d+-(\d+)/)
-                    if (discTrackMatch) {
-                        fileNum = parseInt(discTrackMatch[1], 10)
-                    } else {
-                        // Fallback: just leading number "01" or "1"
-                        const numMatch = file.name.match(/^(\d+)/)
-                        if (numMatch) {
-                            fileNum = parseInt(numMatch[1], 10)
-                        }
-                    }
-                    if (fileNum !== null) {
-                        matchedTrack = tracks.find(t => parseInt(t.idx, 10) === fileNum)
+                    // Clean filename for name matching
+                    const cleanName = file.name
+                        .replace(/\.[^.]+$/, '') // Remove extension
+                        .replace(/^\d+-\d+[\s.\-_]+/, '') // Remove disc-track prefix like "1-07 "
+                        .replace(/^\d+[\s.\-_]+/, '') // Remove track prefix like "07 "
+                        .replace(/^\d+/, '') // Remove any remaining leading digits
+                        .trim()
+                        .toLowerCase()
+
+                    // Method 1 (PRIORITY): Match by song name (handles multi-disc albums correctly)
+                    if (cleanName) {
+                        matchedTrack = tracks.find(t => {
+                            const trackName = (t.name || '').toLowerCase().trim()
+                            return cleanName.includes(trackName) || trackName.includes(cleanName) || cleanName === trackName
+                        })
                     }
 
-                    // Method 2: If no number match, try filename matching
+                    // Method 2 (FALLBACK): Match by track number if name matching failed
+                    // Only use for single-disc albums or when name matching isn't possible
                     if (!matchedTrack) {
-                        const cleanName = file.name
-                            .replace(/\.[^.]+$/, '')
-                            .replace(/^\d+[\s.\-_]+/, '')
-                            .replace(/^\d+/, '')
-                            .trim()
-                            .toLowerCase()
-                        if (cleanName) {
-                            matchedTrack = tracks.find(t => {
-                                const trackName = (t.name || '').toLowerCase().trim()
-                                return cleanName.includes(trackName) || trackName.includes(cleanName) || cleanName === trackName
-                            })
+                        let fileNum = null
+                        // Try disc-track format: "1-01" -> extract "01"
+                        const discTrackMatch = file.name.match(/^\d+-(\d+)/)
+                        if (discTrackMatch) {
+                            fileNum = parseInt(discTrackMatch[1], 10)
+                        } else {
+                            // Fallback: just leading number "01" or "1"
+                            const numMatch = file.name.match(/^(\d+)/)
+                            if (numMatch) {
+                                fileNum = parseInt(numMatch[1], 10)
+                            }
+                        }
+                        if (fileNum !== null) {
+                            matchedTrack = tracks.find(t => parseInt(t.idx, 10) === fileNum)
                         }
                     }
 
