@@ -9,8 +9,9 @@ class Task(models.Model):
     state = models.CharField(max_length=255, default="wait")
     parent_path = models.CharField(max_length=255, default="")
     filename = models.CharField(max_length=255, default="")
-    created_at = models.DateTimeField(null=True, auto_now_add=True)
     error_msg = models.TextField(default="")
+    created_at = models.DateTimeField(null=True, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class TaskRecord(models.Model):
@@ -23,4 +24,3 @@ class TaskRecord(models.Model):
     extra = models.TextField(default="")
     created_at = models.DateTimeField(null=True, auto_now_add=True)
     batch = models.CharField(max_length=255, default="")
-    error_msg = models.TextField(default="")

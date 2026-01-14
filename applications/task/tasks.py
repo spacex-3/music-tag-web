@@ -246,10 +246,12 @@ def clear_music():
 
 
 @app.task(bind=True)
-def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy="overwrite_all"):
+def batch_auto_tag_task(self, batch=None, source_list=None, select_mode=None, overwrite_policy="overwrite_all", skip_scraped=False, folder_path=None):
     """
     自动刮削任务
     source_list: ["migu", "qmusic", "netease"]
+    skip_scraped: If True, skip files that are already in Task table (any state)
+    folder_path: If provided, scan this folder recursively (used for scheduled scraping)
     """
     logs = []
     success_count = 0
@@ -264,24 +266,83 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
         logs.append({"msg": msg, "type": type})
         print(msg)
 
-    folder_list = TaskRecord.objects.filter(batch=batch, icon="icon-folder").all()
-    for folder in folder_list:
-        data = os.scandir(folder.full_path)
+    # If folder_path is provided (scheduled scraping), scan the folder directly
+    if folder_path and os.path.isdir(folder_path):
+        log(f"Scheduled scraping: Scanning {folder_path}")
+        batch = f"scheduled_{int(time.time())}"  # Generate batch ID
+        
+        # Recursively find all music files
         bulk_set = []
-        for entry in data:
-            each = entry.name
-            file_type = each.split(".")[-1]
-            file_name = ".".join(each.split(".")[:-1])
-            if file_type not in ALLOW_TYPE:
-                continue
-            bulk_set.append(TaskRecord(**{
-                "batch": batch,
-                "song_name": file_name,
-                "full_path": f"{folder.full_path}/{each}",
-                "icon": "icon-music",
-
-            }))
-        TaskRecord.objects.bulk_create(bulk_set)
+        for root, dirs, files in os.walk(folder_path):
+            for file in files:
+                file_type = file.split(".")[-1].lower()
+                if file_type not in ALLOW_TYPE:
+                    continue
+                full_path = os.path.join(root, file)
+                
+                # Skip if already scraped (any state)
+                if skip_scraped:
+                    existing = Task.objects.filter(full_path=full_path).exists()
+                    if existing:
+                        log(f"Skipping (already in history): {file}")
+                        skip_count += 1
+                        Task.objects.update_or_create(full_path=full_path, defaults={
+                            "state": "skipped",
+                            "parent_path": root,
+                            "filename": file,
+                            "updated_at": datetime.datetime.now()
+                        })
+                        skipped_items.append({"name": file, "full_path": full_path})
+                        continue
+                
+                file_name = ".".join(file.split(".")[:-1])
+                bulk_set.append(TaskRecord(**{
+                    "batch": batch,
+                    "song_name": file_name,
+                    "full_path": full_path,
+                    "icon": "icon-music",
+                }))
+        
+        TaskRecord.objects.bulk_create(bulk_set, batch_size=500)
+        log(f"Found {len(bulk_set)} files to process (skipped {skip_count})")
+        
+    # Normal mode: process pre-created TaskRecord entries
+    else:
+        # Apply skip_scraped filter to existing task records
+        folder_list = TaskRecord.objects.filter(batch=batch, icon="icon-folder").all()
+        for folder in folder_list:
+            data = os.scandir(folder.full_path)
+            bulk_set = []
+            for entry in data:
+                each = entry.name
+                file_type = each.split(".")[-1]
+                file_name = ".".join(each.split(".")[:-1])
+                if file_type not in ALLOW_TYPE:
+                    continue
+                full_path = f"{folder.full_path}/{each}"
+                
+                # Skip if already scraped (any state)
+                if skip_scraped:
+                    existing = Task.objects.filter(full_path=full_path).exists()
+                    if existing:
+                        log(f"Skipping (already in history): {each}")
+                        skip_count += 1
+                        Task.objects.update_or_create(full_path=full_path, defaults={
+                            "state": "skipped",
+                            "parent_path": folder.full_path,
+                            "filename": each,
+                            "updated_at": datetime.datetime.now()
+                        })
+                        skipped_items.append({"name": each, "full_path": full_path})
+                        continue
+                
+                bulk_set.append(TaskRecord(**{
+                    "batch": batch,
+                    "song_name": file_name,
+                    "full_path": full_path,
+                    "icon": "icon-music",
+                }))
+            TaskRecord.objects.bulk_create(bulk_set)
 
     task_list = TaskRecord.objects.filter(batch=batch).exclude(icon="icon-folder").all()
     total_tasks = len(task_list)
@@ -406,6 +467,8 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
                             "filename": os.path.basename(task.full_path),
                             "song_name": task.song_name,
                             "artist_name": task.artist_name,
+                            "error_msg": "",
+                            "updated_at": datetime.datetime.now()
                         })
                     else:
                         task.state = "failed"
@@ -415,6 +478,18 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
                         failed_items.append({
                             "name": os.path.basename(task.full_path),
                             "full_path": task.full_path
+                        })
+                        
+                        # Persist failure to history
+                        parent_path = os.path.dirname(task.full_path)
+                        Task.objects.update_or_create(full_path=task.full_path, defaults={
+                            "state": "failed",
+                            "parent_path": parent_path,
+                            "filename": os.path.basename(task.full_path),
+                            "song_name": task.song_name,
+                            "artist_name": task.artist_name,
+                            "error_msg": "Match Failed (in Strict Album Mode)",
+                            "updated_at": datetime.datetime.now()
                         })
             else:
                 log(f"Album not found for {folder_path}, falling back to single song match")
@@ -480,11 +555,13 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
 def _process_single_task(task, source_list, select_mode, log=print, overwrite_policy="overwrite_all"):
     is_match = False
     cw = False
+    last_error = ""
     for resource in source_list:
         log(f"Start Matching ({resource}): {os.path.basename(task.full_path)}")
         try:
             is_match = match_song(resource, task.full_path, select_mode, overwrite_policy)
         except Exception as e:
+            last_error = str(e)
             log(f"Error: {e}", "error")
             is_match = False
             if "Cookie Invalid" in str(e) and resource == "netease":
@@ -494,12 +571,19 @@ def _process_single_task(task, source_list, select_mode, log=print, overwrite_po
             task.state = "success"
             task.save()
             parent_path = os.path.dirname(task.full_path)
+            
+            # Manually update updated_at if needed, but auto_now=True handles save()
+            # For update_or_create, auto_now=True on model might not trigger if not in defaults?
+            # Actually auto_now work on save(), so update_or_create calls save().
+            
             Task.objects.update_or_create(full_path=task.full_path, defaults={
                 "state": task.state,
                 "parent_path": parent_path,
                 "filename": os.path.basename(task.full_path),
                 "song_name": task.song_name,
                 "artist_name": task.artist_name,
+                "error_msg": "",  # Clear error on success
+                "updated_at": datetime.datetime.now() # Force update timestamp
             })
             log(f"Success: {os.path.basename(task.full_path)}")
             break
@@ -511,12 +595,19 @@ def _process_single_task(task, source_list, select_mode, log=print, overwrite_po
         task.save()
         log(f"Failed: {os.path.basename(task.full_path)}", "error")
         parent_path = os.path.dirname(task.full_path)
+        
+        # If no specific exception, default error
+        if not last_error:
+            last_error = "Match failed (No results found)"
+            
         Task.objects.update_or_create(full_path=task.full_path, defaults={
             "state": task.state,
             "parent_path": parent_path,
             "filename": os.path.basename(task.full_path),
             "song_name": task.song_name,
             "artist_name": task.artist_name,
+            "error_msg": last_error,
+            "updated_at": datetime.datetime.now() # Force update timestamp
         })
         return 0, 1, cw
     return 1, 0, cw

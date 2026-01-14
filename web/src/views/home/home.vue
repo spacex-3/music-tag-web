@@ -736,12 +736,22 @@
                 <div v-for="(item, idx) in filteredHistoryItems" :key="'hist-' + idx"
                     :style="{ cursor: 'pointer', padding: '8px 12px', borderBottom: '1px solid #eee', color: item.type === 'failed' ? '#ea3636' : (item.type === 'skipped' ? '#ff9c01' : '#2dcb56') }"
                     @click="handleJump(item)">
-                    <span style="margin-right: 8px;">
-                        <bk-icon v-if="item.type === 'success'" type="check-circle-shape"></bk-icon>
-                        <bk-icon v-else-if="item.type === 'failed'" type="close-circle-shape"></bk-icon>
-                        <bk-icon v-else type="exclamation-circle-shape"></bk-icon>
-                    </span>
-                    {{ item.name }}
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span style="margin-right: 8px;">
+                                <bk-icon v-if="item.type === 'success'" type="check-circle-shape"></bk-icon>
+                                <bk-icon v-else-if="item.type === 'failed'" type="close-circle-shape"></bk-icon>
+                                <bk-icon v-else type="exclamation-circle-shape"></bk-icon>
+                            </span>
+                            {{ item.name }}
+                        </div>
+                        <div style="font-size: 12px; color: #999; min-width: 140px; text-align: right;">
+                            {{ item.display_time }}
+                        </div>
+                    </div>
+                    <div v-if="item.error_msg" style="color: #ea3636; font-size: 12px; margin-left: 24px; margin-top: 4px;">
+                        {{ item.error_msg }}
+                    </div>
                 </div>
             </div>
             <div v-else style="text-align: center; padding: 40px; color: #999;">
@@ -1545,30 +1555,54 @@
                         .trim()
                         .toLowerCase()
 
-                    // Method 1 (PRIORITY): Match by song name (handles multi-disc albums correctly)
-                    // Use best-score matching to avoid short names matching incorrectly
+                    // Helper: extract Chinese characters from a string
+                    const extractChinese = (str) => {
+                        const matches = str.match(/[\u4e00-\u9fa5]+/g)
+                        return matches ? matches.join('') : ''
+                    }
+
+                    // Helper: normalize string - remove ALL punctuation, spaces, special chars
+                    const normalize = (str) => {
+                        return str.replace(/[^a-z0-9\u4e00-\u9fa5]/gi, '').toLowerCase()
+                    }
+
+                    // Method 1 (PRIORITY): Match by normalized name
                     if (cleanName) {
                         let bestScore = 0
                         let bestMatch = null
+                        const fileNameNorm = normalize(cleanName)
+                        const fileNameChinese = extractChinese(cleanName)
+
                         tracks.forEach(t => {
                             const trackName = (t.name || '').toLowerCase().trim()
                             if (!trackName) return
+
+                            const trackNorm = normalize(trackName)
+                            const trackChinese = extractChinese(trackName)
                             let score = 0
-                            // Exact match = highest score
-                            if (cleanName === trackName) {
+
+                            // Exact normalized match = highest score
+                            if (fileNameNorm === trackNorm) {
                                 score = 1000
-                            } else if (cleanName.includes(trackName)) {
-                                // Track name is substring of filename - score by length ratio
-                                score = (trackName.length / cleanName.length) * 100
-                            } else if (trackName.includes(cleanName)) {
-                                // Filename is substring of track name
-                                score = (cleanName.length / trackName.length) * 100
+                            } else if (fileNameNorm.includes(trackNorm) || trackNorm.includes(fileNameNorm)) {
+                                // Normalized substring match (handles punctuation/space differences)
+                                const matchLen = Math.min(fileNameNorm.length, trackNorm.length)
+                                const maxLen = Math.max(fileNameNorm.length, trackNorm.length)
+                                score = 600 + (matchLen / maxLen) * 100
+                            } else if (fileNameChinese && trackChinese && (fileNameChinese.includes(trackChinese) || trackChinese.includes(fileNameChinese))) {
+                                // Chinese characters match (handles extra English in filename)
+                                const matchLen = Math.min(fileNameChinese.length, trackChinese.length)
+                                const maxLen = Math.max(fileNameChinese.length, trackChinese.length)
+                                score = 500 + (matchLen / maxLen) * 100
                             }
+
                             if (score > bestScore) {
                                 bestScore = score
                                 bestMatch = t
+                                console.log(`[Match] "${file.name}" -> "${t.name}" (score=${score.toFixed(0)}, norm="${fileNameNorm}" vs "${trackNorm}")`)
                             }
                         })
+
                         // Require minimum score to avoid false positives
                         if (bestScore >= 30) {
                             matchedTrack = bestMatch
@@ -1576,13 +1610,15 @@
                     }
 
                     // Method 2 (FALLBACK): Match by track number if name matching failed
-                    // Only use for single-disc albums or when name matching isn't possible
+                    // ONLY for disc 1 - multi-disc albums (disc 2+) use name matching only
                     if (!matchedTrack) {
+                        let discNum = 1
                         let fileNum = null
-                        // Try disc-track format: "1-01" -> extract "01"
-                        const discTrackMatch = file.name.match(/^\d+-(\d+)/)
+                        // Try disc-track format: "2-01" -> disc=2, track=1
+                        const discTrackMatch = file.name.match(/^(\d+)-(\d+)/)
                         if (discTrackMatch) {
-                            fileNum = parseInt(discTrackMatch[1], 10)
+                            discNum = parseInt(discTrackMatch[1], 10)
+                            fileNum = parseInt(discTrackMatch[2], 10)
                         } else {
                             // Fallback: just leading number "01" or "1"
                             const numMatch = file.name.match(/^(\d+)/)
@@ -1590,8 +1626,15 @@
                                 fileNum = parseInt(numMatch[1], 10)
                             }
                         }
-                        if (fileNum !== null) {
+                        // Only use track number fallback for disc 1
+                        // For disc 2+, track number doesn't map to idx correctly
+                        if (fileNum !== null && discNum === 1) {
                             matchedTrack = tracks.find(t => parseInt(t.idx, 10) === fileNum)
+                            if (matchedTrack) {
+                                console.log(`[Track# Fallback] "${file.name}" -> "${matchedTrack.name}" (track=${fileNum})`)
+                            }
+                        } else if (!matchedTrack) {
+                            console.log(`[NO MATCH] "${file.name}" (disc=${discNum}, track=${fileNum})`)
                         }
                     }
 
@@ -1780,33 +1823,42 @@
                         const tasks = res.data.results
                         // Filter preserves original order from API (sorted by -created_at)
                         this.successItems = tasks.filter(t => t.state === 'success').map(t => {
-                            const time = t.created_at ? t.created_at.replace('T', ' ').split('.')[0] : ''
+                            const rawTime = t.updated_at || t.created_at
+                            const time = rawTime ? rawTime.replace('T', ' ').split('.')[0] : ''
                             return {
                                 name: t.song_name ? `${t.artist_name} - ${t.song_name}` : t.filename,
                                 msg: `${time} - ${t.full_path}`,
                                 type: 'success',
                                 parent_path: t.parent_path,
-                                created_at: t.created_at
+                                created_at: t.created_at,
+                                display_time: time,
+                                error_msg: ''
                             }
                         })
-                        this.failedItems = tasks.filter(t => t.state === 'fail').map(t => {
-                            const time = t.created_at ? t.created_at.replace('T', ' ').split('.')[0] : ''
+                        this.failedItems = tasks.filter(t => t.state === 'failed' || t.state === 'fail').map(t => {
+                            const rawTime = t.updated_at || t.created_at
+                            const time = rawTime ? rawTime.replace('T', ' ').split('.')[0] : ''
                             return {
                                 name: t.song_name ? `${t.artist_name} - ${t.song_name}` : t.filename,
                                 msg: `${time} - ${t.full_path}`,
-                                type: 'error',
+                                type: 'failed',
                                 parent_path: t.parent_path,
-                                created_at: t.created_at
+                                created_at: t.created_at,
+                                display_time: time,
+                                error_msg: t.error_msg || '未知错误'
                             }
                         })
                         this.skippedItems = tasks.filter(t => t.state === 'skipped').map(t => {
-                            const time = t.created_at ? t.created_at.replace('T', ' ').split('.')[0] : ''
+                            const rawTime = t.updated_at || t.created_at
+                            const time = rawTime ? rawTime.replace('T', ' ').split('.')[0] : ''
                             return {
                                 name: t.song_name ? `${t.artist_name} - ${t.song_name}` : t.filename,
                                 msg: `${time} - ${t.full_path}`,
                                 type: 'skipped',
                                 parent_path: t.parent_path,
-                                created_at: t.created_at
+                                created_at: t.created_at,
+                                display_time: time,
+                                error_msg: ''
                             }
                         })
                     }

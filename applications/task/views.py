@@ -206,8 +206,8 @@ class TaskViewSets(GenericViewSet):
             }))
         TaskRecord.objects.bulk_create(bulk_set, batch_size=500)
         overwrite_policy = music_info.get("overwrite_policy", "overwrite_all")
-        overwrite_policy = music_info.get("overwrite_policy", "overwrite_all")
-        task = batch_auto_tag_task.delay(timestamp, source_list, select_mode, overwrite_policy)
+        skip_scraped = music_info.get("skip_scraped", False)
+        task = batch_auto_tag_task.delay(timestamp, source_list, select_mode, overwrite_policy, skip_scraped)
         return self.success_response(data={"task_id": task.id})
 
     @action(methods=['GET'], detail=False)
@@ -448,6 +448,113 @@ class TaskViewSets(GenericViewSet):
                 return self.failure_response(msg="Failed to save cookies")
         except Exception as e:
             return self.failure_response(msg=f"Error processing cookies: {str(e)}")
+
+    @action(methods=['GET'], detail=False)
+    def get_schedule_config(self, request, *args, **kwargs):
+        """Get scheduled scraping configuration"""
+        import json
+        from django_celery_beat.models import PeriodicTask, IntervalSchedule
+        
+        default_config = {
+            'enabled': False,
+            'interval_hours': 24,
+            'interval_unit': 'hours',
+            'select_mode': 'netease',
+            'overwrite_policy': 'overwrite_all',
+            'source_list': ['netease'],
+            'skip_scraped': True,
+            'next_run': None
+        }
+        
+        try:
+            task = PeriodicTask.objects.get(name='scheduled_auto_scrape')
+            schedule = task.interval
+            config = json.loads(task.kwargs or '{}')
+            
+            # Calculate interval in correct unit
+            if schedule:
+                if schedule.period == IntervalSchedule.HOURS:
+                    interval_hours = schedule.every
+                    interval_unit = 'hours'
+                elif schedule.period == IntervalSchedule.MINUTES:
+                    interval_hours = schedule.every
+                    interval_unit = 'minutes'
+                else:
+                    interval_hours = schedule.every
+                    interval_unit = 'hours'
+            else:
+                interval_hours = 24
+                interval_unit = 'hours'
+            
+            result = {
+                'enabled': task.enabled,
+                'interval_hours': interval_hours,
+                'interval_unit': interval_unit,
+                'select_mode': config.get('select_mode', 'netease'),
+                'overwrite_policy': config.get('overwrite_policy', 'overwrite_all'),
+                'source_list': config.get('source_list', ['netease']),
+                'skip_scraped': config.get('skip_scraped', True),
+                'last_run_at': task.last_run_at.isoformat() if task.last_run_at else None,
+                'date_changed': task.date_changed.isoformat() if task.date_changed else None,
+            }
+            return self.success_response(data=result)
+        except PeriodicTask.DoesNotExist:
+            return self.success_response(data=default_config)
+        except Exception as e:
+            return self.success_response(data=default_config)
+
+    @action(methods=['POST'], detail=False)
+    def update_schedule_config(self, request, *args, **kwargs):
+        """Update scheduled scraping configuration"""
+        import json
+        from django_celery_beat.models import PeriodicTask, IntervalSchedule
+        from django.conf import settings
+        
+        data = request.data
+        enabled = data.get('enabled', False)
+        interval_hours = int(data.get('interval_hours', 24))
+        interval_unit = data.get('interval_unit', 'hours')
+        select_mode = data.get('select_mode', 'netease')
+        overwrite_policy = data.get('overwrite_policy', 'overwrite_all')
+        source_list = data.get('source_list', ['netease'])
+        skip_scraped = data.get('skip_scraped', True)
+        
+        try:
+            # Create or get interval schedule
+            if interval_unit == 'minutes':
+                schedule, _ = IntervalSchedule.objects.get_or_create(
+                    every=interval_hours,
+                    period=IntervalSchedule.MINUTES
+                )
+            else:
+                schedule, _ = IntervalSchedule.objects.get_or_create(
+                    every=interval_hours,
+                    period=IntervalSchedule.HOURS
+                )
+            
+            # Task kwargs (parameters to pass to the celery task)
+            task_kwargs = json.dumps({
+                'select_mode': select_mode,
+                'overwrite_policy': overwrite_policy,
+                'source_list': source_list,
+                'skip_scraped': skip_scraped,
+                'folder_path': settings.MEDIA_ROOT  # Scan entire media folder
+            })
+            
+            # Create or update periodic task
+            task, created = PeriodicTask.objects.update_or_create(
+                name='scheduled_auto_scrape',
+                defaults={
+                    'task': 'applications.task.tasks.batch_auto_tag_task',
+                    'interval': schedule,
+                    'kwargs': task_kwargs,
+                    'enabled': enabled
+                }
+            )
+            
+            return self.success_response(msg="Schedule updated successfully")
+        except Exception as e:
+            return self.failure_response(msg=f"Failed to update schedule: {str(e)}")
 
 
 class TaskModelViewSets(mixins.ListModelMixin,

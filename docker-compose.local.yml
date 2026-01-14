@@ -1,0 +1,57 @@
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/prod/django/Dockerfile
+    container_name: music-tag-web
+    ports:
+      - "8001:8001"
+    volumes:
+      - /Users/ks/Downloads/Music:/app/media:z
+      - ./data:/app/data:z
+    restart: always
+    environment:
+      dockerrun: "yes"
+    depends_on:
+      - redis
+    command: /start
+
+  celeryworker:
+    build:
+      context: .
+      dockerfile: ./compose/prod/django/Dockerfile
+    container_name: music_celeryworker
+    environment:
+      dockerrun: "yes"
+      C_FORCE_ROOT: "1"
+    volumes:
+      - /Users/ks/Downloads/Music:/app/media:z
+      - ./data:/app/data:z
+    depends_on:
+      - redis
+    restart: always
+    command: >
+      sh -c "ln -sf /app/data/db.sqlite3 /app/db.sqlite3 &&
+             /start-celeryworker"
+
+  celerybeat:
+    build:
+      context: .
+      dockerfile: ./compose/prod/django/Dockerfile
+    container_name: music_celerybeat
+    environment:
+      dockerrun: "yes"
+    volumes:
+      - /Users/ks/Downloads/Music:/app/media:z
+      - ./data:/app/data:z
+    depends_on:
+      - redis
+    restart: always
+    command: >
+      sh -c "ln -sf /app/data/db.sqlite3 /app/db.sqlite3 &&
+             /start-celerybeat"
+
+  redis:
+    image: redis:6
+    container_name: music_redis
+    restart: always
