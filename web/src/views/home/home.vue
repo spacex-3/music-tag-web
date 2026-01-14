@@ -1820,7 +1820,11 @@
             loadHistory() {
                 this.$api.Task.getRecord({ page_size: 10000 }).then(res => {
                     if (res.result) {
-                        const tasks = res.data.results
+                        const tasks = res.data.results.sort((a, b) => {
+                            const timeA = new Date(a.updated_at || a.created_at).getTime()
+                            const timeB = new Date(b.updated_at || b.created_at).getTime()
+                            return timeB - timeA
+                        })
                         // Filter preserves original order from API (sorted by -created_at)
                         this.successItems = tasks.filter(t => t.state === 'success').map(t => {
                             const rawTime = t.updated_at || t.created_at

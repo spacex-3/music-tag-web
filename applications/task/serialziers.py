@@ -83,7 +83,7 @@ class TaskSerializer(serializers.ModelSerializer):
         if os.path.exists(ret["full_path"]):
             ret["is_exists"] = True
         else:
-            Task.objects.filter(id=ret["id"]).delete()
+            # Do NOT delete the record just because file is missing
             ret["is_exists"] = False
                  
         return ret

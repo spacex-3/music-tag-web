@@ -8,6 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.gzip import gzip_page
 from rest_framework import mixins
 from rest_framework.decorators import action
+from rest_framework import filters
 
 from applications.task.constants import ALLOW_TYPE
 from applications.task.filters import TaskFilters
@@ -389,21 +390,29 @@ class TaskViewSets(GenericViewSet):
 
     @action(methods=["post"], detail=False)
     def stop_all_tasks(self, request, *args, **kwargs):
+        import redis
+        try:
+            r = redis.StrictRedis(host='redis', port=6379, db=0)
+            r.setex("STOP_ALL_TASKS", 60, "true")  # Set flag for 60 seconds
+        except Exception as e:
+            print(f"Failed to set stop flag in Redis: {e}")
+
         active_tasks = celery_app.control.inspect().active()
         reserved_tasks = celery_app.control.inspect().reserved()
         
         if active_tasks:
             for tasks in active_tasks.values():
                 for task in tasks:
-                    celery_app.control.revoke(task["id"], terminate=True)
+                    # gevent execution pool does not support terminate=True
+                    celery_app.control.revoke(task["id"])
                     
         if reserved_tasks:
             for tasks in reserved_tasks.values():
                 for task in tasks:
-                    celery_app.control.revoke(task["id"], terminate=True)
+                    celery_app.control.revoke(task["id"])
                     
         celery_app.control.purge()
-        return self.success_response(msg="Tasks stopped")
+        return self.success_response(msg="Tasks stopping...")
 
     @action(methods=["get"], detail=False)
     def active_queue(self, request, *args, **kwargs):
@@ -577,6 +586,8 @@ class TaskViewSets(GenericViewSet):
 
 class TaskModelViewSets(mixins.ListModelMixin,
                         GenericViewSet):
-    queryset = Task.objects.order_by("-id")
+    queryset = Task.objects.order_by("-updated_at")
     serializer_class = TaskSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter)
     filterset_class = TaskFilters
+    ordering_fields = ('updated_at', 'created_at', 'id')

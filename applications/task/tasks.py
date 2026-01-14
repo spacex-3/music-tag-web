@@ -12,6 +12,7 @@ from django.db import transaction
 from applications.music.models import Folder, Track, Album, Genre, Artist, Attachment
 from applications.subsonic.constants import AUDIO_EXTENSIONS_AND_MIMETYPE, COVER_TYPE
 from applications.task.constants import ALLOW_TYPE
+import redis
 from applications.task.models import TaskRecord, Task
 from applications.task.services.music_ids import MusicIDS
 from applications.task.services.music_resource import MusicResource
@@ -266,6 +267,20 @@ def batch_auto_tag_task(self, batch=None, source_list=None, select_mode=None, ov
         logs.append({"msg": msg, "type": type})
         print(msg)
 
+    # Redis connection for stop signal
+    try:
+        r_client = redis.StrictRedis(host='redis', port=6379, db=0)
+    except:
+        r_client = None
+
+    def check_stop():
+        if r_client and r_client.exists("STOP_ALL_TASKS"):
+            return True
+        return False
+        
+    if check_stop():
+         return {"logs": [{"msg": "Task stopped by user", "type": "warning"}]}
+
     # If folder_path is provided (scheduled scraping), scan the folder directly
     if folder_path and os.path.isdir(folder_path):
         log(f"Scheduled scraping: Scanning {folder_path}")
@@ -274,7 +289,9 @@ def batch_auto_tag_task(self, batch=None, source_list=None, select_mode=None, ov
         # Recursively find all music files
         bulk_set = []
         for root, dirs, files in os.walk(folder_path):
+            if check_stop(): break
             for file in files:
+                if check_stop(): break
                 file_type = file.split(".")[-1].lower()
                 if file_type not in ALLOW_TYPE:
                     continue
@@ -311,9 +328,11 @@ def batch_auto_tag_task(self, batch=None, source_list=None, select_mode=None, ov
         # Apply skip_scraped filter to existing task records
         folder_list = TaskRecord.objects.filter(batch=batch, icon="icon-folder").all()
         for folder in folder_list:
+            if check_stop(): break
             data = os.scandir(folder.full_path)
             bulk_set = []
             for entry in data:
+                if check_stop(): break
                 each = entry.name
                 file_type = each.split(".")[-1]
                 file_name = ".".join(each.split(".")[:-1])
@@ -353,10 +372,12 @@ def batch_auto_tag_task(self, batch=None, source_list=None, select_mode=None, ov
         # Group tasks by folder
         tasks_by_folder = defaultdict(list)
         for task in task_list:
+            if check_stop(): break
             parent_path = os.path.dirname(task.full_path)
             tasks_by_folder[parent_path].append(task)
             
         for folder_path, tasks in tasks_by_folder.items():
+            if check_stop(): break
             log(f"Processing folder: {folder_path} with {len(tasks)} files")
             
             # Step 1: Voting for Album Name
@@ -418,6 +439,7 @@ def batch_auto_tag_task(self, batch=None, source_list=None, select_mode=None, ov
             if remote_album:
                 tracks = remote_album['tracks']
                 for task in tasks:
+                    if check_stop(): break
                     current_index += 1
                     self.update_state(state='PROGRESS', meta={
                         'current': current_index,
@@ -504,6 +526,7 @@ def batch_auto_tag_task(self, batch=None, source_list=None, select_mode=None, ov
                 log(f"Album not found for {folder_path}, falling back to single song match")
                 log(f"Album not found for {folder_path}, falling back to single song match")
                 for task in tasks:
+                    if check_stop(): break
                     current_index += 1
                     self.update_state(state='PROGRESS', meta={
                         'current': current_index,
@@ -528,6 +551,7 @@ def batch_auto_tag_task(self, batch=None, source_list=None, select_mode=None, ov
     else:
         # Normal Mode
         for task in task_list:
+            if check_stop(): break
             current_index += 1
             self.update_state(state='PROGRESS', meta={
                 'current': current_index,
