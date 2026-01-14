@@ -22,5 +22,6 @@ class TaskRecord(models.Model):
     icon = models.CharField(max_length=255, default="icon-folder")
     state = models.CharField(max_length=255, default="wait")
     extra = models.TextField(default="")
+    error_msg = models.TextField(default="")
     created_at = models.DateTimeField(null=True, auto_now_add=True)
     batch = models.CharField(max_length=255, default="")
