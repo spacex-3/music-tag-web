@@ -922,6 +922,7 @@
                 fadeShowDetail: false,
                 showTranslation: false,
                 isLoading: false,
+                loadingText: '',
                 SongList: [],
                 reloadImg: true,
                 genreList: [
@@ -1614,11 +1615,15 @@
                     confirmFn: async() => {
                         this.isLoading = true
                         const resource = this.resource || 'netease'
+                        const total = matches.length
 
                         try {
                             for (let i = 0; i < matches.length; i++) {
                                 const m = matches[i]
-                                // Update loading text if possible (using a temporary message or verify if bkInfo closes)
+                                // Show progress
+                                const fileName = m.file.name.replace(/\.[^.]+$/, '')
+                                this.loadingText = `正在处理: ${fileName} (${i + 1}/${total})`
+                                console.log(`[Album Match] ${i + 1}/${total}: ${m.file.name} -> ${m.track.name}`)
 
                                 let lyrics = ''
                                 try {
@@ -1655,6 +1660,7 @@
                                     await new Promise(resolve => setTimeout(resolve, 2000))
                                 }
                             }
+                            this.loadingText = ''
 
                             // Batch save
                             const res = await this.$api.Task.updateId3({'music_id3_info': updates})

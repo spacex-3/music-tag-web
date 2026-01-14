@@ -3,8 +3,6 @@ import copy
 import copy
 import os
 import time
-import json
-from django_celery_beat.models import PeriodicTask, IntervalSchedule
 
 from django.utils.decorators import method_decorator
 from django.views.decorators.gzip import gzip_page
@@ -22,7 +20,6 @@ from applications.task.services.music_resource import MusicResource
 from applications.task.services.update_ids import update_music_info
 from applications.task.tasks import full_scan_folder, scan, clear_music, batch_auto_tag_task, tidy_folder_task
 from applications.utils.translation import translation_lyc_text
-from applications.task.utils import recursive_scandir, detect_language
 from component.drf.viewsets import GenericViewSet
 from django_vue_cli.celery_app import app as celery_app
 
@@ -198,115 +195,20 @@ class TaskViewSets(GenericViewSet):
         source_list = music_info.get("source_list", [])
         timestamp = str(int(time.time() * 1000))
         bulk_set = []
-        input_paths = []
         for each in select_data:
-             if each.get("icon") == "icon-folder":
-                 input_paths.append(f"{full_path}/{each.get('name')}")
-             else:
-                 input_paths.append(f"{full_path}/{each.get('name')}")
-        
-        # Recursively find all music files
-        all_music_files = recursive_scandir(input_paths)
-        
-        for music_path in all_music_files:
-            name = os.path.basename(music_path)
+            name = each.get("name")
             song_name = ".".join(name.split(".")[:-1])
             bulk_set.append(TaskRecord(**{
                 "song_name": song_name,
-                "full_path": music_path,
-                "icon": "icon-file", # Treat all as files now
+                "full_path": f"{full_path}/{name}",
+                "icon": each.get("icon"),
                 "batch": timestamp
             }))
         TaskRecord.objects.bulk_create(bulk_set, batch_size=500)
         overwrite_policy = music_info.get("overwrite_policy", "overwrite_all")
-        skip_scraped = music_info.get("skip_scraped", False)
-        # Using apply_async to pass kwargs explicitly or just ensuring order is correct
-        task = batch_auto_tag_task.delay(timestamp, source_list, select_mode, overwrite_policy, skip_scraped)
+        overwrite_policy = music_info.get("overwrite_policy", "overwrite_all")
+        task = batch_auto_tag_task.delay(timestamp, source_list, select_mode, overwrite_policy)
         return self.success_response(data={"task_id": task.id})
-
-    @action(methods=['POST'], detail=False)
-    def upload_image(self, request, *args, **kwargs):
-        image = request.FILES.get('upload_file')
-        if not image:
-            return self.failure_response(msg="没有上传图片")
-        
-        # Save image
-        save_path = os.path.join(settings.BASE_DIR, "static", "dist", "img", image.name)
-        with open(save_path, 'wb+') as destination:
-            for chunk in image.chunks():
-                destination.write(chunk)
-                
-        return self.success_response(data={"url": f"/static/dist/img/{image.name}"})
-
-    @action(methods=['GET'], detail=False)
-    def get_schedule_config(self, request):
-        try:
-            task = PeriodicTask.objects.get(name='auto_scrape_new_files')
-            interval = task.interval
-            enabled = task.enabled
-            # Parse kwargs to get current config
-            kwargs = json.loads(task.kwargs)
-            # Default values if not present
-            config = {
-                "enabled": enabled,
-                "interval_hours": interval.every,  # Kept key name for compatibility, but represents value
-                "interval_unit": interval.period,  # 'hours' or 'minutes'
-                "source_list": kwargs.get("source_list", ["netease"]),
-                "select_mode": kwargs.get("select_mode", "strict_album"),
-                "overwrite_policy": kwargs.get("overwrite_policy", "overwrite_all"),
-                "skip_scraped": kwargs.get("skip_scraped", True),
-                "last_run_at": task.last_run_at,
-                "date_changed": task.date_changed
-            }
-            return self.success_response(data=config)
-        except PeriodicTask.DoesNotExist:
-            # Return default config
-            return self.success_response(data={
-                "enabled": False,
-                "interval_hours": 1,
-                "interval_unit": "hours",
-                "source_list": ["netease"],
-                "select_mode": "strict_album",
-                "overwrite_policy": "overwrite_all",
-                "skip_scraped": True
-            })
-
-    @action(methods=['POST'], detail=False)
-    def update_schedule_config(self, request):
-        data = request.data
-        enabled = data.get("enabled", False)
-        interval_value = int(data.get("interval_hours", 1)) # Value
-        interval_unit = data.get("interval_unit", "hours") # 'hours' or 'minutes'
-        
-        period = IntervalSchedule.HOURS
-        if interval_unit == "minutes":
-            period = IntervalSchedule.MINUTES
-        
-        # Schedule
-        schedule, _ = IntervalSchedule.objects.get_or_create(
-            every=interval_value,
-            period=period,
-        )
-        
-        # Task Arguments - Using a special batch ID "scheduled"
-        kwargs = {
-            "batch": "scheduled", 
-            "source_list": data.get("source_list", ["netease"]),
-            "select_mode": data.get("select_mode", "strict_album"),
-            "overwrite_policy": data.get("overwrite_policy", "overwrite_all"),
-            "skip_scraped": data.get("skip_scraped", True)
-        }
-        
-        PeriodicTask.objects.update_or_create(
-            name='auto_scrape_new_files',
-            defaults={
-                'interval': schedule,
-                'task': 'applications.task.tasks.batch_auto_tag_task',
-                'kwargs': json.dumps(kwargs),
-                'enabled': enabled
-            }
-        )
-        return self.success_response()
 
     @action(methods=['GET'], detail=False)
     def task_status(self, request, *args, **kwargs):
@@ -423,18 +325,7 @@ class TaskViewSets(GenericViewSet):
             raw_lyc_list.append(line)
             clean_lyc_list.append(clean_line)
         clean_lyc_str = "\n".join(clean_lyc_list)
-
-        # Smart Translation Logic
-        try:
-             # Assume Chinese if detection fails or is ambiguous (fallback)
-            lang = detect_language(clean_lyc_str)
-            target_lang = "en" if lang == "中文" else "zh-CHS"
-            print(f"Lyrics Language: {lang}, Translating to: {target_lang}")
-        except Exception as e:
-            print(f"Language detection failed: {e}")
-            target_lang = "zh-CHS"
-
-        results = translation_lyc_text(clean_lyc_str, to_language=target_lang)
+        results = translation_lyc_text(clean_lyc_str)
         new_lyc = []
         results_list = results.split("\n")
         for index, result in enumerate(results_list):
@@ -461,27 +352,20 @@ class TaskViewSets(GenericViewSet):
         select_data = validate_data["select_data"]
         second_dir = validate_data.get("second_dir", "")
         music_id3_info = []
-        source_dirs = []
-        input_paths = []
-
         for data in select_data:
             if data.get('icon') == 'icon-folder':
                 file_full_path = f"{full_path}/{data.get('name')}"
-                source_dirs.append(file_full_path)
-                input_paths.append(file_full_path)
+                data = os.scandir(file_full_path)
+                for index, entry in enumerate(data, 1):
+                    each = entry.name
+                    file_type = each.split(".")[-1]
+                    if file_type not in ALLOW_TYPE:
+                        continue
+                    music_id3_info.append(f"{file_full_path}/{each}")
             else:
-                p = f"{full_path}/{data.get('name')}"
-                input_paths.append(p)
-        
-        music_id3_info = recursive_scandir(input_paths)
-        result = tidy_folder_task(music_id3_info, {
-            "root_path": root_path,
-            "first_dir": first_dir,
-            "second_dir": second_dir,
-            "source_dirs": source_dirs,
-            "base_path": full_path
-        })
-        return self.success_response(data=result)
+                music_id3_info.append(f"{full_path}/{data.get('name')}")
+        tidy_folder_task(music_id3_info, {"root_path": root_path, "first_dir": first_dir, "second_dir": second_dir})
+        return self.success_response()
 
     @action(methods=['POST'], detail=False)
     def upload_image(self, request, *args, **kwargs):
@@ -491,33 +375,17 @@ class TaskViewSets(GenericViewSet):
         # bs64_img_str = "data:image/jpeg;base64," + bs64_img
         return self.success_response(data=bs64_img)
 
-    @action(methods=["post"], detail=False)
-    def stop_all_tasks(self, request, *args, **kwargs):
-        """
-        Stop all running tasks, purge queue, and disable scheduled tasks.
-        """
-        # 1. Revoke active tasks
-        active_tasks = celery_app.control.inspect().active()
-        if active_tasks:
-            for worker, tasks in active_tasks.items():
-                for task in tasks:
-                    celery_app.control.revoke(task["id"], terminate=True)
-        
-        # 2. Purge pending queue
-        celery_app.control.purge()
-        
-        # 3. Disable scheduled task
-        try:
-            PeriodicTask.objects.filter(name='auto_scrape_new_files').update(enabled=False)
-        except Exception:
-            pass
-            
-        return self.success_response(msg="已停止所有任务并关闭定时刮削")
-
     @action(methods=["get"], detail=False)
     def clear_celery(self, request, *args, **kwargs):
-        # Kept for backward compatibility if needed, else can be alias
-        return self.stop_all_tasks(request)
+        active_tasks = celery_app.control.inspect().active()
+        try:
+            active_tasks_data = list(active_tasks.values())[0]
+        except Exception:
+            return self.success_response()
+        for task in active_tasks_data:
+            celery_app.control.revoke(task["id"], terminate=True)
+        celery_app.control.purge()
+        return self.success_response()
 
     @action(methods=["get"], detail=False)
     def active_queue(self, request, *args, **kwargs):
@@ -584,6 +452,6 @@ class TaskViewSets(GenericViewSet):
 
 class TaskModelViewSets(mixins.ListModelMixin,
                         GenericViewSet):
-    queryset = Task.objects.order_by("-created_at")
+    queryset = Task.objects.order_by("-id")
     serializer_class = TaskSerializer
     filterset_class = TaskFilters

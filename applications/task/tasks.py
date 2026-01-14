@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 import os
 import shutil
 import time
@@ -6,7 +6,6 @@ import uuid
 from collections import defaultdict
 
 from component import music_tag
-from component.zhconv.zhconv import convert as zhconv_convert
 from django.conf import settings
 from django.db import transaction
 
@@ -17,7 +16,8 @@ from applications.task.models import TaskRecord, Task
 from applications.task.services.music_ids import MusicIDS
 from applications.task.services.music_resource import MusicResource
 from applications.task.services.scan_utils import ScanMusic, MusicInfo
-from applications.task.utils import folder_update_time, exists_dir, match_song, match_album_song, recursive_scandir, clean_folder_name, is_cd_folder
+from applications.task.services.scan_utils import ScanMusic, MusicInfo
+from applications.task.utils import folder_update_time, exists_dir, match_song, match_album_song
 from applications.task.services.update_ids import save_music
 from django_vue_cli.celery_app import app
 
@@ -246,11 +246,10 @@ def clear_music():
 
 
 @app.task(bind=True)
-def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy="overwrite_all", skip_scraped=False):
+def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy="overwrite_all"):
     """
     自动刮削任务
     source_list: ["migu", "qmusic", "netease"]
-    skip_scraped: bool, if True, skip songs that exist in Task history
     """
     logs = []
     success_count = 0
@@ -264,63 +263,25 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
     def log(msg, type="info"):
         logs.append({"msg": msg, "type": type})
         print(msg)
-    
-    log(f"Batch Auto Tag Task Started with batch={batch}, source_list={source_list}")
 
-    if batch == "scheduled":
-        # Clear previous scheduled records to avoid duplication
-        TaskRecord.objects.filter(batch=batch).delete()
-        
-        # Get all configured music folders
-        # Get all configured music folders
-        dirs = Folder.objects.all()
-        scan_dirs = [d.path for d in dirs if os.path.exists(d.path)]
-        
-        # Fallback if no folders are configured in DB (e.g. fresh install)
-        if not scan_dirs:
-            default_media = settings.MEDIA_ROOT
-            if os.path.exists(default_media):
-                scan_dirs.append(default_media)
-            # Also try /app/media/music as per full_scan defaults
-            default_music = os.path.join(settings.MEDIA_ROOT, "music")
-            if os.path.exists(default_music) and default_music not in scan_dirs:
-                scan_dirs.append(default_music)
-        
-        log(f"Scheduled Scan Dirs: {scan_dirs}")
-        
-        # Recursive scan
-        files = recursive_scandir(scan_dirs, ALLOW_TYPE)
-        
+    folder_list = TaskRecord.objects.filter(batch=batch, icon="icon-folder").all()
+    for folder in folder_list:
+        data = os.scandir(folder.full_path)
         bulk_set = []
-        for f in files:
-            file_name = os.path.basename(f)
+        for entry in data:
+            each = entry.name
+            file_type = each.split(".")[-1]
+            file_name = ".".join(each.split(".")[:-1])
+            if file_type not in ALLOW_TYPE:
+                continue
             bulk_set.append(TaskRecord(**{
                 "batch": batch,
-                "song_name": file_name.rsplit('.', 1)[0],
-                "full_path": f,
+                "song_name": file_name,
+                "full_path": f"{folder.full_path}/{each}",
                 "icon": "icon-music",
+
             }))
         TaskRecord.objects.bulk_create(bulk_set)
-    else:
-        # Manual Mode: User selected folders in UI (which creates TaskRecord with icon-folder)
-        folder_list = TaskRecord.objects.filter(batch=batch, icon="icon-folder").all()
-        for folder in folder_list:
-            data = os.scandir(folder.full_path)
-            bulk_set = []
-            for entry in data:
-                each = entry.name
-                file_type = each.split(".")[-1]
-                file_name = ".".join(each.split(".")[:-1])
-                if file_type not in ALLOW_TYPE:
-                    continue
-                bulk_set.append(TaskRecord(**{
-                    "batch": batch,
-                    "song_name": file_name,
-                    "full_path": f"{folder.full_path}/{each}",
-                    "icon": "icon-music",
-    
-                }))
-            TaskRecord.objects.bulk_create(bulk_set)
 
     task_list = TaskRecord.objects.filter(batch=batch).exclude(icon="icon-folder").all()
     total_tasks = len(task_list)
@@ -335,30 +296,6 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
             tasks_by_folder[parent_path].append(task)
             
         for folder_path, tasks in tasks_by_folder.items():
-            # Check for skip_scraped logic
-            if skip_scraped:
-                # Filter out tasks that have been scraped before
-                tasks_to_process = []
-                for task in tasks:
-                    if Task.objects.filter(full_path=task.full_path).exists():
-                        skipped_items.append({
-                            "name": os.path.basename(task.full_path),
-                            "full_path": task.full_path
-                        })
-                        skip_count += 1
-                        current_index += 1 # Update progress even if skipped
-                        if self.request.id:
-                            self.update_state(state='PROGRESS', meta={
-                                'current': current_index,
-                                'total': total_tasks,
-                                'filename': os.path.basename(task.full_path) + " (Skipped)"
-                            })
-                    else:
-                        tasks_to_process.append(task)
-                tasks = tasks_to_process
-                if not tasks:
-                    continue
-
             log(f"Processing folder: {folder_path} with {len(tasks)} files")
             
             # Step 1: Voting for Album Name
@@ -377,97 +314,46 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
             
             # Determine search query
             search_query = None
-            search_artist = None  # Keep artist for reference but don't include in search
             if album_votes:
                 # Get the most common album name
                 best_album = max(album_votes.items(), key=lambda x: x[1])[0]
                 # If usage > 50% or it's the only one
                 if album_votes[best_album] > len(tasks) * 0.5:
-                    # Use album name ONLY for search (APIs work better without artist prefix)
                     search_query = best_album
+                    # Append artist if available for better precision
                     if artist_votes:
-                        search_artist = max(artist_votes.items(), key=lambda x: x[1])[0]
+                        best_artist = max(artist_votes.items(), key=lambda x: x[1])[0]
+                        search_query = f"{best_artist} {best_album}"
             
             # Fallback to folder name
             if not search_query:
                 folder_name = os.path.basename(folder_path)
-                
-                # Check for CD/Disc subfolders
-                if is_cd_folder(folder_name):
-                    parent_name = os.path.basename(os.path.dirname(folder_path))
-                    search_query = parent_name
-                else:
-                    search_query = folder_name
-                
-                # Clean folder name
-                search_query = clean_folder_name(search_query)
+                search_query = folder_name
                 
             log(f"Searching Album: {search_query}")
             
             # Step 2: Search for Album
-            # Convert Traditional Chinese to Simplified for better matching (esp. Netease)
-            search_query_simplified = zhconv_convert(search_query, 'zh-cn')
-            search_artist_simplified = zhconv_convert(search_artist, 'zh-cn') if search_artist else None
-            
-            if search_query_simplified != search_query:
-                log(f"Also trying Simplified: {search_query_simplified}")
-            
-            # Update Progress to show what we are searching for (Fixes "Frozen" UI perception)
-            if self.request.id:
-                 self.update_state(state='PROGRESS', meta={
-                    'current': current_index,
-                    'total': total_tasks,
-                    'filename': f"Searching Album: {search_query_simplified}..."
-                })
-
             remote_album = None
-            used_resource = None
-            
-            # Search strategy: Netease needs artist+album (to avoid 翻唱), QQ Music uses album-only
             for resource in source_list:
-                if resource == "netease" and search_artist_simplified:
-                    # Netease: use "artist album" to avoid cover versions
-                    netease_query = f"{search_artist_simplified} {search_query_simplified}"
-                    log(f"Searching Netease with artist: {netease_query}")
-                    remote_album = MusicResource(resource).fetch_album_by_name(netease_query)
-                else:
-                    # QQ Music and others: album name only
-                    remote_album = MusicResource(resource).fetch_album_by_name(search_query_simplified)
-                
-                if remote_album:
-                    log(f"Found Album ({resource}): {remote_album['album_name']} by {remote_album['album_artist']}")
-                    used_resource = resource
-                    break
-                else:
-                    log(f"Album not found on {resource}")
-                    if resource == "netease":
-                        cookie_warning = True
-            
-            # If Simplified didn't work and we had Traditional, try original query
-            if not remote_album and search_query_simplified != search_query:
-                log(f"Retrying with original query: {search_query}")
-                for resource in source_list:
-                    if resource == "netease" and search_artist:
-                        netease_query = f"{search_artist} {search_query}"
-                        remote_album = MusicResource(resource).fetch_album_by_name(netease_query)
-                    else:
-                        remote_album = MusicResource(resource).fetch_album_by_name(search_query)
-                    if remote_album:
-                        log(f"Found Album ({resource}): {remote_album['album_name']} by {remote_album['album_artist']}")
-                        used_resource = resource
-                        break
+                if resource == "netease" or True: 
+                     remote_album = MusicResource(resource).fetch_album_by_name(search_query)
+                     if remote_album:
+                         log(f"Found Album: {remote_album['album_name']} by {remote_album['album_artist']}")
+                         break
+                     else:
+                         if resource == "netease":
+                            cookie_warning = True
 
             # Step 3: Match and Save
             if remote_album:
                 tracks = remote_album['tracks']
                 for task in tasks:
                     current_index += 1
-                    if self.request.id:
-                        self.update_state(state='PROGRESS', meta={
-                            'current': current_index,
-                            'total': total_tasks,
-                            'filename': os.path.basename(task.full_path)
-                        })
+                    self.update_state(state='PROGRESS', meta={
+                        'current': current_index,
+                        'total': total_tasks,
+                        'filename': os.path.basename(task.full_path)
+                    })
                     matched_song = match_album_song(resource, task.full_path, tracks)
                     
                     if matched_song:
@@ -497,55 +383,32 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
 
                             # Overwrite Policy Logic
                             if overwrite_policy == 'overwrite_missing':
-                                for key in ['title', 'artist', 'album', 'year']:
-                                    try:
-                                        # Check if tag exists and has a value
-                                        if f[key].value:
-                                            # If exists, remove from updates (preserve original)
-                                            # 'name' maps to 'title', so we pop 'name' if title exists
-                                            if key == 'title':
-                                                matched_song.pop('name', None)
-                                            matched_song.pop(key, None)
-                                    except Exception:
-                                        # Tag doesn't exist or has no value - safe to overwrite
-                                        pass
-                                
                                 try:
+                                    if f['title'].value: matched_song.pop('name', None)
+                                    
+                                    if f['title'].value: matched_song.pop('title', None)
+                                    if f['artist'].value: matched_song.pop('artist', None)
+                                    if f['album'].value: matched_song.pop('album', None)
+                                    if f['year'].value: matched_song.pop('year', None)
+                                    # Album img checking is complex, assume if we have artwork we skip
                                     if f['artwork'].value: matched_song.pop('album_img', None)
-                                except Exception:
-                                    pass
+                                except Exception as e:
+                                    log(f"Overwrite check error: {e}")
 
                             save_music(f, matched_song, False)
-                            
-                            # Record to History (Task table)
-                            Task.objects.update_or_create(full_path=task.full_path, defaults={
-                                "state": task.state,
-                                "parent_path": os.path.dirname(task.full_path),
-                                "filename": os.path.basename(task.full_path),
-                                "song_name": task.song_name,
-                                "artist_name": task.artist_name,
-                                "created_at": datetime.now()
-                            })
                         except Exception as e:
                             log(f"Save ID3 Error: {e}")
-                            # Record error to history
-                            Task.objects.update_or_create(full_path=task.full_path, defaults={
-                                "state": "fail",
-                                "parent_path": os.path.dirname(task.full_path),
-                                "filename": os.path.basename(task.full_path),
-                                "song_name": task.song_name,
-                                "artist_name": task.artist_name,
-                                "created_at": datetime.now(),
-                                "error_msg": str(e)
-                            })
-                            fail_count += 1
-                            failed_items.append({
-                                "name": os.path.basename(task.full_path),
-                                "full_path": task.full_path
-                            })
-                        time.sleep(2)
+
+                        parent_path = os.path.dirname(task.full_path)
+                        Task.objects.update_or_create(full_path=task.full_path, defaults={
+                            "state": task.state,
+                            "parent_path": parent_path,
+                            "filename": os.path.basename(task.full_path),
+                            "song_name": task.song_name,
+                            "artist_name": task.artist_name,
+                        })
                     else:
-                        task.state = "fail"
+                        task.state = "failed"
                         task.save()
                         fail_count += 1
                         log(f"Match Failed: {os.path.basename(task.full_path)}", "error")
@@ -553,28 +416,16 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
                             "name": os.path.basename(task.full_path),
                             "full_path": task.full_path
                         })
-                        # Record to History (Task table) - Failed
-                        Task.objects.update_or_create(full_path=task.full_path, defaults={
-                            "state": task.state,
-                            "parent_path": os.path.dirname(task.full_path),
-                            "filename": os.path.basename(task.full_path),
-                            "song_name": task.song_name,
-                            "artist_name": task.artist_name,
-                            "created_at": datetime.now(),
-                            "error_msg": "Match Failed (Unknown)"
-                        })
-                        time.sleep(2)
             else:
                 log(f"Album not found for {folder_path}, falling back to single song match")
                 log(f"Album not found for {folder_path}, falling back to single song match")
                 for task in tasks:
                     current_index += 1
-                    if self.request.id:
-                        self.update_state(state='PROGRESS', meta={
-                            'current': current_index,
-                            'total': total_tasks,
-                            'filename': os.path.basename(task.full_path)
-                        })
+                    self.update_state(state='PROGRESS', meta={
+                        'current': current_index,
+                        'total': total_tasks,
+                        'filename': os.path.basename(task.full_path)
+                    })
                     s, f, cw = _process_single_task(task, source_list, select_mode, log, overwrite_policy)
                     success_count += s
                     fail_count += f
@@ -594,26 +445,11 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
         # Normal Mode
         for task in task_list:
             current_index += 1
-            if skip_scraped and Task.objects.filter(full_path=task.full_path).exists():
-                skipped_items.append({
-                    "name": os.path.basename(task.full_path),
-                    "full_path": task.full_path
-                })
-                skip_count += 1
-                if self.request.id:
-                    self.update_state(state='PROGRESS', meta={
-                        'current': current_index,
-                        'total': total_tasks,
-                        'filename': os.path.basename(task.full_path) + " (Skipped)"
-                    })
-                continue
-
-            if self.request.id:
-                self.update_state(state='PROGRESS', meta={
-                    'current': current_index,
-                    'total': total_tasks,
-                    'filename': os.path.basename(task.full_path)
-                })
+            self.update_state(state='PROGRESS', meta={
+                'current': current_index,
+                'total': total_tasks,
+                'filename': os.path.basename(task.full_path)
+            })
             s, f, cw = _process_single_task(task, source_list, select_mode, log, overwrite_policy)
             success_count += s
             fail_count += f
@@ -625,9 +461,9 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
                 })
             elif s > 0:
                 success_items.append({
+                    "name": os.path.basename(task.full_path),
                     "full_path": task.full_path
                 })
-            time.sleep(2)
 
     return {
         "logs": logs,
@@ -644,7 +480,6 @@ def batch_auto_tag_task(self, batch, source_list, select_mode, overwrite_policy=
 def _process_single_task(task, source_list, select_mode, log=print, overwrite_policy="overwrite_all"):
     is_match = False
     cw = False
-    error_msg = ""
     for resource in source_list:
         log(f"Start Matching ({resource}): {os.path.basename(task.full_path)}")
         try:
@@ -652,7 +487,6 @@ def _process_single_task(task, source_list, select_mode, log=print, overwrite_po
         except Exception as e:
             log(f"Error: {e}", "error")
             is_match = False
-            error_msg = str(e)
             if "Cookie Invalid" in str(e) and resource == "netease":
                 cw = True
             break
@@ -666,7 +500,6 @@ def _process_single_task(task, source_list, select_mode, log=print, overwrite_po
                 "filename": os.path.basename(task.full_path),
                 "song_name": task.song_name,
                 "artist_name": task.artist_name,
-                "created_at": datetime.now()
             })
             log(f"Success: {os.path.basename(task.full_path)}")
             break
@@ -674,7 +507,7 @@ def _process_single_task(task, source_list, select_mode, log=print, overwrite_po
              pass
 
     if not is_match:
-        task.state = "fail"
+        task.state = "failed"
         task.save()
         log(f"Failed: {os.path.basename(task.full_path)}", "error")
         parent_path = os.path.dirname(task.full_path)
@@ -684,8 +517,6 @@ def _process_single_task(task, source_list, select_mode, log=print, overwrite_po
             "filename": os.path.basename(task.full_path),
             "song_name": task.song_name,
             "artist_name": task.artist_name,
-            "created_at": datetime.now(),
-            "error_msg": error_msg or "Match Failed (Unknown)"
         })
         return 0, 1, cw
     return 1, 0, cw
@@ -700,16 +531,10 @@ def tidy_folder_task(music_path_list, tidy_config):
     if second_dir:
         tidy_map = defaultdict(lambda: defaultdict(list))
         for music_path in music_path_list:
-            if not os.path.exists(music_path):
-                print(f"Warning: Music file not found: {music_path}")
-                continue
             file = MusicIDS(music_path)
             first_value = getattr(file, first_dir, "未知")
             second_value = getattr(file, second_dir, "未知")
             tidy_map[first_value][second_value].append(music_path)
-        
-        print(f"Tidy Map (Level 2): {len(tidy_map)} entires. Plan to move files...")
-        
         for first_value, second_map in tidy_map.items():
             first_path = os.path.join(root_path, first_value)
             if not os.path.exists(first_path):
@@ -719,52 +544,16 @@ def tidy_folder_task(music_path_list, tidy_config):
                 if not os.path.exists(second_path):
                     os.makedirs(second_path)
                 for music_path in music_path_list:
-                    try:
-                        shutil.move(music_path, second_path)
-                    except Exception as e:
-                        print(f"Error moving {music_path} to {second_path}: {e}")
+                    shutil.move(music_path, second_path)
     else:
         tidy_map = defaultdict(list)
         for music_path in music_path_list:
-            if not os.path.exists(music_path):
-                print(f"Warning: Music file not found: {music_path}")
-                continue
             file = MusicIDS(music_path)
             first_value = getattr(file, first_dir, "未知")
             tidy_map[first_value].append(music_path)
-            
-        print(f"Tidy Map (Level 1): {len(tidy_map)} entires. Plan to move files...")
-
         for first_value, music_path_list in tidy_map.items():
             first_path = os.path.join(root_path, first_value)
             if not os.path.exists(first_path):
                 os.makedirs(first_path)
             for music_path in music_path_list:
-                try:
-                    shutil.move(music_path, first_path)
-                except Exception as e:
-                    print(f"Error moving {music_path} to {first_path}: {e}")
-
-    # Cleanup Source Folders
-    source_dirs = tidy_config.get("source_dirs", [])
-    base_path = tidy_config.get("base_path")
-    moved_count = 0
-    if base_path and source_dirs:
-        unorganized_root = os.path.join(base_path, "未整理文件")
-        
-        for source in source_dirs:
-            if os.path.exists(source) and os.path.isdir(source):
-                # Check directly inside if there are files left
-                try:
-                    # Move the leftover folder to unorganized_root
-                    # shutil.move will move 'source' (e.g. /path/to/AlbumA) INTO unorganized_root
-                    # Result: /path/to/未整理文件/AlbumA
-                    if not os.path.exists(unorganized_root):
-                        os.makedirs(unorganized_root)
-                        
-                    shutil.move(source, unorganized_root)
-                    moved_count += 1
-                except Exception as e:
-                    print(f"Error moving leftovers for {source}: {e}")
-
-    return {"moved_unorganized_count": moved_count}
+                shutil.move(music_path, first_path)
