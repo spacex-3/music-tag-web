@@ -1545,11 +1545,33 @@
                         .toLowerCase()
 
                     // Method 1 (PRIORITY): Match by song name (handles multi-disc albums correctly)
+                    // Use best-score matching to avoid short names matching incorrectly
                     if (cleanName) {
-                        matchedTrack = tracks.find(t => {
+                        let bestScore = 0
+                        let bestMatch = null
+                        tracks.forEach(t => {
                             const trackName = (t.name || '').toLowerCase().trim()
-                            return cleanName.includes(trackName) || trackName.includes(cleanName) || cleanName === trackName
+                            if (!trackName) return
+                            let score = 0
+                            // Exact match = highest score
+                            if (cleanName === trackName) {
+                                score = 1000
+                            } else if (cleanName.includes(trackName)) {
+                                // Track name is substring of filename - score by length ratio
+                                score = (trackName.length / cleanName.length) * 100
+                            } else if (trackName.includes(cleanName)) {
+                                // Filename is substring of track name
+                                score = (cleanName.length / trackName.length) * 100
+                            }
+                            if (score > bestScore) {
+                                bestScore = score
+                                bestMatch = t
+                            }
                         })
+                        // Require minimum score to avoid false positives
+                        if (bestScore >= 30) {
+                            matchedTrack = bestMatch
+                        }
                     }
 
                     // Method 2 (FALLBACK): Match by track number if name matching failed
