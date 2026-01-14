@@ -153,57 +153,74 @@ def match_album_song(resource, song_path, album_tracks):
     """
     Match a local song file to a track in the album list.
     Matching rules:
-    1. Track number (if available)
-    2. Title fuzzy match
+    1. Song name from FILENAME (priority) - handles multi-disc albums correctly
+    2. Track number (fallback for single-disc albums)
     """
     from applications.task.services.music_resource import MusicResource
     
     file = music_tag.load_file(song_path)
     file_name = song_path.split("/")[-1]
-    file_title = file_name.split('.')[0]
-    title = file["title"].value or file_title
-    track_num = file["tracknumber"].value
     
-    # Try to parse track number from filename if tag is missing
-    # e.g. "01. Song.mp3" or "01 - Song.mp3"
+    # Extract clean song name from filename (PRIORITY for matching)
+    # Remove extension and disc-track prefixes like "1-07 " or "07 "
+    file_title = file_name.rsplit('.', 1)[0]  # Remove extension
+    file_title_clean = re.sub(r'^\d+-\d+[\s.\-_]+', '', file_title)  # Remove "1-07 " prefix
+    file_title_clean = re.sub(r'^\d+[\s.\-_]+', '', file_title_clean)  # Remove "07 " prefix
+    file_title_clean = re.sub(r'^\d+', '', file_title_clean).strip()  # Remove remaining leading digits
+    
+    # For matching, use filename (not ID3 tag which may be wrong)
+    match_title = file_title_clean if file_title_clean else file_title
+    
+    # Also try to get track number from filename
+    track_num = None
+    # Try disc-track format: "1-07" -> extract "07"
+    disc_track_match = re.match(r'^(\d+)-(\d+)', file_name)
+    if disc_track_match:
+        track_num = int(disc_track_match.group(2))
+    else:
+        # Try simple format: "07 Song.mp3"
+        simple_match = re.match(r'^(\d+)[\s.\-_]', file_name)
+        if simple_match:
+            track_num = int(simple_match.group(1))
+    
+    # If no track in filename, try ID3 tag
     if not track_num:
-        match = re.search(r'^(\d+)[\.\s\-]', file_name)
-        if match:
-            track_num = int(match.group(1))
+        tag_track = file["tracknumber"].value
+        if tag_track:
+            try:
+                track_num = int(str(tag_track).split('/')[0])
+            except:
+                pass
 
     is_match = False
     song_select = None
     
-    # 1. Try Track Number Match (Strongest Signal)
-    if track_num:
+    # 1. Try Song Name Match FIRST (handles multi-disc albums correctly)
+    best_score = 0
+    for song in album_tracks:
+        song_name = song.get('name') or song.get('songname') or ''
+        score = match_score(match_title, song_name)
+        if score > best_score:
+            best_score = score
+            song_select = song
+    
+    if best_score >= 1:  # Require at least partial match
+        is_match = True
+        song_name = song_select.get('name') or song_select.get('songname') or ''
+        print(f"Name Match: {file_name} -> {song_name} (score={best_score})")
+    
+    # 2. Try Track Number Match (fallback for single-disc albums with no name match)
+    if not is_match and track_num:
         try:
-            track_num_int = int(str(track_num).split('/')[0])
             for song in album_tracks:
                 song_name = song.get('name') or song.get('songname') or ''
-                if song.get('idx') == track_num_int or song.get('track_num') == track_num_int:
-                    # Verify with title to avoid complete mismatches
-                    if match_score(title, song_name) >= 1: 
-                        is_match = True
-                        song_select = song
-                        print(f"Track Num Match: {title} -> {song_name}")
-                        break
+                if song.get('idx') == track_num or song.get('track_num') == track_num:
+                    is_match = True
+                    song_select = song
+                    print(f"Track Num Match: {file_name} -> {song_name} (track={track_num})")
+                    break
         except Exception:
             pass
-            
-    # 2. Try Title Fuzzy Match (Fallback)
-    if not is_match:
-        best_score = 0
-        for song in album_tracks:
-            song_name = song.get('name') or song.get('songname') or ''
-            score = match_score(title, song_name)
-            if score > best_score:
-                best_score = score
-                song_select = song
-        
-        if best_score >= 1: # Require at least partial match
-            is_match = True
-            song_name = song_select.get('name') or song_select.get('songname') or ''
-            print(f"Title Match: {title} -> {song_name}")
 
     if is_match:
         song_select["filename"] = file_name
