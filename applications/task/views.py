@@ -387,6 +387,24 @@ class TaskViewSets(GenericViewSet):
         celery_app.control.purge()
         return self.success_response()
 
+    @action(methods=["post"], detail=False)
+    def stop_all_tasks(self, request, *args, **kwargs):
+        active_tasks = celery_app.control.inspect().active()
+        reserved_tasks = celery_app.control.inspect().reserved()
+        
+        if active_tasks:
+            for tasks in active_tasks.values():
+                for task in tasks:
+                    celery_app.control.revoke(task["id"], terminate=True)
+                    
+        if reserved_tasks:
+            for tasks in reserved_tasks.values():
+                for task in tasks:
+                    celery_app.control.revoke(task["id"], terminate=True)
+                    
+        celery_app.control.purge()
+        return self.success_response(msg="Tasks stopped")
+
     @action(methods=["get"], detail=False)
     def active_queue(self, request, *args, **kwargs):
         active_tasks = celery_app.control.inspect().active()

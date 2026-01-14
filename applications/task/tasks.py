@@ -373,37 +373,46 @@ def batch_auto_tag_task(self, batch=None, source_list=None, select_mode=None, ov
                 except:
                     pass
             
-            # Determine search query
-            search_query = None
+            # Determine search queries candidates
+            queries_to_try = []
             if album_votes:
                 # Get the most common album name
                 best_album = max(album_votes.items(), key=lambda x: x[1])[0]
                 # If usage > 50% or it's the only one
                 if album_votes[best_album] > len(tasks) * 0.5:
-                    search_query = best_album
-                    # Append artist if available for better precision
+                    # 1. Try Artist + Album (Highest precision)
                     if artist_votes:
                         best_artist = max(artist_votes.items(), key=lambda x: x[1])[0]
-                        search_query = f"{best_artist} {best_album}"
+                        queries_to_try.append(f"{best_artist} {best_album}")
+                    
+                    # 2. Try Album Only (Medium precision)
+                    queries_to_try.append(best_album)
             
-            # Fallback to folder name
-            if not search_query:
-                folder_name = os.path.basename(folder_path)
-                search_query = folder_name
-                
-            log(f"Searching Album: {search_query}")
+            # 3. Fallback to folder name (Lowest precision but robust)
+            folder_name = os.path.basename(folder_path)
+            queries_to_try.append(folder_name)
             
+            # Remove duplicates while preserving order
+            queries_to_try = list(dict.fromkeys(queries_to_try))
+
             # Step 2: Search for Album
             remote_album = None
-            for resource in source_list:
-                if resource == "netease" or True: 
-                     remote_album = MusicResource(resource).fetch_album_by_name(search_query)
-                     if remote_album:
-                         log(f"Found Album: {remote_album['album_name']} by {remote_album['album_artist']}")
-                         break
-                     else:
-                         if resource == "netease":
-                            cookie_warning = True
+            for search_query in queries_to_try:
+                if not search_query: continue
+                log(f"Searching Album: {search_query}")
+                
+                for resource in source_list:
+                    if resource == "netease" or True: 
+                         remote_album = MusicResource(resource).fetch_album_by_name(search_query)
+                         if remote_album:
+                             log(f"Found Album: {remote_album['album_name']} by {remote_album['album_artist']}")
+                             break
+                         else:
+                             if resource == "netease":
+                                cookie_warning = True
+                
+                if remote_album:
+                    break
 
             # Step 3: Match and Save
             if remote_album:
