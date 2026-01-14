@@ -1045,9 +1045,9 @@
                     ...this.failedItems.map(i => ({ ...i, type: 'failed' })),
                     ...this.skippedItems.map(i => ({ ...i, type: 'skipped' }))
                 ].sort((a, b) => {
-                    // Sort by created_at descending (newest first)
-                    const timeA = a.created_at || ''
-                    const timeB = b.created_at || ''
+                    // Sort by display_time descending (newest first) - display_time is derived from updated_at
+                    const timeA = a.display_time || ''
+                    const timeB = b.display_time || ''
                     return timeB.localeCompare(timeA)
                 })
                 if (this.historyFilter === 'all') return all
@@ -1654,18 +1654,20 @@
 
                 this.$bkInfo({
                     title: `确认匹配 ${matches.length} 个文件？`,
-                    subTitle: `即将应用元数据并抓取歌词 (每首间隔 2秒 以防反爬，预计耗时 ${matches.length * 2}秒)`,
+                    subTitle: '即将应用元数据并抓取歌词',
                     confirmFn: async() => {
                         this.isLoading = true
+                        this.isScraping = true
+                        this.progressText = '开始匹配...'
                         const resource = this.resource || 'netease'
                         const total = matches.length
 
                         try {
                             for (let i = 0; i < matches.length; i++) {
                                 const m = matches[i]
-                                // Show progress
+                                // Show progress in header bar (like auto-scrape)
                                 const fileName = m.file.name.replace(/\.[^.]+$/, '')
-                                this.loadingText = `正在处理: ${fileName} (${i + 1}/${total})`
+                                this.progressText = `正在刮削: ${fileName} (${i + 1}/${total})`
                                 console.log(`[Album Match] ${i + 1}/${total}: ${m.file.name} -> ${m.track.name}`)
 
                                 let lyrics = ''
@@ -1697,13 +1699,9 @@
                                     is_save_lyrics_file: true,
                                     is_save_album_cover: true
                                 })
-
-                                // Wait 2s to be safe, except for the last one
-                                if (i < matches.length - 1) {
-                                    await new Promise(resolve => setTimeout(resolve, 2000))
-                                }
                             }
-                            this.loadingText = ''
+                            this.isScraping = false
+                            this.progressText = ''
 
                             // Batch save
                             const res = await this.$api.Task.updateId3({'music_id3_info': updates})

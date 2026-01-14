@@ -3,6 +3,7 @@ import copy
 import copy
 import os
 import time
+import django_filters
 
 from django.utils.decorators import method_decorator
 from django.views.decorators.gzip import gzip_page
