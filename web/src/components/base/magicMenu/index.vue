@@ -13,7 +13,7 @@
 
 <script>
     import topHeader from './header.vue'
-    import leftMenu from './LeftMenu.vue'
+    import leftMenu from './leftMenu.vue'
     import container from './container.vue'
 
     export default {
