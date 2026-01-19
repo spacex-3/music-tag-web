@@ -78,7 +78,10 @@ RUN python setup_in_docker.py
 
 # Build frontend
 WORKDIR ${APP_HOME}/web
-RUN npm config set registry https://registry.npmmirror.com
+ARG NPM_REGISTRY=https://registry.npmjs.org/
+RUN npm config set registry ${NPM_REGISTRY}
+RUN npm config set fetch-retry-maxtimeout 600000
+RUN npm config set fetch-timeout 600000
 RUN rm -f package-lock.json && npm install --legacy-peer-deps
 RUN npm run build
 WORKDIR ${APP_HOME}

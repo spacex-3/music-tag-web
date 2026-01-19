@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: ./compose/prod/django/Dockerfile
+      args:
+        NPM_REGISTRY: https://registry.npmmirror.com/
     container_name: music-tag-web
     ports:
       - "8001:8001"
@@ -20,6 +22,8 @@ services:
     build:
       context: .
       dockerfile: ./compose/prod/django/Dockerfile
+      args:
+        NPM_REGISTRY: https://registry.npmmirror.com/
     container_name: music_celeryworker
     environment:
       dockerrun: "yes"
@@ -38,6 +42,8 @@ services:
     build:
       context: .
       dockerfile: ./compose/prod/django/Dockerfile
+      args:
+        NPM_REGISTRY: https://registry.npmmirror.com/
     container_name: music_celerybeat
     environment:
       dockerrun: "yes"
