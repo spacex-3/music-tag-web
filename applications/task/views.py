@@ -79,6 +79,10 @@ class TaskViewSets(GenericViewSet):
             if file_type in ["lrc", "txt"]:
                 frc_map[file_name] = each
         task_map = dict(Task.objects.filter(parent_path=file_path).values_list("filename", "state"))
+        
+        # Import music_tag for metadata check
+        from component import music_tag
+        
         for index, entry in enumerate(file_data, 1):
             each = entry.get("name")
             file_type = each.split(".")[-1]
@@ -101,12 +105,36 @@ class TaskViewSets(GenericViewSet):
                 icon = "icon-script-files"
             else:
                 icon = "icon-script-file"
+            
+            # Determine state: first check Task table, then check file metadata
+            # Note: task_map is keyed by filename WITHOUT extension
+            state = task_map.get(file_name, None)
+            # If not in Task table OR state is null/failed, check file metadata directly
+            if state is None or state in ("null", "failed"):
+                # Check file metadata directly
+                try:
+                    full_file_path = f"{file_path}/{each}"
+                    f = music_tag.load_file(full_file_path)
+                    has_album = bool(str(f.get("album", "")).strip())
+                    has_artist = bool(str(f.get("artist", "")).strip())
+                    has_cover = f.get("artwork") is not None and f["artwork"].value is not None
+                    has_lyrics = bool(str(f.get("lyrics", "")).strip())
+                    
+                    # If has ANY of these, mark as success (loosened condition)
+                    if has_album or has_artist or has_cover or has_lyrics:
+                        state = "success"
+                    elif state is None:
+                        state = "null"
+                except:
+                    if state is None:
+                        state = "null"
+                    
             children_data.append({
                 "id": index,
                 "name": each,
                 "title": each,
                 "icon": icon,
-                "state": task_map.get(each, "null"),
+                "state": state,
                 "size": entry.get("size"),
                 "update_time": entry.get("update_time")
             })
@@ -127,6 +155,74 @@ class TaskViewSets(GenericViewSet):
             }
         ]
         return self.success_response(data=res_data)
+
+    @action(methods=['GET'], detail=False, authentication_classes=[], permission_classes=[])
+    def stream_audio(self, request, *args, **kwargs):
+        """Stream audio file for playback (public endpoint - no auth required)"""
+        from django.http import FileResponse, HttpResponse
+        import mimetypes
+        
+        file_path = request.query_params.get('path', '')
+        if not file_path or not os.path.exists(file_path):
+            return HttpResponse('File not found', status=404)
+        
+        # Explicit MIME type mapping for audio formats
+        ext = file_path.split('.')[-1].lower()
+        mime_map = {
+            'flac': 'audio/flac',
+            'mp3': 'audio/mpeg',
+            'm4a': 'audio/mp4',
+            'aac': 'audio/aac',
+            'ogg': 'audio/ogg',
+            'opus': 'audio/opus',
+            'wav': 'audio/wav',
+            'aiff': 'audio/aiff',
+            'wma': 'audio/x-ms-wma',
+            'ape': 'audio/ape',
+            'wv': 'audio/x-wavpack',
+        }
+        mime_type = mime_map.get(ext)
+        if not mime_type:
+            mime_type, _ = mimetypes.guess_type(file_path)
+        if not mime_type:
+            mime_type = 'audio/mpeg'
+        
+        # Simple streaming response (supports browser audio element)
+        try:
+            response = FileResponse(open(file_path, 'rb'), content_type=mime_type)
+            response['Accept-Ranges'] = 'bytes'
+            response['Content-Disposition'] = f'inline; filename="{os.path.basename(file_path)}"'
+            return response
+        except Exception as e:
+            return HttpResponse(str(e), status=500)
+
+    @action(methods=['POST'], detail=False)
+    def get_lyrics(self, request, *args, **kwargs):
+        """Get lyrics from a music file"""
+        from component import music_tag
+        
+        file_path = request.data.get('file_path', '')
+        if not file_path or not os.path.exists(file_path):
+            return self.failure_response(msg='文件不存在')
+        
+        try:
+            f = music_tag.load_file(file_path)
+            lyrics = str(f.get("lyrics", "") or "")
+            
+            # Also check for .lrc file
+            base_name = ".".join(os.path.basename(file_path).split(".")[:-1])
+            lrc_path = os.path.join(os.path.dirname(file_path), f"{base_name}.lrc")
+            lrc_content = ""
+            if os.path.exists(lrc_path):
+                with open(lrc_path, 'r', encoding='utf-8') as lrc_file:
+                    lrc_content = lrc_file.read()
+            
+            return self.success_response(data={
+                "embedded": lyrics,
+                "lrc_file": lrc_content
+            })
+        except Exception as e:
+            return self.failure_response(msg=str(e))
 
     @action(methods=['POST'], detail=False)
     def music_id3(self, request, *args, **kwargs):
@@ -584,6 +680,205 @@ class TaskViewSets(GenericViewSet):
         except Exception as e:
             return self.failure_response(msg=f"Failed to update schedule: {str(e)}")
 
+    @action(methods=['POST'], detail=False)
+    def media_stats(self, request, *args, **kwargs):
+        """Get media statistics for the given folder"""
+        from component import music_tag
+        from collections import defaultdict
+        
+        folder_path = request.data.get('folder_path', '')
+        if not folder_path or not os.path.exists(folder_path):
+            return self.failure_response(msg="文件夹不存在")
+        
+        albums = defaultdict(list)
+        artists = defaultdict(list)
+        album_artists = defaultdict(list)
+        has_info = []
+        no_info = []
+        
+        for root, dirs, files in os.walk(folder_path):
+            for file in files:
+                file_type = file.split(".")[-1].lower()
+                if file_type not in ALLOW_TYPE:
+                    continue
+                
+                full_path = os.path.join(root, file)
+                try:
+                    f = music_tag.load_file(full_path)
+                    title = str(f.get("title", "")).strip() or ""
+                    artist = str(f.get("artist", "")).strip() or ""
+                    album = str(f.get("album", "")).strip() or ""
+                    albumartist = str(f.get("albumartist", "")).strip() or ""
+                    has_lyrics = bool(str(f.get("lyrics", "")).strip())
+                    has_cover = f.get("artwork") is not None and f["artwork"].value is not None
+                    
+                    file_info = {
+                        "filename": file,
+                        "full_path": full_path,
+                        "parent_path": root,
+                        "title": title,
+                        "artist": artist,
+                        "album": album,
+                        "albumartist": albumartist,
+                        "has_lyrics": has_lyrics,
+                        "has_cover": has_cover
+                    }
+                    
+                    # Group by dimensions
+                    if album:
+                        albums[album].append(file_info)
+                    if artist:
+                        artists[artist].append(file_info)
+                    if albumartist:
+                        album_artists[albumartist].append(file_info)
+                    
+                    # Check if has any scrape info
+                    if title or artist or album or albumartist or has_lyrics or has_cover:
+                        has_info.append(file_info)
+                    else:
+                        no_info.append(file_info)
+                        
+                except Exception as e:
+                    # File couldn't be read, count as no info
+                    no_info.append({
+                        "filename": file,
+                        "full_path": full_path,
+                        "parent_path": root,
+                        "error": str(e)
+                    })
+        
+        # Convert to list format with counts
+        albums_list = []
+        for album_name, files in sorted(albums.items()):
+            scraped_count = sum(1 for f in files if f.get('has_lyrics') or f.get('has_cover'))
+            album_artist = files[0].get('albumartist', '') if files else ''
+            albums_list.append({
+                "name": album_name,
+                "count": len(files),
+                "scraped_count": scraped_count,
+                "albumartist": album_artist,
+                "files": files[:5]
+            })
+        artists_list = [{"name": k, "count": len(v), "files": v[:5]} for k, v in sorted(artists.items())]
+        album_artists_list = [{"name": k, "count": len(v), "files": v[:5]} for k, v in sorted(album_artists.items())]
+        
+        return self.success_response(data={
+            "albums": albums_list,
+            "albums_count": len(albums_list),
+            "artists": artists_list,
+            "artists_count": len(artists_list),
+            "album_artists": album_artists_list,
+            "album_artists_count": len(album_artists_list),
+            "has_info": has_info[:100],  # Limit to first 100
+            "has_info_count": len(has_info),
+            "no_info": no_info[:100],  # Limit to first 100
+            "no_info_count": len(no_info),
+            "total_files": len(has_info) + len(no_info)
+        })
+
+    @action(methods=['POST'], detail=False)
+    def media_stats_detail(self, request, *args, **kwargs):
+        """Get detailed media statistics for drill-down navigation
+        
+        Parameters:
+        - folder_path: root media folder
+        - view_type: 'artist_albums' | 'album_artist_albums' | 'album_songs'
+        - name: the artist/album artist/album name to filter by
+        """
+        from component import music_tag
+        from collections import defaultdict
+        
+        folder_path = request.data.get('folder_path', '')
+        view_type = request.data.get('view_type', '')
+        name = request.data.get('name', '')
+        
+        if not folder_path or not os.path.exists(folder_path):
+            return self.failure_response(msg="文件夹不存在")
+        
+        if not view_type or not name:
+            return self.failure_response(msg="缺少参数")
+        
+        # Collect all matching files
+        all_files = []
+        for root, dirs, files in os.walk(folder_path):
+            for file in files:
+                file_type = file.split(".")[-1].lower()
+                if file_type not in ALLOW_TYPE:
+                    continue
+                
+                full_path = os.path.join(root, file)
+                try:
+                    f = music_tag.load_file(full_path)
+                    title = str(f.get("title", "")).strip() or file
+                    artist = str(f.get("artist", "")).strip() or ""
+                    album = str(f.get("album", "")).strip() or ""
+                    albumartist = str(f.get("albumartist", "")).strip() or ""
+                    year = str(f.get("year", "")).strip() or ""
+                    genre = str(f.get("genre", "")).strip() or ""
+                    has_lyrics = bool(str(f.get("lyrics", "")).strip())
+                    has_cover = f.get("artwork") is not None and f["artwork"].value is not None
+                    
+                    file_info = {
+                        "filename": file,
+                        "full_path": full_path,
+                        "parent_path": root,
+                        "title": title,
+                        "artist": artist,
+                        "album": album,
+                        "albumartist": albumartist,
+                        "year": year,
+                        "genre": genre,
+                        "has_lyrics": has_lyrics,
+                        "has_cover": has_cover
+                    }
+                    
+                    # Filter based on view_type
+                    if view_type == 'artist_albums' and artist == name:
+                        all_files.append(file_info)
+                    elif view_type == 'album_artist_albums' and albumartist == name:
+                        all_files.append(file_info)
+                    elif view_type == 'album_songs' and album == name:
+                        all_files.append(file_info)
+                        
+                except Exception:
+                    pass
+        
+        if view_type in ['artist_albums', 'album_artist_albums']:
+            # Group by album, return album list with song counts
+            albums = defaultdict(list)
+            for f in all_files:
+                if f['album']:
+                    albums[f['album']].append(f)
+            
+            albums_list = []
+            for album_name, songs in sorted(albums.items()):
+                scraped_count = sum(1 for s in songs if s['has_lyrics'] or s['has_cover'])
+                albums_list.append({
+                    "name": album_name,
+                    "song_count": len(songs),
+                    "scraped_count": scraped_count,
+                    "year": songs[0].get('year', '') if songs else '',
+                    "albumartist": songs[0].get('albumartist', '') if songs else '',
+                })
+            
+            return self.success_response(data={
+                "type": "albums",
+                "name": name,
+                "albums": albums_list,
+                "total_songs": len(all_files)
+            })
+        
+        elif view_type == 'album_songs':
+            # Return all songs in the album with full details
+            return self.success_response(data={
+                "type": "songs",
+                "name": name,
+                "songs": all_files,
+                "total_songs": len(all_files)
+            })
+        
+        return self.failure_response(msg="无效的视图类型")
+
 
 class TaskModelViewSets(mixins.ListModelMixin,
                         GenericViewSet):
@@ -592,3 +887,4 @@ class TaskModelViewSets(mixins.ListModelMixin,
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter)
     filterset_class = TaskFilters
     ordering_fields = ('updated_at', 'created_at', 'id')
+

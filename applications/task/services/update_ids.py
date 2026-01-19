@@ -12,14 +12,57 @@ from applications.utils.send import send
 
 def update_music_info(music_id3_info, is_raw_thumbnail=False):
     for each in music_id3_info:
+        print(f"DEBUG_UPDATE_INFO: {each}") # Debug print
         f = music_tag.load_file(each["file_full_path"])
         save_music(f, each, is_raw_thumbnail)
         parent_path = os.path.dirname(each["file_full_path"])
         filename = os.path.basename(each["file_full_path"])
+        
+        # Build detail message listing what was written
+        written_fields = []
+        if each.get("title"):
+            written_fields.append("标题")
+        if each.get("artist"):
+            written_fields.append("艺术家")
+        if each.get("album"):
+            written_fields.append("专辑")
+        if each.get("albumartist"):
+            written_fields.append("专辑艺术家")
+        if each.get("lyrics"):
+            written_fields.append("歌词")
+        if each.get("album_img"):
+            written_fields.append("封面")
+        if each.get("year"):
+            written_fields.append("年份")
+        if each.get("genre"):
+            written_fields.append("风格")
+        if each.get("tracknumber"):
+            written_fields.append("音轨号")
+        if each.get("discnumber"):
+            written_fields.append("碟片号")
+        
+        source_map = {
+            "netease": "网易云音乐",
+            "qmusic": "QQ音乐",
+            "migu": "咪咕音乐",
+            "kugou": "酷狗音乐",
+            "kuwo": "酷我音乐",
+            "acoustid": "AcoustID",
+            "smart_tag": "智能标签"
+        }
+        source_name = source_map.get(each.get("source"), each.get("source"))
+        
+        detail_msg = "写入: " + ", ".join(written_fields) if written_fields else ""
+        if source_name:
+            detail_msg += f", 来源: {source_name}"
+        
         Task.objects.update_or_create(full_path=each["file_full_path"], defaults={
             "state": "success",
             "parent_path": parent_path,
-            "filename": filename
+            "filename": filename,
+            "song_name": each.get("title", ""),
+            "artist_name": each.get("artist", ""),
+            "detail_msg": detail_msg
         })
 
 

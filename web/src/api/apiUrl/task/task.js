@@ -8,6 +8,9 @@ export default {
     loginInfo: function (params) {
         return GET(reUrl + '/user/info/', params)
     },
+    changePassword: function (params) {
+        return POST(reUrl + '/user/change_password/', params)
+    },
     logout: function (params) {
         return POST(reUrl + '/logout/', params)
     },
@@ -61,5 +64,17 @@ export default {
     },
     updateScheduleConfig: function (params) {
         return POST(reUrl + '/api/update_schedule_config/', params)
+    },
+    mediaStats: function (params) {
+        return POST(reUrl + '/api/media_stats/', params)
+    },
+    getLyrics: function (params) {
+        return POST(reUrl + '/api/get_lyrics/', params)
+    },
+    streamAudioUrl: function (filePath) {
+        return reUrl + '/api/stream_audio/?path=' + encodeURIComponent(filePath)
+    },
+    mediaStatsDetail: function (params) {
+        return POST(reUrl + '/api/media_stats_detail/', params)
     }
 }

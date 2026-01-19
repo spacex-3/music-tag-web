@@ -5,7 +5,8 @@ const common = {
         fullPath: '',
         hasMsg: false,
         showHistory: false,
-        showSchedule: false
+        showSchedule: false,
+        showStats: false
     },
     mutations: {
         setDefaultTableHeight: (state, val) => {
@@ -25,6 +26,9 @@ const common = {
         },
         setShowSchedule: (state, val) => {
             state.showSchedule = val
+        },
+        setShowStats: (state, val) => {
+            state.showStats = val
         }
     }
 }

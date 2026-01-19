@@ -3,6 +3,7 @@ const getters = {
     geFullPath: state => state.common.fullPath,
     getHasMsg: state => state.common.hasMsg,
     getShowHistory: state => state.common.showHistory,
-    getShowSchedule: state => state.common.showSchedule
+    getShowSchedule: state => state.common.showSchedule,
+    getShowStats: state => state.common.showStats
 }
 export default getters

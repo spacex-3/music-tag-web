@@ -141,6 +141,7 @@ def match_song(resource, song_path, select_mode, overwrite_policy="overwrite_all
             except Exception as e:
                 print(f"Overwrite check error: {e}")
 
+        song_select['source'] = resource
         save_music(file, song_select, False)
     return is_match
 

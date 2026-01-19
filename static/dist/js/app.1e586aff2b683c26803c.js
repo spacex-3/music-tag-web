@@ -7,13 +7,6 @@ module.exports = "data:application/font-woff2;base64,d09GMgABAAAAAGoIAAsAAAAA6KQ
 
 /***/ }),
 
-/***/ "1bPz":
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
 /***/ "3Hgs":
 /***/ (function(module, exports) {
 
@@ -22,6 +15,20 @@ module.exports = "data:application/font-woff2;base64,d09GMgABAAAAAGoIAAsAAAAA6KQ
 /***/ }),
 
 /***/ "46YR":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ "46wR":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ "6nJw":
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
@@ -369,6 +376,9 @@ var vuex_esm = __webpack_require__("NYxO");
 //
 //
 //
+//
+//
+//
 
 
 
@@ -595,18 +605,21 @@ var vuex_esm = __webpack_require__("NYxO");
         },
         openSchedule: function openSchedule() {
             this.$store.commit('setShowSchedule', true);
+        },
+        openStats: function openStats() {
+            this.$store.commit('setShowStats', true);
         }
     }
 });
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-5c28f1f4","hasScoped":true,"transformToRequire":{"video":["src","poster"],"source":"src","img":"src","image":"xlink:href"},"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/base/magicMenu/header.vue
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"monitor-navigation-header"},[_c('div',{staticClass:"header-title"},[(_vm.$route.meta.hasOwnProperty('back'))?_c('span',{staticClass:"header-title-icon",on:{"click":_vm.handleBack}},[_c('svg',{staticClass:"icon",staticStyle:{"width":"1em","height":"1em","vertical-align":"middle","fill":"currentColor","overflow":"hidden"},attrs:{"viewBox":"0 0 1024 1024","version":"1.1","xmlns":"http://www.w3.org/2000/svg","p-id":"4756"}},[_c('path',{attrs:{"d":"M416 480h320v64H416l96 96-48 48-176-176 176-176 48 48-96 96z","p-id":"4757"}})])]):_vm._e()]),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","justify-content":"center","align-items":"center"}},[(_vm.scheduleCountdown)?_c('span',{staticStyle:{"color":"#63656E","font-size":"12px","margin-right":"15px"}},[_vm._v("\n            下次运行: "+_vm._s(_vm.scheduleCountdown)+"\n        ")]):_vm._e(),_vm._v(" "),_c('bk-button',{staticStyle:{"color":"#63656E","margin-right":"20px"},attrs:{"text":true,"title":"配置网易 Cookies"},on:{"click":_vm.openCookieConfig}},[_c('bk-icon',{attrs:{"type":"cog"}}),_vm._v(" 配置 Cookies\n        ")],1),_vm._v(" "),_c('bk-button',{staticStyle:{"color":"#63656E","margin-right":"20px"},attrs:{"text":true,"title":"定时刮削"},on:{"click":_vm.openSchedule}},[_c('bk-icon',{attrs:{"type":"clock"}}),_vm._v(" 定时刮削\n        ")],1),_vm._v(" "),_c('bk-button',{staticStyle:{"color":"#ff5656","margin-right":"20px"},attrs:{"text":true,"title":"停止刮削"},on:{"click":_vm.handleStopTasks}},[_c('bk-icon',{attrs:{"type":"close-circle-shape"}}),_vm._v(" 停止刮削\n        ")],1),_vm._v(" "),_c('bk-button',{staticStyle:{"color":"#63656E"},attrs:{"text":true,"title":"刮削记录"},on:{"click":_vm.openHistory}},[_c('bk-icon',{attrs:{"type":"list"}}),_vm._v(" 历史记录\n        ")],1)],1),_vm._v(" "),_c('bk-dialog',{attrs:{"theme":"primary","mask-close":false,"title":"更新网易云 Cookies"},on:{"confirm":_vm.handleUpdateCookies},model:{value:(_vm.cookieVisible),callback:function ($$v) {_vm.cookieVisible=$$v},expression:"cookieVisible"}},[_c('p',{staticStyle:{"margin-bottom":"10px"}},[_vm._v("粘贴完整的 Cookie 字符串 (key=value; key2=value2) 或 JSON 格式。")]),_vm._v(" "),_c('bk-input',{attrs:{"type":"textarea","rows":5,"placeholder":"MUSIC_U=...; __csrf=..."},model:{value:(_vm.cookieStr),callback:function ($$v) {_vm.cookieStr=$$v},expression:"cookieStr"}})],1)],1)}
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-94c2dd36","hasScoped":true,"transformToRequire":{"video":["src","poster"],"source":"src","img":"src","image":"xlink:href"},"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/base/magicMenu/header.vue
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"monitor-navigation-header"},[_c('div',{staticClass:"header-title"},[(_vm.$route.meta.hasOwnProperty('back'))?_c('span',{staticClass:"header-title-icon",on:{"click":_vm.handleBack}},[_c('svg',{staticClass:"icon",staticStyle:{"width":"1em","height":"1em","vertical-align":"middle","fill":"currentColor","overflow":"hidden"},attrs:{"viewBox":"0 0 1024 1024","version":"1.1","xmlns":"http://www.w3.org/2000/svg","p-id":"4756"}},[_c('path',{attrs:{"d":"M416 480h320v64H416l96 96-48 48-176-176 176-176 48 48-96 96z","p-id":"4757"}})])]):_vm._e()]),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","justify-content":"center","align-items":"center"}},[(_vm.scheduleCountdown)?_c('span',{staticStyle:{"color":"#63656E","font-size":"12px","margin-right":"15px"}},[_vm._v("\n            下次运行: "+_vm._s(_vm.scheduleCountdown)+"\n        ")]):_vm._e(),_vm._v(" "),_c('bk-button',{staticStyle:{"color":"#63656E","margin-right":"20px"},attrs:{"text":true,"title":"配置网易 Cookies"},on:{"click":_vm.openCookieConfig}},[_c('bk-icon',{attrs:{"type":"cog"}}),_vm._v(" 配置 Cookies\n        ")],1),_vm._v(" "),_c('bk-button',{staticStyle:{"color":"#63656E","margin-right":"20px"},attrs:{"text":true,"title":"定时刮削"},on:{"click":_vm.openSchedule}},[_c('bk-icon',{attrs:{"type":"clock"}}),_vm._v(" 定时刮削\n        ")],1),_vm._v(" "),_c('bk-button',{staticStyle:{"color":"#ff5656","margin-right":"20px"},attrs:{"text":true,"title":"停止刮削"},on:{"click":_vm.handleStopTasks}},[_c('bk-icon',{attrs:{"type":"close-circle-shape"}}),_vm._v(" 停止刮削\n        ")],1),_vm._v(" "),_c('bk-button',{staticStyle:{"color":"#63656E","margin-right":"20px"},attrs:{"text":true,"title":"刮削记录"},on:{"click":_vm.openHistory}},[_c('bk-icon',{attrs:{"type":"list"}}),_vm._v(" 历史记录\n        ")],1),_vm._v(" "),_c('bk-button',{staticStyle:{"color":"#63656E"},attrs:{"text":true,"title":"媒体统计"},on:{"click":_vm.openStats}},[_c('bk-icon',{attrs:{"type":"pie-chart"}}),_vm._v(" 统计\n        ")],1)],1),_vm._v(" "),_c('bk-dialog',{attrs:{"theme":"primary","mask-close":false,"title":"更新网易云 Cookies"},on:{"confirm":_vm.handleUpdateCookies},model:{value:(_vm.cookieVisible),callback:function ($$v) {_vm.cookieVisible=$$v},expression:"cookieVisible"}},[_c('p',{staticStyle:{"margin-bottom":"10px"}},[_vm._v("粘贴完整的 Cookie 字符串 (key=value; key2=value2) 或 JSON 格式。")]),_vm._v(" "),_c('bk-input',{attrs:{"type":"textarea","rows":5,"placeholder":"MUSIC_U=...; __csrf=..."},model:{value:(_vm.cookieStr),callback:function ($$v) {_vm.cookieStr=$$v},expression:"cookieStr"}})],1)],1)}
 var staticRenderFns = []
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ var magicMenu_header = (esExports);
 // CONCATENATED MODULE: ./src/components/base/magicMenu/header.vue
 function injectStyle (ssrContext) {
-  __webpack_require__("1bPz")
-  __webpack_require__("W5Kj")
+  __webpack_require__("R6Gb")
+  __webpack_require__("6nJw")
 }
 var normalizeComponent = __webpack_require__("VU/8")
 /* script */
@@ -619,7 +632,7 @@ var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = "data-v-5c28f1f4"
+var __vue_scopeId__ = "data-v-94c2dd36"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -1076,7 +1089,8 @@ var common = {
         fullPath: '',
         hasMsg: false,
         showHistory: false,
-        showSchedule: false
+        showSchedule: false,
+        showStats: false
     },
     mutations: {
         setDefaultTableHeight: function setDefaultTableHeight(state, val) {
@@ -1096,6 +1110,9 @@ var common = {
         },
         setShowSchedule: function setShowSchedule(state, val) {
             state.showSchedule = val;
+        },
+        setShowStats: function setShowStats(state, val) {
+            state.showStats = val;
         }
     }
 };
@@ -1117,6 +1134,9 @@ var getters = {
     },
     getShowSchedule: function getShowSchedule(state) {
         return state.common.showSchedule;
+    },
+    getShowStats: function getShowStats(state) {
+        return state.common.showStats;
     }
 };
 /* harmony default export */ var vuex_getters = (getters);
@@ -1308,6 +1328,18 @@ var reUrl =  true ? '' : '/api-proxy';
     },
     updateScheduleConfig: function updateScheduleConfig(params) {
         return POST(reUrl + '/api/update_schedule_config/', params);
+    },
+    mediaStats: function mediaStats(params) {
+        return POST(reUrl + '/api/media_stats/', params);
+    },
+    getLyrics: function getLyrics(params) {
+        return POST(reUrl + '/api/get_lyrics/', params);
+    },
+    streamAudioUrl: function streamAudioUrl(filePath) {
+        return reUrl + '/api/stream_audio/?path=' + encodeURIComponent(filePath);
+    },
+    mediaStatsDetail: function mediaStatsDetail(params) {
+        return POST(reUrl + '/api/media_stats_detail/', params);
     }
 });
 // CONCATENATED MODULE: ./src/api/index.js
@@ -1423,6 +1455,10 @@ var regenerator_default = /*#__PURE__*/__webpack_require__.n(regenerator);
 var asyncToGenerator = __webpack_require__("exGp");
 var asyncToGenerator_default = /*#__PURE__*/__webpack_require__.n(asyncToGenerator);
 
+// EXTERNAL MODULE: ./node_modules/babel-runtime/core-js/get-iterator.js
+var get_iterator = __webpack_require__("BO1k");
+var get_iterator_default = /*#__PURE__*/__webpack_require__.n(get_iterator);
+
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/toConsumableArray.js
 var toConsumableArray = __webpack_require__("Gu7T");
 var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableArray);
@@ -1434,6 +1470,256 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
 
 
 
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2307,12 +2593,14 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
             musicInfo: {
                 'genre': '流行',
                 'is_save_lyrics_file': false,
-                'is_save_album_cover': false
+                'is_save_album_cover': false,
+                'source': ''
             },
             musicInfoManual: {
                 'genre': '流行',
                 'is_save_lyrics_file': false,
-                'is_save_album_cover': false
+                'is_save_album_cover': false,
+                'source': ''
             },
             fadeShowDir: false,
             fadeShowDetail: false,
@@ -2367,6 +2655,17 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
             albumList: [],
             selectedAlbum: null,
             timer: null,
+            statsVisible: false,
+            statsLoading: false,
+            statsData: null,
+            statsTab: 'albums',
+            statsDetailData: null,
+            statsBreadcrumb: [],
+            statsRootPath: '',
+            currentPlayingFile: '',
+            currentLyrics: '',
+            lyricsOffset: 0, // In seconds
+            audioCurrentTime: 0,
             exampleSetting2: {
                 primary: {
                     visible: false,
@@ -2385,7 +2684,7 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
         };
     },
 
-    computed: extends_default()({}, Object(vuex_esm["b" /* mapGetters */])(['geFullPath', 'getShowHistory', 'getShowSchedule']), {
+    computed: extends_default()({}, Object(vuex_esm["b" /* mapGetters */])(['geFullPath', 'getShowHistory', 'getShowSchedule', 'getShowStats']), {
         filePath: {
             get: function get() {
                 var _this = this;
@@ -2425,9 +2724,101 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
             return all.filter(function (i) {
                 return i.type === _this2.historyFilter;
             });
+        },
+        audioSrc: function audioSrc() {
+            if (!this.currentPlayingFile) return '';
+            return this.$api.Task.streamAudioUrl(this.currentPlayingFile);
+        },
+        lyricsLines: function lyricsLines() {
+            // For backward compatibility - just text lines
+            return this.parsedLyrics.map(function (l) {
+                return l.text;
+            });
+        },
+        parsedLyrics: function parsedLyrics() {
+            if (!this.currentLyrics) return [];
+            var lines = this.currentLyrics.split('\n');
+            var result = [];
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = get_iterator_default()(lines), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var line = _step.value;
+
+                    // Match LRC format: [mm:ss.xx] or [mm:ss]
+                    var match = line.match(/^\[(\d{2}):(\d{2})(?:[.:])(\d{2,3})?\](.*)$/);
+                    if (match) {
+                        var min = parseInt(match[1], 10);
+                        var sec = parseInt(match[2], 10);
+                        var ms = match[3] ? parseInt(match[3].padEnd(3, '0'), 10) : 0;
+                        // Apply offset here. If offset is +0.05s, we want the lyric to appear 0.05s LATER.
+                        // So the lyric's time should be increased by offset.
+                        var time = min * 60 + sec + ms / 1000 + this.lyricsOffset;
+                        var text = match[4].trim();
+                        if (text.length > 0) {
+                            result.push({ time: time, text: text });
+                        }
+                    } else {
+                        // Non-timestamped line, skip metadata like [ar:Artist]
+                        var _text = line.replace(/\[.*?\]/g, '').trim();
+                        if (_text.length > 0 && !line.startsWith('[')) {
+                            result.push({ time: -1, text: _text });
+                        }
+                    }
+                }
+                // Sort by time
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            return result.sort(function (a, b) {
+                return a.time - b.time;
+            });
+        },
+        currentLyricIndex: function currentLyricIndex() {
+            if (!this.parsedLyrics.length) return -1;
+            var currentTime = this.audioCurrentTime;
+            // Find the last lyric that has started
+            var idx = -1;
+            for (var i = 0; i < this.parsedLyrics.length; i++) {
+                if (this.parsedLyrics[i].time >= 0 && this.parsedLyrics[i].time <= currentTime) {
+                    idx = i;
+                }
+            }
+            return idx;
         }
     }),
     watch: {
+        currentLyricIndex: function currentLyricIndex(newIdx) {
+            var _this3 = this;
+
+            // Auto-scroll to current lyric
+            if (newIdx >= 0 && this.$refs['lyricLine' + newIdx]) {
+                this.$nextTick(function () {
+                    var el = _this3.$refs['lyricLine' + newIdx];
+                    var target = Array.isArray(el) ? el[0] : el;
+                    if (target && _this3.$refs.lyricsContainer) {
+                        var container = _this3.$refs.lyricsContainer;
+                        var lineTop = target.offsetTop - container.offsetTop;
+                        var scrollTo = lineTop - container.clientHeight / 2 + target.clientHeight / 2;
+                        container.scrollTop = Math.max(0, scrollTo);
+                    }
+                });
+            }
+        },
         getShowSchedule: function getShowSchedule(val) {
             if (val) {
                 this.openScheduleDialog();
@@ -2438,6 +2829,17 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
             if (val) {
                 this.historyVisible = true;
                 this.$store.commit('setShowHistory', false);
+            }
+        },
+        getShowStats: function getShowStats(val) {
+            if (val) {
+                this.statsVisible = true;
+                this.$store.commit('setShowStats', false);
+            }
+        },
+        statsVisible: function statsVisible(val) {
+            if (val) {
+                this.loadStats();
             }
         },
         historyVisible: function historyVisible(val) {
@@ -2452,7 +2854,7 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
 
     methods: {
         tpl: function tpl(node, ctx) {
-            var _this3 = this;
+            var _this4 = this;
 
             var h = this.$createElement;
 
@@ -2465,13 +2867,9 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                     },
                     on: {
                         'click': function click() {
-                            _this3.nodeClickOne(node);
+                            _this4.nodeClickOne(node);
                         }
-                    },
-                    directives: [{
-                        name: 'bk-tooltips',
-                        value: node.title
-                    }]
+                    }
                 })]);
             } else {
                 return h('span', [h('span', { 'class': titleClass, domProps: {
@@ -2479,7 +2877,7 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                     },
                     on: {
                         'click': function click() {
-                            _this3.nodeClickOne(node);
+                            _this4.nodeClickOne(node);
                         }
                     }
                 })]);
@@ -2507,7 +2905,7 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
             return path;
         },
         nodeClickOne: function nodeClickOne(node) {
-            var _this4 = this;
+            var _this5 = this;
 
             if (node.icon === 'icon-folder') {
                 if (this.filePath.endsWith('/')) {
@@ -2524,19 +2922,28 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                 this.fileName = node.name;
                 var separator = this.filePath.endsWith('/') ? '' : '/';
                 this.fullPath = this.filePath + separator + node.name;
+
+                // Set current playing file for the audio player
+                this.currentPlayingFile = this.fullPath;
+                // Clear search results so player UI shows
+                this.SongList = [];
+
                 this.$api.Task.musicId3({ 'file_path': this.filePath, 'file_name': node.name }).then(function (res) {
                     console.log(res);
                     if (res.result) {
-                        _this4.musicInfo = res.data;
-                        _this4.musicInfo.is_save_lyrics_file = false;
-                        _this4.musicInfo.is_save_album_cover = false;
-                        _this4.files1 = [{
+                        _this5.musicInfo = res.data;
+                        _this5.musicInfo.is_save_lyrics_file = false;
+                        _this5.musicInfo.is_save_album_cover = false;
+                        _this5.files1 = [{
                             name: 'cover.png',
                             status: 'done',
-                            url: _this4.musicInfo.artwork
+                            url: _this5.musicInfo.artwork
                         }];
+
+                        // Load lyrics for the player
+                        _this5.loadFileLyrics(_this5.fullPath);
                     } else {
-                        _this4.$cwMessage(res.message, 'error');
+                        _this5.$cwMessage(res.message, 'error');
                     }
                 });
             }
@@ -2544,7 +2951,7 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
 
         // checkbox
         nodeCheckTwo: function nodeCheckTwo(node, checked) {
-            var _this5 = this;
+            var _this6 = this;
 
             console.log(node, checked);
             if (checked) {
@@ -2553,14 +2960,14 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                     this.checkedData = [];
                     this.checkedIds = [];
                     node.children.forEach(function (el) {
-                        _this5.checkedData.push({
+                        _this6.checkedData.push({
                             checked: el.checked,
                             icon: el.icon,
                             id: el.id,
                             name: el.name,
                             title: el.title
                         });
-                        _this5.checkedIds.push(el.id);
+                        _this6.checkedIds.push(el.id);
                     });
                 } else {
                     this.checkedData.push({
@@ -2586,16 +2993,19 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
             }
             console.log(this.checkedIds);
         },
-        handleCopy: function handleCopy(k, v) {
-            var _this6 = this;
+        handleCopy: function handleCopy(k, v, source) {
+            var _this7 = this;
 
+            if (source) {
+                this.musicInfo.source = source;
+            }
             if (k === 'lyric') {
                 var resurce = this.resource !== 'smart_tag' ? this.resource : v.resource;
                 this.$api.Task.fetchLyric({ 'song_id': v.id, 'resource': resurce }).then(function (res) {
                     if (res.result) {
-                        _this6.musicInfo['lyrics'] = res.data;
+                        _this7.musicInfo['lyrics'] = res.data;
                     } else {
-                        _this6.$cwMessage('未找到歌词', 'error');
+                        _this7.$cwMessage('未找到歌词', 'error');
                     }
                 });
             } else if (k === 'album_img') {
@@ -2607,7 +3017,7 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                 }];
                 this.reloadImg = false;
                 this.$nextTick(function () {
-                    _this6.reloadImg = true;
+                    _this7.reloadImg = true;
                 });
             } else if (k === 'lyric_tran') {
                 this.musicInfo['lyrics'] = v;
@@ -2616,18 +3026,21 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
             }
         },
         copyAll: function copyAll(item) {
-            this.handleCopy('title', item.name);
-            this.handleCopy('year', item.year);
-            this.handleCopy('lyric', item);
-            this.handleCopy('album', item.album);
-            this.handleCopy('artist', item.artist);
-            this.handleCopy('album_img', item.album_img);
+            console.log('DEBUG: copyAll item:', item);
+            var s = item.source || '';
+            this.handleCopy('title', item.name, s);
+            this.handleCopy('year', item.year, s);
+            this.handleCopy('lyric', item, s);
+            this.handleCopy('album', item.album, s);
+            this.handleCopy('artist', item.artist, s);
+            this.handleCopy('album_img', item.album_img, s);
+            this.musicInfo.source = s;
         },
         nodeExpandedOne: function nodeExpandedOne(node, expanded) {},
 
         // 查询网易云接口
         toggleLock: function toggleLock(mode) {
-            var _this7 = this;
+            var _this8 = this;
 
             if (mode === 'title') {
                 if (!this.musicInfo.title) {
@@ -2641,13 +3054,16 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                     resource: this.resource,
                     full_path: this.fullPath
                 }).then(function (res) {
-                    _this7.fadeShowDetail = true;
-                    _this7.SongList = res.data;
+                    _this8.fadeShowDetail = true;
+                    _this8.SongList = res.data;
+                    if (!res.data || res.data.length === 0) {
+                        _this8.$cwMessage('未找到相关歌曲', 'warning');
+                    }
                 });
             }
         },
         translation: function translation() {
-            var _this8 = this;
+            var _this9 = this;
 
             if (!this.musicInfo.lyrics) {
                 this.$cwMessage('歌词不能为空', 'error');
@@ -2657,24 +3073,24 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
             this.$api.Task.translationLyc({
                 lyc: this.musicInfo.lyrics
             }).then(function (res) {
-                _this8.showTranslation = true;
-                _this8.translationText = res.data;
+                _this9.showTranslation = true;
+                _this9.translationText = res.data;
             });
         },
 
         // 文件目录
         handleSearchFile: function handleSearchFile() {
-            var _this9 = this;
+            var _this10 = this;
 
             this.fadeShowDir = false;
             this.checkedData = [];
             this.checkedIds = [];
             this.$api.Task.fileList({ 'file_path': this.filePath, sorted_fields: this.sortedField }).then(function (res) {
                 if (res.result) {
-                    _this9.treeListOne = res.data;
-                    _this9.fadeShowDir = true;
+                    _this10.treeListOne = res.data;
+                    _this10.fadeShowDir = true;
                 } else {
-                    _this9.$cwMessage(res.message, 'error');
+                    _this10.$cwMessage(res.message, 'error');
                 }
             });
         },
@@ -2688,7 +3104,7 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
 
         // 保存音乐信息
         handleClick: function handleClick() {
-            var _this10 = this;
+            var _this11 = this;
 
             console.log(this.musicInfo);
             var separator = this.filePath.endsWith('/') ? '' : '/';
@@ -2697,34 +3113,34 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
             }, this.musicInfo)];
             this.isLoading = true;
             this.$api.Task.updateId3({ 'music_id3_info': params }).then(function (res) {
-                _this10.isLoading = false;
+                _this11.isLoading = false;
                 if (res.result) {
-                    _this10.$cwMessage('修改成功', 'success');
-                    _this10.$store.commit('setHasMsg', true);
+                    _this11.$cwMessage('修改成功', 'success');
+                    _this11.$store.commit('setHasMsg', true);
                 } else {
-                    _this10.$cwMessage('修改失败', 'error');
+                    _this11.$cwMessage('修改失败', 'error');
                 }
             });
         },
         handleBatch: function handleBatch() {
-            var _this11 = this;
+            var _this12 = this;
 
             this.$bkInfo({
                 title: '确认要批量修改？',
                 confirmLoading: true,
                 confirmFn: function confirmFn() {
                     try {
-                        _this11.isLoading = true;
+                        _this12.isLoading = true;
 
-                        _this11.$api.Task.batchUpdateId3({
-                            'file_full_path': _this11.filePath,
-                            'select_data': _this11.checkedData,
-                            'music_info': _this11.musicInfoManual
+                        _this12.$api.Task.batchUpdateId3({
+                            'file_full_path': _this12.filePath,
+                            'select_data': _this12.checkedData,
+                            'music_info': _this12.musicInfoManual
                         }).then(function (res) {
-                            _this11.isLoading = false;
+                            _this12.isLoading = false;
                             console.log(res);
                             if (res.result) {
-                                _this11.$cwMessage('修改成功', 'success');
+                                _this12.$cwMessage('修改成功', 'success');
                             }
                         });
                         return true;
@@ -2736,64 +3152,64 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
             });
         },
         handleBatchAuto: function handleBatchAuto() {
-            var _this12 = this;
+            var _this13 = this;
 
             this.$bkInfo({
                 title: '确认要批量修改？',
                 confirmLoading: true,
                 confirmFn: function confirmFn() {
                     try {
-                        _this12.isLoading = true;
-                        _this12.musicInfoManual['select_mode'] = _this12.selectAutoMode;
-                        _this12.musicInfoManual['source_list'] = _this12.sourceList;
-                        _this12.musicInfoManual['overwrite_policy'] = _this12.overwritePolicy;
-                        _this12.musicInfoManual['skip_scraped'] = _this12.skipScraped;
-                        _this12.$api.Task.batchAutoUpdateId3({
-                            'file_full_path': _this12.filePath,
-                            'select_data': _this12.checkedData,
-                            'music_info': _this12.musicInfoManual
+                        _this13.isLoading = true;
+                        _this13.musicInfoManual['select_mode'] = _this13.selectAutoMode;
+                        _this13.musicInfoManual['source_list'] = _this13.sourceList;
+                        _this13.musicInfoManual['overwrite_policy'] = _this13.overwritePolicy;
+                        _this13.musicInfoManual['skip_scraped'] = _this13.skipScraped;
+                        _this13.$api.Task.batchAutoUpdateId3({
+                            'file_full_path': _this13.filePath,
+                            'select_data': _this13.checkedData,
+                            'music_info': _this13.musicInfoManual
                         }).then(function (res) {
-                            _this12.isLoading = false;
+                            _this13.isLoading = false;
                             console.log(res);
                             if (res.result) {
                                 // Start Polling
                                 var taskId = res.data.task_id;
-                                _this12.gameover = false;
-                                _this12.isScraping = true;
-                                _this12.progressText = '开始刮削...';
-                                _this12.exampleSetting1.primary.visible = false;
+                                _this13.gameover = false;
+                                _this13.isScraping = true;
+                                _this13.progressText = '开始刮削...';
+                                _this13.exampleSetting1.primary.visible = false;
 
-                                _this12.timer = setInterval(function () {
-                                    _this12.$api.Task.taskStatus({ task_id: taskId }).then(function (statusRes) {
+                                _this13.timer = setInterval(function () {
+                                    _this13.$api.Task.taskStatus({ task_id: taskId }).then(function (statusRes) {
                                         if (statusRes.result) {
                                             var status = statusRes.data;
                                             if (status.state === 'PROGRESS') {
-                                                _this12.progressText = '\u6B63\u5728\u522E\u524A: ' + status.filename + ' (' + status.current + '/' + status.total + ')';
+                                                _this13.progressText = '\u6B63\u5728\u522E\u524A: ' + status.filename + ' (' + status.current + '/' + status.total + ')';
                                             } else if (status.state === 'SUCCESS') {
-                                                clearInterval(_this12.timer);
-                                                _this12.isScraping = false;
-                                                _this12.progressText = '';
+                                                clearInterval(_this13.timer);
+                                                _this13.isScraping = false;
+                                                _this13.progressText = '';
 
                                                 var result = status.result;
-                                                _this12.scrapeLogs = result.logs || [];
-                                                _this12.summaryData = result;
-                                                _this12.failedItems = result.failed_items || [];
-                                                _this12.successItems = result.success_items || [];
-                                                _this12.skippedItems = result.skipped_items || [];
-                                                _this12.logVisible = true;
-                                                _this12.$store.commit('setHasMsg', true);
-                                                _this12.handleSearchFile();
+                                                _this13.scrapeLogs = result.logs || [];
+                                                _this13.summaryData = result;
+                                                _this13.failedItems = result.failed_items || [];
+                                                _this13.successItems = result.success_items || [];
+                                                _this13.skippedItems = result.skipped_items || [];
+                                                _this13.logVisible = true;
+                                                _this13.$store.commit('setHasMsg', true);
+                                                _this13.handleSearchFile();
                                             } else if (status.state === 'FAILURE' || status.state === 'REVOKED') {
-                                                clearInterval(_this12.timer);
-                                                _this12.isScraping = false;
-                                                _this12.progressText = '';
-                                                _this12.$cwMessage('任务失败', 'error');
+                                                clearInterval(_this13.timer);
+                                                _this13.isScraping = false;
+                                                _this13.progressText = '';
+                                                _this13.$cwMessage('任务失败', 'error');
                                             }
                                         }
                                     });
                                 }, 1000);
                             } else {
-                                _this12.$cwMessage(res.message || '任务启动失败', 'error');
+                                _this13.$cwMessage(res.message || '任务启动失败', 'error');
                             }
                         });
                         return true;
@@ -2805,7 +3221,7 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
             });
         },
         handleJump: function handleJump(item) {
-            var _this13 = this;
+            var _this14 = this;
 
             // Use parent_path if available (from history), otherwise extract from full_path
             var parentPath = item.parent_path || (item.full_path ? item.full_path.substring(0, item.full_path.lastIndexOf('/')) : null);
@@ -2822,22 +3238,22 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
             this.checkedIds = [];
             this.$api.Task.fileList({ 'file_path': this.filePath, sorted_fields: this.sortedField }).then(function (res) {
                 if (res.result) {
-                    _this13.treeListOne = res.data;
-                    _this13.fadeShowDir = true;
+                    _this14.treeListOne = res.data;
+                    _this14.fadeShowDir = true;
 
-                    _this13.$nextTick(function () {
-                        var targetNode = _this13.treeListOne.find(function (node) {
+                    _this14.$nextTick(function () {
+                        var targetNode = _this14.treeListOne.find(function (node) {
                             return node.name === item.name || node.full_path === item.full_path;
                         });
                         if (targetNode) {
-                            _this13.nodeClickOne(targetNode);
+                            _this14.nodeClickOne(targetNode);
                             setTimeout(function () {
-                                _this13.toggleLock('title');
+                                _this14.toggleLock('title');
                             }, 500);
                         }
                     });
                 } else {
-                    _this13.$cwMessage(res.message, 'error');
+                    _this14.$cwMessage(res.message, 'error');
                 }
             });
         },
@@ -2849,7 +3265,7 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
             this.albumSearchVisible = true;
         },
         searchAlbum: function searchAlbum() {
-            var _this14 = this;
+            var _this15 = this;
 
             if (!this.albumSearchQuery) return;
             this.isAlbumSearching = true;
@@ -2860,20 +3276,20 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                 resource: resource,
                 album_name: this.albumSearchQuery
             }).then(function (res) {
-                _this14.isAlbumSearching = false;
+                _this15.isAlbumSearching = false;
                 if (res.result && res.data.length > 0) {
-                    _this14.albumList = res.data;
+                    _this15.albumList = res.data;
                 } else {
-                    _this14.albumList = [];
-                    _this14.$cwMessage(res.message || '未找到专辑', 'warning');
+                    _this15.albumList = [];
+                    _this15.$cwMessage(res.message || '未找到专辑', 'warning');
                 }
             }).catch(function (e) {
-                _this14.isAlbumSearching = false;
-                _this14.$cwMessage('搜索失败: ' + (e.message || 'Wait Timeout'), 'error');
+                _this15.isAlbumSearching = false;
+                _this15.$cwMessage('搜索失败: ' + (e.message || 'Wait Timeout'), 'error');
             });
         },
         selectAlbum: function selectAlbum(album) {
-            var _this15 = this;
+            var _this16 = this;
 
             this.selectedAlbum = album;
             this.isAlbumSearching = true;
@@ -2882,15 +3298,15 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                 resource: resource,
                 album_id: album.id
             }).then(function (res) {
-                _this15.isAlbumSearching = false;
+                _this16.isAlbumSearching = false;
                 if (res.result) {
-                    _this15.albumSearchResults = res.data;
+                    _this16.albumSearchResults = res.data;
                 } else {
-                    _this15.$cwMessage(res.message || '获取专辑详情失败', 'error');
+                    _this16.$cwMessage(res.message || '获取专辑详情失败', 'error');
                 }
             }).catch(function (e) {
-                _this15.isAlbumSearching = false;
-                _this15.$cwMessage('获取专辑详情失败: ' + (e.message || 'Wait Timeout'), 'error');
+                _this16.isAlbumSearching = false;
+                _this16.$cwMessage('获取专辑详情失败: ' + (e.message || 'Wait Timeout'), 'error');
             });
         },
         backToAlbumList: function backToAlbumList() {
@@ -2898,7 +3314,7 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
             this.albumSearchResults = null;
         },
         applyAlbumTrack: function applyAlbumTrack(track) {
-            var _this16 = this;
+            var _this17 = this;
 
             // Apply metadata
             this.musicInfo.title = track.name;
@@ -2908,6 +3324,7 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
             this.musicInfo.year = this.albumSearchResults.year;
             this.musicInfo.album_img = this.albumSearchResults.album_img;
             this.musicInfo.tracknumber = track.idx;
+            this.musicInfo.source = this.resource || 'netease'; // Default to current resource
 
             // Update Cover Preview
             this.files1 = [{
@@ -2917,7 +3334,7 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
             }];
             this.reloadImg = false;
             this.$nextTick(function () {
-                _this16.reloadImg = true;
+                _this17.reloadImg = true;
             });
 
             this.albumSearchVisible = false;
@@ -2929,15 +3346,15 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                 'resource': resource
             }).then(function (res) {
                 if (res.result) {
-                    _this16.musicInfo.lyrics = res.data;
-                    _this16.$cwMessage('已应用元数据和歌词', 'success');
+                    _this17.musicInfo.lyrics = res.data;
+                    _this17.$cwMessage('已应用元数据和歌词', 'success');
                 } else {
-                    _this16.$cwMessage('已应用元数据，但歌词获取失败', 'warning');
+                    _this17.$cwMessage('已应用元数据，但歌词获取失败', 'warning');
                 }
             });
         },
         handleAutoMatchScores: function handleAutoMatchScores() {
-            var _this17 = this;
+            var _this18 = this;
 
             return asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee2() {
                 var tracks, root, files, updates, separator, matches;
@@ -2945,24 +3362,24 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                     while (1) {
                         switch (_context2.prev = _context2.next) {
                             case 0:
-                                tracks = _this17.albumSearchResults.tracks;
+                                tracks = _this18.albumSearchResults.tracks;
                                 // treeListOne is [{ children: [...] }]
 
-                                root = _this17.treeListOne[0];
+                                root = _this18.treeListOne[0];
 
                                 if (!(!root || !root.children)) {
                                     _context2.next = 5;
                                     break;
                                 }
 
-                                _this17.$cwMessage('文件列表为空', 'warning');
+                                _this18.$cwMessage('文件列表为空', 'warning');
                                 return _context2.abrupt('return');
 
                             case 5:
                                 files = root.children; // These are the files in the current folder
 
                                 updates = [];
-                                separator = _this17.filePath.endsWith('/') ? '' : '/';
+                                separator = _this18.filePath.endsWith('/') ? '' : '/';
 
                                 // Matches to process
 
@@ -2974,7 +3391,7 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                                     if (file.children) return; // Skip folders
 
                                     var matchedTrack = null;
-                                    var fullPath = file.full_path || _this17.filePath + separator + file.name;
+                                    var fullPath = file.full_path || _this18.filePath + separator + file.name;
 
                                     // Clean filename for name matching
                                     var cleanName = file.name.replace(/\.[^.]+$/, '') // Remove extension
@@ -3082,12 +3499,12 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                                     break;
                                 }
 
-                                _this17.$cwMessage('未找到可匹配的曲目 (按编号或文件名均无匹配)', 'warning');
+                                _this18.$cwMessage('未找到可匹配的曲目 (按编号或文件名均无匹配)', 'warning');
                                 return _context2.abrupt('return');
 
                             case 13:
 
-                                _this17.$bkInfo({
+                                _this18.$bkInfo({
                                     title: '\u786E\u8BA4\u5339\u914D ' + matches.length + ' \u4E2A\u6587\u4EF6\uFF1F',
                                     subTitle: '即将应用元数据并抓取歌词',
                                     confirmFn: function () {
@@ -3098,10 +3515,10 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                                                 while (1) {
                                                     switch (_context.prev = _context.next) {
                                                         case 0:
-                                                            _this17.isLoading = true;
-                                                            _this17.isScraping = true;
-                                                            _this17.progressText = '开始匹配...';
-                                                            resource = _this17.resource || 'netease';
+                                                            _this18.isLoading = true;
+                                                            _this18.isScraping = true;
+                                                            _this18.progressText = '开始匹配...';
+                                                            resource = _this18.resource || 'netease';
                                                             total = matches.length;
                                                             _context.prev = 5;
                                                             i = 0;
@@ -3117,13 +3534,13 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
 
                                                             fileName = m.file.name.replace(/\.[^.]+$/, '');
 
-                                                            _this17.progressText = '\u6B63\u5728\u522E\u524A: ' + fileName + ' (' + (i + 1) + '/' + total + ')';
+                                                            _this18.progressText = '\u6B63\u5728\u522E\u524A: ' + fileName + ' (' + (i + 1) + '/' + total + ')';
                                                             console.log('[Album Match] ' + (i + 1) + '/' + total + ': ' + m.file.name + ' -> ' + m.track.name);
 
                                                             lyrics = '';
                                                             _context.prev = 13;
                                                             _context.next = 16;
-                                                            return _this17.$api.Task.fetchLyric({
+                                                            return _this18.$api.Task.fetchLyric({
                                                                 'song_id': m.track.id,
                                                                 'resource': resource
                                                             });
@@ -3149,17 +3566,18 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                                                                 file_full_path: m.fullPath,
                                                                 title: m.track.name,
                                                                 artist: m.track.artist,
-                                                                album: _this17.albumSearchResults.album_name,
-                                                                albumartist: _this17.albumSearchResults.album_artist,
-                                                                year: _this17.albumSearchResults.year,
-                                                                album_img: _this17.albumSearchResults.album_img,
+                                                                album: _this18.albumSearchResults.album_name,
+                                                                albumartist: _this18.albumSearchResults.album_artist,
+                                                                year: _this18.albumSearchResults.year,
+                                                                album_img: _this18.albumSearchResults.album_img,
                                                                 tracknumber: m.track.idx,
                                                                 lyrics: lyrics,
-                                                                genre: '',
+                                                                genre: m.track.genre || _this18.albumSearchResults.genre || '',
                                                                 comment: '',
-                                                                discnumber: null,
+                                                                discnumber: m.track.disc || null,
                                                                 is_save_lyrics_file: true,
-                                                                is_save_album_cover: true
+                                                                is_save_album_cover: true,
+                                                                source: resource
                                                             });
 
                                                         case 24:
@@ -3168,29 +3586,29 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                                                             break;
 
                                                         case 27:
-                                                            _this17.isScraping = false;
-                                                            _this17.progressText = '';
+                                                            _this18.isScraping = false;
+                                                            _this18.progressText = '';
 
                                                             // Batch save
                                                             _context.next = 31;
-                                                            return _this17.$api.Task.updateId3({ 'music_id3_info': updates });
+                                                            return _this18.$api.Task.updateId3({ 'music_id3_info': updates });
 
                                                         case 31:
                                                             res = _context.sent;
 
-                                                            _this17.isLoading = false;
+                                                            _this18.isLoading = false;
                                                             if (res.result) {
-                                                                _this17.$cwMessage('批量匹配成功', 'success');
-                                                                _this17.albumSearchVisible = false;
-                                                                _this17.$store.commit('setHasMsg', true);
-                                                                _this17.handleSearchFile();
+                                                                _this18.$cwMessage('批量匹配成功', 'success');
+                                                                _this18.albumSearchVisible = false;
+                                                                _this18.$store.commit('setHasMsg', true);
+                                                                _this18.handleSearchFile();
                                                             } else {
                                                                 msg = res.message;
 
                                                                 if ((typeof msg === 'undefined' ? 'undefined' : typeof_default()(msg)) === 'object') {
                                                                     msg = stringify_default()(msg);
                                                                 }
-                                                                _this17.$cwMessage('部分失败: ' + msg, 'error');
+                                                                _this18.$cwMessage('部分失败: ' + msg, 'error');
                                                             }
                                                             _context.next = 41;
                                                             break;
@@ -3199,16 +3617,16 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                                                             _context.prev = 36;
                                                             _context.t1 = _context['catch'](5);
 
-                                                            _this17.isLoading = false;
+                                                            _this18.isLoading = false;
                                                             console.error(_context.t1);
-                                                            _this17.$cwMessage('批量处理出错', 'error');
+                                                            _this18.$cwMessage('批量处理出错', 'error');
 
                                                         case 41:
                                                         case 'end':
                                                             return _context.stop();
                                                     }
                                                 }
-                                            }, _callee, _this17, [[5, 36], [13, 20]]);
+                                            }, _callee, _this18, [[5, 36], [13, 20]]);
                                         }));
 
                                         return function confirmFn() {
@@ -3222,44 +3640,44 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                                 return _context2.stop();
                         }
                     }
-                }, _callee2, _this17);
+                }, _callee2, _this18);
             }))();
         },
         handleTidy: function handleTidy() {
-            var _this18 = this;
+            var _this19 = this;
 
             this.$bkInfo({
                 title: '确认要整理文件夹？',
                 confirmLoading: true,
                 confirmFn: function confirmFn() {
                     try {
-                        _this18.isLoading = true;
-                        _this18.tidyFormData['file_full_path'] = _this18.filePath;
-                        _this18.tidyFormData['select_data'] = _this18.checkedData;
+                        _this19.isLoading = true;
+                        _this19.tidyFormData['file_full_path'] = _this19.filePath;
+                        _this19.tidyFormData['select_data'] = _this19.checkedData;
                         try {
-                            _this18.$api.Task.tidyFolder(_this18.tidyFormData).then(function (res) {
-                                _this18.isLoading = false;
+                            _this19.$api.Task.tidyFolder(_this19.tidyFormData).then(function (res) {
+                                _this19.isLoading = false;
                                 if (res.result) {
                                     var movedCount = res.data.moved_unorganized_count || 0;
                                     var msg = '文件夹整理完成！';
                                     if (movedCount > 0) {
                                         msg += ' \u5DF2\u5C06 ' + movedCount + ' \u4E2A\u672A\u6574\u7406\u6587\u4EF6\u5939/\u6587\u4EF6\u79FB\u52A8\u5230 "\u672A\u6574\u7406\u6587\u4EF6" \u76EE\u5F55\u3002';
-                                        _this18.$bkInfo({
+                                        _this19.$bkInfo({
                                             type: 'success',
                                             title: '整理完成',
                                             subTitle: msg
                                         });
                                     } else {
-                                        _this18.$cwMessage(msg, 'success');
+                                        _this19.$cwMessage(msg, 'success');
                                     }
-                                    _this18.exampleSetting2.primary.visible = false;
-                                    _this18.handleSearchFile();
+                                    _this19.exampleSetting2.primary.visible = false;
+                                    _this19.handleSearchFile();
                                 } else {
-                                    _this18.$cwMessage('整理失败: ' + res.message, 'error');
+                                    _this19.$cwMessage('整理失败: ' + res.message, 'error');
                                 }
                             });
                         } catch (e) {
-                            _this18.isLoading = false;
+                            _this19.isLoading = false;
                         }
                         return true;
                     } catch (e) {
@@ -3301,27 +3719,27 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
             }
         },
         openScheduleDialog: function openScheduleDialog() {
-            var _this19 = this;
+            var _this20 = this;
 
             this.scheduleVisible = true;
             this.$api.Task.getScheduleConfig().then(function (res) {
                 if (res.result) {
-                    _this19.scheduleConfig = res.data;
+                    _this20.scheduleConfig = res.data;
                 }
             });
         },
         saveScheduleConfig: function saveScheduleConfig() {
-            var _this20 = this;
+            var _this21 = this;
 
             this.$api.Task.updateScheduleConfig(this.scheduleConfig).then(function (res) {
                 if (res.result) {
-                    _this20.$cwMessage('定时任务配置已保存', 'success');
-                    _this20.scheduleVisible = false;
+                    _this21.$cwMessage('定时任务配置已保存', 'success');
+                    _this21.scheduleVisible = false;
                 }
             });
         },
         loadHistory: function loadHistory() {
-            var _this21 = this;
+            var _this22 = this;
 
             this.$api.Task.getRecord({ page_size: 10000 }).then(function (res) {
                 if (res.result) {
@@ -3331,7 +3749,7 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                         return timeB - timeA;
                     });
                     // Filter preserves original order from API (sorted by -created_at)
-                    _this21.successItems = tasks.filter(function (t) {
+                    _this22.successItems = tasks.filter(function (t) {
                         return t.state === 'success';
                     }).map(function (t) {
                         var rawTime = t.updated_at || t.created_at;
@@ -3343,10 +3761,10 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                             parent_path: t.parent_path,
                             created_at: t.created_at,
                             display_time: time,
-                            error_msg: ''
+                            detail_msg: t.detail_msg || ''
                         };
                     });
-                    _this21.failedItems = tasks.filter(function (t) {
+                    _this22.failedItems = tasks.filter(function (t) {
                         return t.state === 'failed' || t.state === 'fail';
                     }).map(function (t) {
                         var rawTime = t.updated_at || t.created_at;
@@ -3361,7 +3779,7 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                             error_msg: t.error_msg || '未知错误'
                         };
                     });
-                    _this21.skippedItems = tasks.filter(function (t) {
+                    _this22.skippedItems = tasks.filter(function (t) {
                         return t.state === 'skipped';
                     }).map(function (t) {
                         var rawTime = t.updated_at || t.created_at;
@@ -3386,17 +3804,202 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
                 // Close the history dialog if open
                 this.scheduleVisible = false;
             }
+        },
+        loadStats: function loadStats() {
+            var _this23 = this;
+
+            if (!this.filePath) {
+                this.statsData = null;
+                return;
+            }
+            this.statsLoading = true;
+            this.statsData = null;
+            this.statsDetailData = null;
+            this.statsBreadcrumb = [];
+            this.statsRootPath = this.filePath;
+            this.$api.Task.mediaStats({ folder_path: this.filePath }).then(function (res) {
+                _this23.statsLoading = false;
+                if (res.result) {
+                    _this23.statsData = res.data;
+                } else {
+                    _this23.$cwMessage(res.message || '加载统计失败', 'error');
+                }
+            }).catch(function () {
+                _this23.statsLoading = false;
+                _this23.$cwMessage('加载统计失败', 'error');
+            });
+        },
+        navigateToStatsItem: function navigateToStatsItem(item) {
+            if (item && item.parent_path) {
+                this.filePath = item.parent_path;
+                this.handleSearchFile();
+                this.statsVisible = false;
+            }
+        },
+        resetStatsView: function resetStatsView() {
+            this.statsDetailData = null;
+            this.statsBreadcrumb = [];
+        },
+        navigateBreadcrumb: function navigateBreadcrumb(idx) {
+            if (idx < this.statsBreadcrumb.length - 1) {
+                // Navigate to that level
+                var crumb = this.statsBreadcrumb[idx];
+                if (crumb.type === 'root') {
+                    this.resetStatsView();
+                } else if (crumb.type === 'artist') {
+                    this.drillDownArtist(crumb.name, false);
+                } else if (crumb.type === 'album_artist') {
+                    this.drillDownAlbumArtist(crumb.name, false);
+                }
+            }
+        },
+        drillDownArtist: function drillDownArtist(name) {
+            var _this24 = this;
+
+            var updateBreadcrumb = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+            this.statsLoading = true;
+            this.$api.Task.mediaStatsDetail({
+                folder_path: this.statsRootPath,
+                view_type: 'artist_albums',
+                name: name
+            }).then(function (res) {
+                _this24.statsLoading = false;
+                if (res.result) {
+                    _this24.statsDetailData = res.data;
+                    if (updateBreadcrumb) {
+                        _this24.statsBreadcrumb = [{ type: 'artist', name: name, label: '🎤 ' + name }];
+                    }
+                }
+            }).catch(function () {
+                _this24.statsLoading = false;
+            });
+        },
+        drillDownAlbumArtist: function drillDownAlbumArtist(name) {
+            var _this25 = this;
+
+            var updateBreadcrumb = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+            this.statsLoading = true;
+            this.$api.Task.mediaStatsDetail({
+                folder_path: this.statsRootPath,
+                view_type: 'album_artist_albums',
+                name: name
+            }).then(function (res) {
+                _this25.statsLoading = false;
+                if (res.result) {
+                    _this25.statsDetailData = res.data;
+                    if (updateBreadcrumb) {
+                        _this25.statsBreadcrumb = [{ type: 'album_artist', name: name, label: '👥 ' + name }];
+                    }
+                }
+            }).catch(function () {
+                _this25.statsLoading = false;
+            });
+        },
+        drillDownAlbum: function drillDownAlbum(name) {
+            var _this26 = this;
+
+            this.statsLoading = true;
+            this.$api.Task.mediaStatsDetail({
+                folder_path: this.statsRootPath,
+                view_type: 'album_songs',
+                name: name
+            }).then(function (res) {
+                _this26.statsLoading = false;
+                if (res.result) {
+                    _this26.statsDetailData = res.data;
+                    // Add to breadcrumb if coming from artist view
+                    if (_this26.statsBreadcrumb.length > 0 && _this26.statsBreadcrumb[_this26.statsBreadcrumb.length - 1].type !== 'album') {
+                        _this26.statsBreadcrumb.push({ type: 'album', name: name, label: '📀 ' + name });
+                    } else if (_this26.statsBreadcrumb.length === 0) {
+                        _this26.statsBreadcrumb = [{ type: 'album', name: name, label: '📀 ' + name }];
+                    }
+                }
+            }).catch(function () {
+                _this26.statsLoading = false;
+            });
+        },
+        loadFileLyrics: function loadFileLyrics(filePath) {
+            var _this27 = this;
+
+            this.currentLyrics = '';
+            this.$api.Task.getLyrics({ file_path: filePath }).then(function (res) {
+                if (res.result) {
+                    // Prefer embedded lyrics, fallback to lrc file
+                    _this27.currentLyrics = res.data.embedded || res.data.lrc_file || '';
+                }
+            }).catch(function () {
+                _this27.currentLyrics = '';
+            });
+        },
+        adjustLyricsOffset: function adjustLyricsOffset(delta) {
+            this.lyricsOffset += delta;
+        },
+        applyLyricsOffset: function applyLyricsOffset() {
+            var _this28 = this;
+
+            if (this.lyricsOffset === 0) return;
+
+            var lines = this.musicInfo.lyrics.split('\n');
+            var newLines = lines.map(function (line) {
+                var match = line.match(/^\[(\d{2}):(\d{2})(?:[.:])(\d{2,3})?\](.*)$/);
+                if (match) {
+                    var min = parseInt(match[1], 10);
+                    var sec = parseInt(match[2], 10);
+                    var ms = match[3] ? parseInt(match[3].padEnd(3, '0'), 10) : 0;
+                    var totalSeconds = min * 60 + sec + ms / 1000;
+                    totalSeconds += _this28.lyricsOffset;
+
+                    if (totalSeconds < 0) totalSeconds = 0;
+
+                    var newMin = Math.floor(totalSeconds / 60);
+                    var newSec = Math.floor(totalSeconds % 60);
+                    var newMs = Math.round((totalSeconds - newMin * 60 - newSec) * 1000);
+
+                    var minStr = String(newMin).padStart(2, '0');
+                    var secStr = String(newSec).padStart(2, '0');
+                    var msStr = String(newMs).padStart(3, '0');
+                    var text = match[4]; // Preserve original spacing
+
+                    return '[' + minStr + ':' + secStr + '.' + msStr + ']' + text;
+                }
+                return line;
+            });
+
+            this.musicInfo.lyrics = newLines.join('\n');
+            this.lyricsOffset = 0;
+            this.$cwMessage('已应用歌词偏移', 'success');
+        },
+        onAudioTimeUpdate: function onAudioTimeUpdate(event) {
+            this.audioCurrentTime = event.target.currentTime;
+        },
+        onAudioLoaded: function onAudioLoaded(event) {
+            console.log('Audio loaded, duration:', event.target.duration);
+        },
+        onAudioError: function onAudioError(event) {
+            console.error('Audio error:', event.target.error);
+            console.error('Audio src was:', event.target.src);
+            this.$cwMessage('音频加载失败，请检查文件格式或浏览器兼容性', 'error');
         }
     }
 });
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-c0d938de","hasScoped":false,"transformToRequire":{"video":["src","poster"],"source":"src","img":"src","image":"xlink:href"},"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/views/home/home.vue
-var home_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticStyle:{"display":"flex","flex-wrap":"wrap"}},[_c('div',{staticClass:"file-section"},[_c('div',{staticStyle:{"width":"95%","margin-top":"20px","margin-left":"10px"}},[_c('div',{staticStyle:{"display":"flex","align-items":"center"}},[_c('bk-icon',{staticStyle:{"cursor":"pointer"},attrs:{"type":"arrows-left-shape"},on:{"click":_vm.backDir}}),_vm._v(" "),_c('bk-input',{attrs:{"clearable":true,"placeholder":'请输入文件夹路径：',"behavior":"simplicity"},on:{"enter":_vm.handleSearchFile},model:{value:(_vm.filePath),callback:function ($$v) {_vm.filePath=$$v},expression:"filePath"}}),_vm._v(" "),_c('bk-icon',{staticStyle:{"cursor":"pointer"},attrs:{"type":"arrows-down-shape"},on:{"click":_vm.handleSearchFile}})],1),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"10px","display":"flex","align-items":"center"}},[_c('bk-input',{attrs:{"type":"text","placeholder":"根据文件名称搜索"},on:{"enter":_vm.handleSearch},model:{value:(_vm.searchWord),callback:function ($$v) {_vm.searchWord=$$v},expression:"searchWord"}}),_vm._v(" "),_c('div',{staticStyle:{"margin-left":"10px","margin-right":"5px"}},[_c('bk-dropdown-menu',{attrs:{"align":'right'}},[_c('template',{slot:"dropdown-trigger"},[_c('span',{staticClass:"dropdown-trigger-btn bk-icon icon-sort",staticStyle:{"cursor":"pointer","font-size":"20px"}})]),_vm._v(" "),_c('ul',{staticClass:"bk-dropdown-list",attrs:{"slot":"dropdown-content"},slot:"dropdown-content"},[_c('li',[_c('a',{class:{ 'isSelected': _vm.sortedField.includes('name') },attrs:{"href":"javascript:;"},on:{"click":function($event){return _vm.changeSorted('name')}}},[_vm._v("名称")])]),_vm._v(" "),_c('li',[_c('a',{class:{ 'isSelected': _vm.sortedField.includes('update_time') },attrs:{"href":"javascript:;"},on:{"click":function($event){return _vm.changeSorted('update_time')}}},[_vm._v("修改时间")])]),_vm._v(" "),_c('li',[_c('a',{class:{ 'isSelected': _vm.sortedField.includes('size') },attrs:{"href":"javascript:;"},on:{"click":function($event){return _vm.changeSorted('size')}}},[_vm._v("大小")])])])],2)],1),_vm._v(" "),_c('div',{staticStyle:{"margin-left":"5px"},attrs:{"title":"刷新列表"}},[_c('bk-button',{attrs:{"theme":'default',"icon":'refresh'},on:{"click":_vm.handleSearchFile}})],1)],1),_vm._v(" "),_c('transition',{attrs:{"name":"bk-slide-fade-down"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.fadeShowDir),expression:"fadeShowDir"}],staticStyle:{"margin-top":"10px"}},[_c('bk-tree',{ref:"tree1",attrs:{"data":_vm.treeListOne,"multiple":true,"node-key":'id',"has-border":true,"tpl":_vm.tpl,"draggable":true,"drag-sort":true},on:{"on-click":_vm.nodeClickOne,"on-check":_vm.nodeCheckTwo,"on-expanded":_vm.nodeExpandedOne}})],1)])],1)]),_vm._v(" "),_c('div',{staticClass:"edit-section"},[(_vm.isScraping)?_c('div',{staticStyle:{"padding":"20px","width":"100%","text-align":"center","color":"#3c96ff","font-weight":"bold","font-size":"16px","background-color":"#f0f8ff"}},[_c('bk-icon',{staticStyle:{"display":"inline-block","animation":"spin 2s linear infinite","margin-right":"8px"},attrs:{"type":"refresh"}}),_vm._v("\n            "+_vm._s(_vm.progressText)+"\n        ")],1):_vm._e(),_vm._v(" "),_c('transition',{attrs:{"name":"bk-slide-fade-left"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.musicInfo.title && _vm.checkedIds.length === 0),expression:"musicInfo.title && checkedIds.length === 0"}],staticStyle:{"margin-left":"40px","width":"500px","margin-top":"20px"}},[_c('div',{staticStyle:{"width":"100%","display":"flex","align-items":"center"}},[_c('bk-button',{staticClass:"mr10",staticStyle:{"width":"87%"},attrs:{"theme":'success',"loading":_vm.isLoading},on:{"click":_vm.handleClick}},[_vm._v("\n                        保存信息\n                    ")]),_vm._v(" "),_c('div',{staticStyle:{"margin-left":"6px","cursor":"pointer"},on:{"click":function($event){_vm.exampleSetting3.primary.visible = true}}},[_c('bk-icon',{attrs:{"type":"cog-shape"}})],1)],1),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","margin-bottom":"10px","align-items":"center","margin-top":"10px"}},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${title}'),expression:"'变量名:${title}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${title}'),expression:"'${title}'"}],staticClass:"label1 can-copy"},[_vm._v("标题：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfo.title),callback:function ($$v) {_vm.$set(_vm.musicInfo, "title", $$v)},expression:"musicInfo.title"}})],1),_vm._v(" "),_c('div',[_c('bk-icon',{staticStyle:{"cursor":"pointer","color":"#64c864","margin-left":"20px"},attrs:{"type":"arrows-right-shape"},on:{"click":function($event){return _vm.toggleLock('title')}}})],1)]),_vm._v(" "),_vm._l((_vm.showFields),function(item,index){return _c('div',{key:'l1' + index},[(item === 'filename')?_c('div',{staticClass:"edit-item"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${filename}'),expression:"'变量名:${filename}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${filename}'),expression:"'${filename}'"}],staticClass:"label1 can-copy"},[_vm._v("\n                            文件名：\n                        ")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfo.filename),callback:function ($$v) {_vm.$set(_vm.musicInfo, "filename", $$v)},expression:"musicInfo.filename"}})],1)]):(item === 'artist')?_c('div',{staticClass:"edit-item can-copy"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${artist}'),expression:"'变量名:${artist}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${artist}'),expression:"'${artist}'"}],staticClass:"label1"},[_vm._v("艺术家：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfo.artist),callback:function ($$v) {_vm.$set(_vm.musicInfo, "artist", $$v)},expression:"musicInfo.artist"}})],1)]):(item === 'album')?_c('div',{staticClass:"edit-item can-copy"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${album}'),expression:"'变量名:${album}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${album}'),expression:"'${album}'"}],staticClass:"label1"},[_vm._v("专辑：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%","display":"flex"}},[_c('bk-input',{staticStyle:{"flex":"1"},attrs:{"clearable":true},model:{value:(_vm.musicInfo.album),callback:function ($$v) {_vm.$set(_vm.musicInfo, "album", $$v)},expression:"musicInfo.album"}}),_vm._v(" "),_c('bk-button',{staticStyle:{"margin-left":"5px"},attrs:{"theme":'primary',"text":true,"size":"small"},on:{"click":_vm.openAlbumSearch}},[_c('bk-icon',{attrs:{"type":"search"}})],1)],1)]):(item === 'albumartist')?_c('div',{staticClass:"edit-item can-copy"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${albumartist}'),expression:"'变量名:${albumartist}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${albumartist}'),expression:"'${albumartist}'"}],staticClass:"label1"},[_vm._v("\n                            专辑艺术家：\n                        ")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfo.albumartist),callback:function ($$v) {_vm.$set(_vm.musicInfo, "albumartist", $$v)},expression:"musicInfo.albumartist"}})],1)]):(item === 'genre')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("风格：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-select',{staticStyle:{"width":"250px","background":"#fff"},attrs:{"disabled":false,"ext-cls":"select-custom","ext-popover-cls":"select-popover-custom","placeholder":'请选择歌曲风格',"searchable":""},model:{value:(_vm.musicInfo.genre),callback:function ($$v) {_vm.$set(_vm.musicInfo, "genre", $$v)},expression:"musicInfo.genre"}},_vm._l((_vm.genreList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1)]):(item === 'language')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("语言：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-select',{staticStyle:{"width":"250px","background":"#fff"},attrs:{"disabled":false,"ext-cls":"select-custom","ext-popover-cls":"select-popover-custom","placeholder":'请选择歌曲语言',"searchable":""},model:{value:(_vm.musicInfo.language),callback:function ($$v) {_vm.$set(_vm.musicInfo, "language", $$v)},expression:"musicInfo.language"}},_vm._l((_vm.languageList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1)]):(item === 'year')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("年份：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfo.year),callback:function ($$v) {_vm.$set(_vm.musicInfo, "year", $$v)},expression:"musicInfo.year"}})],1)]):(item === 'lyrics')?_c('div',{staticStyle:{"display":"flex","margin-bottom":"10px","flex-direction":"column"}},[_c('div',{staticStyle:{"display":"flex"}},[_c('div',{staticClass:"label1"},[_vm._v("歌词：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true,"type":"textarea","rows":15},model:{value:(_vm.musicInfo.lyrics),callback:function ($$v) {_vm.$set(_vm.musicInfo, "lyrics", $$v)},expression:"musicInfo.lyrics"}})],1),_vm._v(" "),_c('div',[_c('bk-icon',{staticStyle:{"cursor":"pointer","color":"#64c864","margin-left":"20px"},attrs:{"type":"arrows-right-shape"},on:{"click":function($event){return _vm.translation()}}})],1)]),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","margin-top":"10px"}},[_c('div',{staticClass:"label1"},[_vm._v("保存歌词：")]),_vm._v(" "),_c('bk-switcher',{model:{value:(_vm.musicInfo.is_save_lyrics_file),callback:function ($$v) {_vm.$set(_vm.musicInfo, "is_save_lyrics_file", $$v)},expression:"musicInfo.is_save_lyrics_file"}})],1)]):(item === 'comment')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("描述：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true,"type":"textarea"},model:{value:(_vm.musicInfo.comment),callback:function ($$v) {_vm.$set(_vm.musicInfo, "comment", $$v)},expression:"musicInfo.comment"}})],1)]):(item === 'album_img')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("专辑封面：")]),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","flex-direction":"column"}},[(_vm.reloadImg)?_c('div',{staticStyle:{"width":"70%","display":"flex","flex-direction":"column"}},[_c('div',[_c('bk-upload',{attrs:{"files":_vm.files1,"theme":'picture',"multiple":false,"with-credentials":true,"header":_vm.uploadHeader,"handle-res-code":_vm.handleRes,"size":{ maxFileSize: 5, maxImgSize: 5 },"url":_vm.uploadUrl,"name":"upload_file"}})],1),_vm._v(" "),_c('div',{staticStyle:{"color":"#63656e","font-size":"12px","display":"flex"}},[_c('div',[_vm._v("("+_vm._s(_vm.musicInfo.artwork_w)+"*"+_vm._s(_vm.musicInfo.artwork_h)+")")]),_vm._v(" "),_c('div',[_vm._v(_vm._s(_vm.musicInfo.artwork_size)+"MB")])])]):_vm._e(),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","margin-top":"10px"}},[_c('div',{staticClass:"label1"},[_vm._v("保存图片：")]),_vm._v(" "),_c('bk-switcher',{model:{value:(_vm.musicInfo.is_save_album_cover),callback:function ($$v) {_vm.$set(_vm.musicInfo, "is_save_album_cover", $$v)},expression:"musicInfo.is_save_album_cover"}})],1)])]):(item === 'discnumber')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("光盘编号：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfo.discnumber),callback:function ($$v) {_vm.$set(_vm.musicInfo, "discnumber", $$v)},expression:"musicInfo.discnumber"}})],1)]):(item === 'tracknumber')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("音轨号：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfo.tracknumber),callback:function ($$v) {_vm.$set(_vm.musicInfo, "tracknumber", $$v)},expression:"musicInfo.tracknumber"}})],1)]):(item === 'duration')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("时长：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%","color":"#63656e","font-size":"14px"}},[_vm._v("\n                            "+_vm._s(_vm.musicInfo.duration)+" s\n                        ")])]):(item === 'bit_rate')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("比特率：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%","color":"#63656e","font-size":"14px"}},[_vm._v("\n                            "+_vm._s(_vm.musicInfo.bit_rate)+" kbps\n                        ")])]):(item === 'size')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("文件大小：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%","color":"#63656e","font-size":"14px"}},[_vm._v("\n                            "+_vm._s(_vm.musicInfo.size)+" MB\n                        ")])]):(item === 'album_type')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("专辑类型：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-select',{staticStyle:{"width":"250px","background":"#fff"},attrs:{"disabled":false,"ext-cls":"select-custom","ext-popover-cls":"select-popover-custom","placeholder":'请选择专辑类型',"searchable":""},model:{value:(_vm.musicInfo.album_type),callback:function ($$v) {_vm.$set(_vm.musicInfo, "album_type", $$v)},expression:"musicInfo.album_type"}},_vm._l((_vm.albumTypeList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1)]):_vm._e()])})],2)]),_vm._v(" "),_c('transition',{attrs:{"name":"bk-slide-fade-left"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.checkedIds.length > 0),expression:"checkedIds.length > 0"}],staticStyle:{"margin-left":"40px","width":"500px","margin-top":"20px"}},[_c('div',{staticStyle:{"width":"100%","display":"flex"}},[_c('bk-button',{staticClass:"mr10",staticStyle:{"flex":"1"},attrs:{"theme":'success',"loading":_vm.isLoading},on:{"click":function($event){_vm.exampleSetting1.primary.visible = true}}},[_vm._v("\n                        自动刮削\n                    ")]),_vm._v(" "),_c('bk-button',{staticClass:"mr10",staticStyle:{"flex":"1"},attrs:{"theme":'primary',"loading":_vm.isLoading},on:{"click":_vm.handleBatch}},[_vm._v("\n                        手动批量调整\n                    ")]),_vm._v(" "),_c('bk-button',{staticClass:"mr10",staticStyle:{"flex":"1"},attrs:{"theme":'success',"loading":_vm.isLoading},on:{"click":function($event){_vm.exampleSetting2.primary.visible = true}}},[_vm._v("\n                        整理文件夹\n                    ")])],1),_vm._v(" "),_c('bk-divider',[_c('div',{staticStyle:{"color":"gray","font-size":"12px"}},[_vm._v("手动刮削参数")])]),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","margin-bottom":"10px","align-items":"center","margin-top":"10px"}},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${title}'),expression:"'变量名:${title}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${title}'),expression:"'${title}'"}],staticClass:"label1 can-copy"},[_vm._v("标题：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true,"placeholder":'支持变量批量修改'},model:{value:(_vm.musicInfoManual.title),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "title", $$v)},expression:"musicInfoManual.title"}})],1)]),_vm._v(" "),_vm._l((_vm.showFields),function(item,index){return _c('div',{key:'l2' + index},[(item === 'filename')?_c('div',{staticClass:"edit-item"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${filename}'),expression:"'变量名:${filename}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${filename}'),expression:"'${filename}'"}],staticClass:"label1 can-copy"},[_vm._v("\n                            文件名：\n                        ")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true,"placeholder":'例如：${title}-${album}'},model:{value:(_vm.musicInfoManual.filename),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "filename", $$v)},expression:"musicInfoManual.filename"}})],1)]):(item === 'artist')?_c('div',{staticClass:"edit-item"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${artist}'),expression:"'变量名:${artist}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${artist}'),expression:"'${artist}'"}],staticClass:"label1 can-copy"},[_vm._v("艺术家：\n                        ")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true,"placeholder":'具体哪些变量,鼠标悬浮在标题上查看'},model:{value:(_vm.musicInfoManual.artist),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "artist", $$v)},expression:"musicInfoManual.artist"}})],1)]):(item === 'album')?_c('div',{staticClass:"edit-item"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${album}'),expression:"'变量名:${album}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${album}'),expression:"'${album}'"}],staticClass:"label1 can-copy"},[_vm._v("专辑：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfoManual.album),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "album", $$v)},expression:"musicInfoManual.album"}})],1)]):(item === 'albumartist')?_c('div',{staticClass:"edit-item"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${albumartist}'),expression:"'变量名:${albumartist}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${albumartist}'),expression:"'${albumartist}'"}],staticClass:"label1 can-copy"},[_vm._v("专辑艺术家：\n                        ")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfoManual.albumartist),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "albumartist", $$v)},expression:"musicInfoManual.albumartist"}})],1)]):(item === 'genre')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("风格：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-select',{staticStyle:{"width":"250px","background":"#fff"},attrs:{"disabled":false,"ext-cls":"select-custom","ext-popover-cls":"select-popover-custom","placeholder":'请选择歌曲风格',"searchable":""},model:{value:(_vm.musicInfoManual.genre),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "genre", $$v)},expression:"musicInfoManual.genre"}},_vm._l((_vm.genreList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1)]):(item === 'language')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("语言：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-select',{staticStyle:{"width":"250px","background":"#fff"},attrs:{"disabled":false,"ext-cls":"select-custom","ext-popover-cls":"select-popover-custom","placeholder":'请选择歌曲语言',"searchable":""},model:{value:(_vm.musicInfoManual.language),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "language", $$v)},expression:"musicInfoManual.language"}},_vm._l((_vm.languageList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1)]):(item === 'year')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("年份：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfoManual.year),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "year", $$v)},expression:"musicInfoManual.year"}})],1)]):(item === 'lyrics')?_c('div',{staticStyle:{"display":"flex","margin-bottom":"10px","flex-direction":"column"}},[_c('div',{staticStyle:{"display":"flex"}},[_c('div',{staticClass:"label1"},[_vm._v("歌词：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true,"type":"textarea","rows":15},model:{value:(_vm.musicInfoManual.lyrics),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "lyrics", $$v)},expression:"musicInfoManual.lyrics"}})],1)]),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","margin-top":"10px"}},[_c('div',{staticClass:"label1"},[_vm._v("保存歌词：")]),_vm._v(" "),_c('bk-switcher',{model:{value:(_vm.musicInfoManual.is_save_lyrics_file),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "is_save_lyrics_file", $$v)},expression:"musicInfoManual.is_save_lyrics_file"}})],1)]):(item === 'comment')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("描述：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true,"type":"textarea"},model:{value:(_vm.musicInfoManual.comment),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "comment", $$v)},expression:"musicInfoManual.comment"}})],1)]):(item === 'album_img')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("专辑封面：")]),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","flex-direction":"column"}},[(_vm.reloadImg)?_c('div',{staticStyle:{"width":"70%","display":"flex","flex-direction":"column"}},[_c('div',[_c('bk-upload',{attrs:{"files":_vm.files1,"theme":'picture',"multiple":false,"with-credentials":true,"header":_vm.uploadHeader,"handle-res-code":_vm.handleResBatch,"size":{ maxFileSize: 5, maxImgSize: 5 },"url":_vm.uploadUrl,"name":"upload_file"}})],1)]):_vm._e(),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","margin-top":"10px"}},[_c('div',{staticClass:"label1"},[_vm._v("保存图片：")]),_vm._v(" "),_c('bk-switcher',{model:{value:(_vm.musicInfoManual.is_save_album_cover),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "is_save_album_cover", $$v)},expression:"musicInfoManual.is_save_album_cover"}})],1)])]):(item === 'discnumber')?_c('div',{staticClass:"edit-item"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${discnumber}'),expression:"'变量名:${discnumber}'"}],staticClass:"label1"},[_vm._v("光盘编号：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfoManual.discnumber),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "discnumber", $$v)},expression:"musicInfoManual.discnumber"}})],1)]):(item === 'tracknumber')?_c('div',{staticClass:"edit-item"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${tracknumber}'),expression:"'变量名:${tracknumber}'"}],staticClass:"label1"},[_vm._v("音轨号：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfoManual.tracknumber),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "tracknumber", $$v)},expression:"musicInfoManual.tracknumber"}})],1)]):_vm._e()])})],2)])],1),_vm._v(" "),_c('div',{staticClass:"resource-section"},[_c('transition',{attrs:{"name":"bk-slide-fade-left"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.fadeShowDetail),expression:"fadeShowDetail"}],staticStyle:{"display":"flex","flex-direction":"column","margin-top":"20px","flex":"1","margin-right":"20px","margin-left":"20px"}},[(_vm.SongList.length === 0)?_c('div',[_c('span',{staticStyle:{"margin-left":"30%","margin-top":"30%"}},[_vm._v("暂无歌曲信息")])]):_c('div',[_c('div',{staticClass:"parent"},[_c('div',{staticClass:"title2"},[_vm._v("应用")]),_vm._v(" "),_c('div',{staticClass:"title2"},[_vm._v("封面")]),_vm._v(" "),_c('div',{staticClass:"title2"},[_vm._v("标题")]),_vm._v(" "),_c('div',{staticClass:"title2"},[_vm._v("艺术家")]),_vm._v(" "),_c('div',{staticClass:"title2"},[_vm._v("专辑")]),_vm._v(" "),_c('div',{staticClass:"title2"},[_vm._v("歌词")]),_vm._v(" "),_c('div',{staticClass:"title2"},[_vm._v("年份")])]),_vm._v(" "),_vm._l((_vm.SongList),function(item,index){return _c('div',{key:index,staticClass:"parent",staticStyle:{"margin-bottom":"10px"}},[_c('bk-icon',{staticStyle:{"margin-right":"5px","cursor":"pointer"},attrs:{"type":"arrows-left-shape"},on:{"click":function($event){return _vm.copyAll(item)}}}),_vm._v(" "),(_vm.resource === 'smart_tag')?_c('div',[_c('bk-badge',{staticClass:"mr40",attrs:{"theme":'warning',"val":item.score,"radius":"20%"}},[_c('bk-image',{staticStyle:{"width":"64px","cursor":"pointer"},attrs:{"fit":"contain","src":item.album_img},on:{"click":function($event){return _vm.handleCopy('album_img',item.album_img)}}})],1)],1):_c('div',[_c('bk-image',{staticStyle:{"width":"64px","cursor":"pointer"},attrs:{"fit":"contain","src":item.album_img},on:{"click":function($event){return _vm.handleCopy('album_img',item.album_img)}}})],1),_vm._v(" "),_c('div',{staticClass:"music-item",on:{"click":function($event){return _vm.handleCopy('title',item.name)}}},[(item.source)?_c('span',{style:({ background: item.source === 'netease' ? '#c20c0c' : '#31c27c', color: 'white', padding: '1px 4px', borderRadius: '3px', fontSize: '10px', marginRight: '4px' })},[_vm._v(_vm._s(item.source === 'netease' ? '网易云' : 'QQ音乐'))]):_vm._e(),_vm._v("\n                            "+_vm._s(item.name)+"\n                        ")]),_vm._v(" "),_c('div',{staticClass:"music-item",on:{"click":function($event){return _vm.handleCopy('artist',item.artist)}}},[_vm._v("\n                            "+_vm._s(item.artist)+"\n                        ")]),_vm._v(" "),_c('div',{staticClass:"music-item",on:{"click":function($event){return _vm.handleCopy('album',item.album)}}},[_vm._v("\n                            "+_vm._s(item.album)+"\n                        ")]),_vm._v(" "),_c('div',{staticClass:"music-item",on:{"click":function($event){return _vm.handleCopy('lyric',item)}}},[_vm._v("加载歌词")]),_vm._v(" "),_c('div',{staticClass:"music-item",on:{"click":function($event){return _vm.handleCopy('year',item.year)}}},[_vm._v("\n                            "+_vm._s(item.year)+"\n                        ")]),_vm._v(" "),_c('bk-divider'),_vm._v(" "),_c('bk-divider'),_vm._v(" "),_c('bk-divider'),_vm._v(" "),_c('bk-divider'),_vm._v(" "),_c('bk-divider'),_vm._v(" "),_c('bk-divider'),_vm._v(" "),_c('bk-divider')],1)})],2)])]),_vm._v(" "),_c('transition',{attrs:{"name":"bk-slide-fade-left"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.showTranslation),expression:"showTranslation"}]},[_c('div',{staticStyle:{"display":"flex","height":"100%"}},[_c('bk-icon',{staticStyle:{"margin-right":"5px","margin-left":"15px","margin-top":"50%","cursor":"pointer"},attrs:{"type":"arrows-left-shape"},on:{"click":function($event){return _vm.handleCopy('lyric_tran',_vm.translationText)}}}),_vm._v(" "),_c('div',{staticStyle:{"width":"100%","height":"100%"}},[_c('bk-input',{staticStyle:{"height":"100%"},attrs:{"clearable":true,"type":"textarea","rows":50},model:{value:(_vm.translationText),callback:function ($$v) {_vm.translationText=$$v},expression:"translationText"}})],1)],1)])]),_vm._v(" "),_c('div',{directives:[{name:"show",rawName:"v-show",value:(!_vm.fadeShowDetail && !_vm.showTranslation),expression:"!fadeShowDetail && !showTranslation"}],staticStyle:{"width":"90%","height":"90%","margin":"50px 20px 20px 50px"}},[_c('bk-image',{staticStyle:{"width":"100%","height":"98%"},attrs:{"fit":"contain","src":'/static/img/bg.png'}})],1)],1),_vm._v(" "),_c('bk-dialog',{attrs:{"theme":"primary","mask-close":false,"header-position":_vm.exampleSetting1.primary.headerPosition,"title":"自动批量修改"},on:{"confirm":_vm.handleBatchAuto},model:{value:(_vm.exampleSetting1.primary.visible),callback:function ($$v) {_vm.$set(_vm.exampleSetting1.primary, "visible", $$v)},expression:"exampleSetting1.primary.visible"}},[_c('p',[_vm._v("宽松模式: 只根据标题匹配元数据, 可能存在同名或翻唱歌曲。")]),_vm._v(" "),_c('p',[_vm._v("严格模式: 根据标题和歌手或标题和专辑匹配元数据, 准确性更高。")]),_vm._v(" "),_c('bk-radio-group',{model:{value:(_vm.selectAutoMode),callback:function ($$v) {_vm.selectAutoMode=$$v},expression:"selectAutoMode"}},[_c('bk-radio-button',{attrs:{"value":"simple"}},[_vm._v("\n                宽松模式\n            ")]),_vm._v(" "),_c('bk-radio-button',{attrs:{"value":"hard"}},[_vm._v("\n                严格模式\n            ")]),_vm._v(" "),_c('bk-radio-button',{attrs:{"value":"strict_album"}},[_vm._v("\n                严格专辑模式 (按文件夹)\n            ")])],1),_vm._v(" "),_c('div',[_vm._v("音乐源顺序")]),_vm._v(" "),_c('bk-select',{staticStyle:{"width":"250px"},attrs:{"searchable":"","multiple":"","show-select-all":""},model:{value:(_vm.sourceList),callback:function ($$v) {_vm.sourceList=$$v},expression:"sourceList"}},_vm._l((_vm.resourceListBatch),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"10px"}},[_vm._v("覆盖策略")]),_vm._v(" "),_c('bk-radio-group',{staticStyle:{"margin-top":"5px"},model:{value:(_vm.overwritePolicy),callback:function ($$v) {_vm.overwritePolicy=$$v},expression:"overwritePolicy"}},[_c('bk-radio-button',{attrs:{"value":"overwrite_all"}},[_vm._v("\n                完全覆盖 (默认)\n            ")]),_vm._v(" "),_c('bk-radio-button',{attrs:{"value":"overwrite_missing"}},[_vm._v("\n                仅补充缺失\n            ")])],1),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"15px"}},[_c('bk-checkbox',{model:{value:(_vm.skipScraped),callback:function ($$v) {_vm.skipScraped=$$v},expression:"skipScraped"}},[_vm._v("跳过已刮削文件 (历史记录中存在即跳过)")])],1)],1),_vm._v(" "),_c('bk-dialog',{attrs:{"theme":"primary","mask-close":false,"header-position":_vm.exampleSetting2.primary.headerPosition,"title":"整理文件夹"},on:{"confirm":_vm.handleTidy},model:{value:(_vm.exampleSetting2.primary.visible),callback:function ($$v) {_vm.$set(_vm.exampleSetting2.primary, "visible", $$v)},expression:"exampleSetting2.primary.visible"}},[_c('p',[_vm._v("整理文件夹，按一级目录，二级目录选定的信息分类。")]),_vm._v(" "),_c('p',{staticStyle:{"color":"#666","font-size":"12px","margin-top":"5px"}},[_vm._v("注意：整理完成后，未成功刮削的文件及残留文件夹将自动移动到当前目录下的【未整理文件】中。")]),_vm._v(" "),_c('div',[_vm._v("整理后的根目录")]),_vm._v(" "),_c('div',{staticClass:"input-demo"},[_c('bk-input',{model:{value:(_vm.tidyFormData.root_path),callback:function ($$v) {_vm.$set(_vm.tidyFormData, "root_path", $$v)},expression:"tidyFormData.root_path"}})],1),_vm._v(" "),_c('div',[_vm._v("一级目录")]),_vm._v(" "),_c('bk-select',{staticStyle:{"width":"250px"},attrs:{"clearable":false},model:{value:(_vm.tidyFormData.first_dir),callback:function ($$v) {_vm.$set(_vm.tidyFormData, "first_dir", $$v)},expression:"tidyFormData.first_dir"}},_vm._l((_vm.tidyList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1),_vm._v(" "),_c('div',[_vm._v("二级目录")]),_vm._v(" "),_c('bk-select',{staticStyle:{"width":"250px"},model:{value:(_vm.tidyFormData.second_dir),callback:function ($$v) {_vm.$set(_vm.tidyFormData, "second_dir", $$v)},expression:"tidyFormData.second_dir"}},_vm._l((_vm.tidyList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1),_vm._v(" "),_c('bk-dialog',{attrs:{"theme":"primary","mask-close":false,"width":"600","title":"定时刮削配置"},on:{"confirm":_vm.saveScheduleConfig},model:{value:(_vm.scheduleVisible),callback:function ($$v) {_vm.scheduleVisible=$$v},expression:"scheduleVisible"}},[_c('div',{staticStyle:{"margin-bottom":"20px"}},[_c('p',{staticStyle:{"color":"#666","margin-bottom":"10px"}},[_vm._v("定时任务将自动扫描媒体库新增文件，并执行刮削。")])]),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","flex-direction":"column"}},[_c('div',{staticStyle:{"margin-bottom":"15px","display":"flex","align-items":"center"}},[_c('span',{staticStyle:{"width":"100px","text-align":"right","margin-right":"20px"}},[_vm._v("开启任务")]),_vm._v(" "),_c('bk-switcher',{model:{value:(_vm.scheduleConfig.enabled),callback:function ($$v) {_vm.$set(_vm.scheduleConfig, "enabled", $$v)},expression:"scheduleConfig.enabled"}})],1),_vm._v(" "),_c('div',{staticStyle:{"margin-bottom":"15px","display":"flex","align-items":"center"}},[_c('span',{staticStyle:{"width":"100px","text-align":"right","margin-right":"20px"}},[_vm._v("执行间隔")]),_vm._v(" "),_c('bk-input',{staticStyle:{"width":"160px","margin-right":"10px"},attrs:{"type":"number","min":1},model:{value:(_vm.scheduleConfig.interval_hours),callback:function ($$v) {_vm.$set(_vm.scheduleConfig, "interval_hours", $$v)},expression:"scheduleConfig.interval_hours"}}),_vm._v(" "),_c('bk-select',{staticStyle:{"width":"80px"},attrs:{"clearable":false},model:{value:(_vm.scheduleConfig.interval_unit),callback:function ($$v) {_vm.$set(_vm.scheduleConfig, "interval_unit", $$v)},expression:"scheduleConfig.interval_unit"}},[_c('bk-option',{attrs:{"id":"hours","name":"小时"}}),_vm._v(" "),_c('bk-option',{attrs:{"id":"minutes","name":"分钟"}})],1)],1),_vm._v(" "),_c('div',{staticStyle:{"margin-bottom":"15px","display":"flex","align-items":"center"}},[_c('span',{staticStyle:{"width":"100px","text-align":"right","margin-right":"20px"}},[_vm._v("刮削模式")]),_vm._v(" "),_c('bk-select',{staticStyle:{"width":"250px"},model:{value:(_vm.scheduleConfig.select_mode),callback:function ($$v) {_vm.$set(_vm.scheduleConfig, "select_mode", $$v)},expression:"scheduleConfig.select_mode"}},_vm._l((_vm.selectAutoModeList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1),_vm._v(" "),_c('div',{staticStyle:{"margin-bottom":"15px","display":"flex","align-items":"center"}},[_c('span',{staticStyle:{"width":"100px","text-align":"right","margin-right":"20px"}},[_vm._v("覆盖策略")]),_vm._v(" "),_c('bk-select',{staticStyle:{"width":"250px"},model:{value:(_vm.scheduleConfig.overwrite_policy),callback:function ($$v) {_vm.$set(_vm.scheduleConfig, "overwrite_policy", $$v)},expression:"scheduleConfig.overwrite_policy"}},_vm._l((_vm.overwritePolicyList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1),_vm._v(" "),_c('div',{staticStyle:{"margin-bottom":"15px","display":"flex","align-items":"center"}},[_c('span',{staticStyle:{"width":"100px","text-align":"right","margin-right":"20px"}},[_vm._v("数据源")]),_vm._v(" "),_c('bk-checkbox-group',{model:{value:(_vm.scheduleConfig.source_list),callback:function ($$v) {_vm.$set(_vm.scheduleConfig, "source_list", $$v)},expression:"scheduleConfig.source_list"}},[_c('bk-checkbox',{staticStyle:{"margin-right":"20px"},attrs:{"value":'netease'}},[_vm._v("网易云音乐")]),_vm._v(" "),_c('bk-checkbox',{attrs:{"value":'qmusic'}},[_vm._v("QQ音乐")])],1)],1),_vm._v(" "),_c('div',{staticStyle:{"margin-bottom":"15px","margin-left":"120px"}},[_c('bk-checkbox',{model:{value:(_vm.scheduleConfig.skip_scraped),callback:function ($$v) {_vm.$set(_vm.scheduleConfig, "skip_scraped", $$v)},expression:"scheduleConfig.skip_scraped"}},[_vm._v("跳过已刮削文件 (历史记录中存在的)")])],1)])]),_vm._v(" "),_c('bk-dialog',{attrs:{"theme":"primary","mask-close":false,"header-position":_vm.exampleSetting3.primary.headerPosition,"title":"配置"},on:{"confirm":_vm.handleSettings},model:{value:(_vm.exampleSetting3.primary.visible),callback:function ($$v) {_vm.$set(_vm.exampleSetting3.primary, "visible", $$v)},expression:"exampleSetting3.primary.visible"}},[_c('p',[_vm._v("选择你的配置，浏览器会保存你的默认值")]),_vm._v(" "),_c('div',[_vm._v("标签来源")]),_vm._v(" "),_c('bk-select',{staticStyle:{"width":"200px"},attrs:{"disabled":false,"clearable":false,"ext-cls":"select-custom","ext-popover-cls":"select-popover-custom"},model:{value:(_vm.resource),callback:function ($$v) {_vm.resource=$$v},expression:"resource"}},_vm._l((_vm.resourceList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1),_vm._v(" "),_c('div',[_vm._v("展示的字段以及顺序")]),_vm._v(" "),_c('bk-select',{staticStyle:{"width":"350px","margin-top":"10px"},attrs:{"searchable":"","clearable":false,"multiple":"","display-tag":""},model:{value:(_vm.showFields),callback:function ($$v) {_vm.showFields=$$v},expression:"showFields"}},_vm._l((_vm.fieldList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1),_vm._v(" "),_c('bk-dialog',{attrs:{"theme":"primary","mask-close":false,"width":"800","show-footer":false,"title":"刮削结果"},model:{value:(_vm.logVisible),callback:function ($$v) {_vm.logVisible=$$v},expression:"logVisible"}},[_c('div',{staticStyle:{"margin-bottom":"10px"}},[_c('bk-alert',{attrs:{"type":"success","title":'成功: ' + (_vm.summaryData.success_count || 0)}}),_vm._v(" "),_c('bk-alert',{staticStyle:{"margin-top":"5px"},attrs:{"type":"error","title":'失败: ' + (_vm.summaryData.fail_count || 0)}}),_vm._v(" "),(_vm.summaryData.cookie_warning)?_c('bk-alert',{staticStyle:{"margin-top":"5px"},attrs:{"type":"warning","title":"警告: 网易云音乐由于缺少Cookie导致搜索失败，请配置Cookie!"}}):_vm._e()],1),_vm._v(" "),(_vm.failedItems.length > 0)?_c('div',{staticStyle:{"margin-top":"10px","max-height":"200px","overflow-y":"auto"}},[_c('p',[_c('strong',[_vm._v("失败列表 (点击跳转):")])]),_vm._v(" "),_vm._l((_vm.failedItems),function(item,idx){return _c('div',{key:'fail-' + idx,staticStyle:{"cursor":"pointer","color":"red"},on:{"click":function($event){return _vm.handleJump(item)}}},[_vm._v("\n                "+_vm._s(item.name)+"\n            ")])})],2):_vm._e(),_vm._v(" "),_c('div',{staticStyle:{"max-height":"500px","overflow-y":"auto","background":"#f5f5f5","padding":"10px","border-radius":"4px","font-family":"monospace","margin-top":"10px"}},_vm._l((_vm.scrapeLogs),function(log,idx){return _c('div',{key:idx,staticStyle:{"margin-bottom":"2px"},style:({ color: log.type === 'error' ? 'red' : (log.type === 'warning' ? '#ff9c01' : 'black') })},[_vm._v("\n                "+_vm._s(log.msg)+"\n            ")])}),0),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"10px","text-align":"right"}},[_c('bk-button',{on:{"click":function($event){_vm.logVisible = false}}},[_vm._v("关闭")])],1)]),_vm._v(" "),_c('bk-dialog',{attrs:{"theme":"primary","mask-close":true,"width":"800","show-footer":false,"title":"刮削记录"},model:{value:(_vm.historyVisible),callback:function ($$v) {_vm.historyVisible=$$v},expression:"historyVisible"}},[_c('div',{staticStyle:{"margin-bottom":"15px"}},[_c('bk-button-group',[_c('bk-button',{attrs:{"theme":_vm.historyFilter === 'all' ? 'primary' : 'default'},on:{"click":function($event){_vm.historyFilter = 'all'}}},[_vm._v("\n                    全部 ("+_vm._s(_vm.successItems.length + _vm.failedItems.length + _vm.skippedItems.length)+")\n                ")]),_vm._v(" "),_c('bk-button',{attrs:{"theme":_vm.historyFilter === 'success' ? 'primary' : 'default'},on:{"click":function($event){_vm.historyFilter = 'success'}}},[_vm._v("\n                    成功 ("+_vm._s(_vm.successItems.length)+")\n                ")]),_vm._v(" "),_c('bk-button',{attrs:{"theme":_vm.historyFilter === 'failed' ? 'primary' : 'default'},on:{"click":function($event){_vm.historyFilter = 'failed'}}},[_vm._v("\n                    失败 ("+_vm._s(_vm.failedItems.length)+")\n                ")]),_vm._v(" "),_c('bk-button',{attrs:{"theme":_vm.historyFilter === 'skipped' ? 'primary' : 'default'},on:{"click":function($event){_vm.historyFilter = 'skipped'}}},[_vm._v("\n                    跳过 ("+_vm._s(_vm.skippedItems.length)+")\n                ")])],1)],1),_vm._v(" "),(_vm.filteredHistoryItems.length > 0)?_c('div',{staticStyle:{"max-height":"400px","overflow-y":"auto"}},_vm._l((_vm.filteredHistoryItems),function(item,idx){return _c('div',{key:'hist-' + idx,style:({ cursor: 'pointer', padding: '8px 12px', borderBottom: '1px solid #eee', color: item.type === 'failed' ? '#ea3636' : (item.type === 'skipped' ? '#ff9c01' : '#2dcb56') }),on:{"click":function($event){return _vm.handleJump(item)}}},[_c('div',{staticStyle:{"display":"flex","justify-content":"space-between","align-items":"center"}},[_c('div',[_c('span',{staticStyle:{"margin-right":"8px"}},[(item.type === 'success')?_c('bk-icon',{attrs:{"type":"check-circle-shape"}}):(item.type === 'failed')?_c('bk-icon',{attrs:{"type":"close-circle-shape"}}):_c('bk-icon',{attrs:{"type":"exclamation-circle-shape"}})],1),_vm._v("\n                        "+_vm._s(item.name)+"\n                    ")]),_vm._v(" "),_c('div',{staticStyle:{"font-size":"12px","color":"#999","min-width":"140px","text-align":"right"}},[_vm._v("\n                        "+_vm._s(item.display_time)+"\n                    ")])]),_vm._v(" "),(item.error_msg)?_c('div',{staticStyle:{"color":"#ea3636","font-size":"12px","margin-left":"24px","margin-top":"4px"}},[_vm._v("\n                    "+_vm._s(item.error_msg)+"\n                ")]):_vm._e()])}),0):_c('div',{staticStyle:{"text-align":"center","padding":"40px","color":"#999"}},[_vm._v("\n            暂无记录\n        ")]),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"15px","text-align":"right"}},[_c('bk-button',{on:{"click":function($event){_vm.historyVisible = false}}},[_vm._v("关闭")])],1)]),_vm._v(" "),_c('bk-dialog',{attrs:{"theme":"primary","mask-close":false,"width":"900","show-footer":false,"title":"搜索专辑"},model:{value:(_vm.albumSearchVisible),callback:function ($$v) {_vm.albumSearchVisible=$$v},expression:"albumSearchVisible"}},[_c('div',{staticStyle:{"display":"flex","margin-bottom":"10px"}},[_c('bk-input',{staticStyle:{"flex":"1","margin-right":"10px"},attrs:{"placeholder":"输入专辑名称"},on:{"enter":_vm.searchAlbum},model:{value:(_vm.albumSearchQuery),callback:function ($$v) {_vm.albumSearchQuery=$$v},expression:"albumSearchQuery"}}),_vm._v(" "),_c('bk-button',{attrs:{"theme":'primary',"loading":_vm.isAlbumSearching},on:{"click":_vm.searchAlbum}},[_vm._v("搜索")]),_vm._v(" "),(_vm.selectedAlbum)?_c('bk-button',{staticStyle:{"margin-left":"10px"},on:{"click":_vm.backToAlbumList}},[_vm._v("返回专辑列表")]):_vm._e()],1),_vm._v(" "),(!_vm.selectedAlbum && _vm.albumList.length > 0)?_c('div',{staticStyle:{"max-height":"450px","overflow-y":"auto"}},[_c('div',{staticStyle:{"margin-bottom":"10px","color":"#666"}},[_vm._v("\n                找到 "+_vm._s(_vm.albumList.length)+" 个专辑\n                "),_c('span',{style:({ background: _vm.resource === 'netease' ? '#c20c0c' : '#31c27c', color: 'white', padding: '2px 6px', borderRadius: '3px', fontSize: '12px', marginLeft: '8px' })},[_vm._v("\n                    "+_vm._s(_vm.resource === 'netease' ? '网易云' : 'QQ音乐')+"\n                ")])]),_vm._v(" "),_vm._l((_vm.albumList),function(album,idx){return _c('div',{key:'album-' + idx,staticStyle:{"padding":"12px","border":"1px solid #eee","border-radius":"4px","margin-bottom":"8px","cursor":"pointer","display":"flex","align-items":"center","transition":"background 0.2s"},on:{"click":function($event){return _vm.selectAlbum(album)},"mouseover":function($event){$event.target.style.background = '#f5f7fa'},"mouseout":function($event){$event.target.style.background = 'white'}}},[_c('img',{staticStyle:{"width":"60px","height":"60px","object-fit":"cover","border-radius":"4px","margin-right":"12px"},attrs:{"src":album.cover}}),_vm._v(" "),_c('div',{staticStyle:{"flex":"1"}},[_c('div',{staticStyle:{"font-weight":"bold","font-size":"14px"}},[_vm._v(_vm._s(album.name))]),_vm._v(" "),_c('div',{staticStyle:{"color":"#666","font-size":"12px","margin-top":"4px"}},[_vm._v(_vm._s(album.artist))]),_vm._v(" "),_c('div',{staticStyle:{"color":"#999","font-size":"12px"}},[_vm._v(_vm._s(album.year)+" · "+_vm._s(album.size)+" 首")])])])})],2):_vm._e(),_vm._v(" "),(_vm.selectedAlbum && _vm.albumSearchResults)?_c('div',{staticStyle:{"max-height":"450px","overflow-y":"auto"}},[_c('div',{staticStyle:{"display":"flex","align-items":"center","margin-bottom":"15px","padding":"10px","background":"#f5f7fa","border-radius":"4px"}},[_c('img',{staticStyle:{"width":"80px","height":"80px","object-fit":"cover","border-radius":"4px","margin-right":"15px"},attrs:{"src":_vm.albumSearchResults.album_img}}),_vm._v(" "),_c('div',[_c('div',{staticStyle:{"font-weight":"bold","font-size":"16px"}},[_vm._v("\n                        "+_vm._s(_vm.albumSearchResults.album_name)+"\n                        "),_c('span',{style:({ background: _vm.resource === 'netease' ? '#c20c0c' : '#31c27c', color: 'white', padding: '2px 6px', borderRadius: '3px', fontSize: '11px', marginLeft: '8px' })},[_vm._v("\n                            "+_vm._s(_vm.resource === 'netease' ? '网易云' : 'QQ音乐')+"\n                        ")])]),_vm._v(" "),_c('div',{staticStyle:{"color":"#666","margin-top":"4px"}},[_vm._v(_vm._s(_vm.albumSearchResults.album_artist))]),_vm._v(" "),_c('div',{staticStyle:{"color":"#999","font-size":"12px"}},[_vm._v(_vm._s(_vm.albumSearchResults.year)+" · "+_vm._s(_vm.albumSearchResults.tracks.length)+" 首")])]),_vm._v(" "),_c('div',{staticStyle:{"margin-left":"auto"}},[_c('bk-button',{attrs:{"theme":'success',"size":"small"},on:{"click":_vm.handleAutoMatchScores}},[_vm._v("一键自动匹配")])],1)]),_vm._v(" "),_vm._l((_vm.albumSearchResults.tracks),function(track,idx){return _c('div',{key:'track-' + idx,staticStyle:{"padding":"10px 12px","border-bottom":"1px solid #eee","cursor":"pointer","display":"flex","align-items":"center"},on:{"click":function($event){return _vm.applyAlbumTrack(track)},"mouseover":function($event){$event.target.style.background = '#f5f7fa'},"mouseout":function($event){$event.target.style.background = 'white'}}},[_c('div',{staticStyle:{"width":"30px","color":"#999"}},[_vm._v(_vm._s(track.idx))]),_vm._v(" "),_c('div',{staticStyle:{"flex":"1"}},[_c('div',[_vm._v(_vm._s(track.name))]),_vm._v(" "),_c('div',{staticStyle:{"color":"#999","font-size":"12px"}},[_vm._v(_vm._s(track.artist))])]),_vm._v(" "),_c('bk-button',{attrs:{"theme":'primary',"text":true,"size":"small"}},[_vm._v("应用")])],1)})],2):_vm._e(),_vm._v(" "),(_vm.albumList.length === 0 && !_vm.selectedAlbum && !_vm.isAlbumSearching)?_c('div',{staticStyle:{"text-align":"center","color":"#999","padding":"40px"}},[_vm._v("\n            输入专辑名称搜索\n        ")]):_vm._e(),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"15px","text-align":"right"}},[_c('bk-button',{on:{"click":function($event){_vm.albumSearchVisible = false}}},[_vm._v("关闭")])],1)])],1)}
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-6d9ccbd8","hasScoped":false,"transformToRequire":{"video":["src","poster"],"source":"src","img":"src","image":"xlink:href"},"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/views/home/home.vue
+var home_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticStyle:{"display":"flex","flex-wrap":"wrap"}},[_c('div',{staticClass:"file-section"},[_c('div',{staticStyle:{"width":"95%","margin-top":"20px","margin-left":"10px"}},[_c('div',{staticStyle:{"display":"flex","align-items":"center"}},[_c('bk-icon',{staticStyle:{"cursor":"pointer"},attrs:{"type":"arrows-left-shape"},on:{"click":_vm.backDir}}),_vm._v(" "),_c('bk-input',{attrs:{"clearable":true,"placeholder":'请输入文件夹路径：',"behavior":"simplicity"},on:{"enter":_vm.handleSearchFile},model:{value:(_vm.filePath),callback:function ($$v) {_vm.filePath=$$v},expression:"filePath"}}),_vm._v(" "),_c('bk-icon',{staticStyle:{"cursor":"pointer"},attrs:{"type":"arrows-down-shape"},on:{"click":_vm.handleSearchFile}})],1),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"10px","display":"flex","align-items":"center"}},[_c('bk-input',{attrs:{"type":"text","placeholder":"根据文件名称搜索"},on:{"enter":_vm.handleSearch},model:{value:(_vm.searchWord),callback:function ($$v) {_vm.searchWord=$$v},expression:"searchWord"}}),_vm._v(" "),_c('div',{staticStyle:{"margin-left":"10px","margin-right":"5px"}},[_c('bk-dropdown-menu',{attrs:{"align":'right'}},[_c('template',{slot:"dropdown-trigger"},[_c('span',{staticClass:"dropdown-trigger-btn bk-icon icon-sort",staticStyle:{"cursor":"pointer","font-size":"20px"}})]),_vm._v(" "),_c('ul',{staticClass:"bk-dropdown-list",attrs:{"slot":"dropdown-content"},slot:"dropdown-content"},[_c('li',[_c('a',{class:{ 'isSelected': _vm.sortedField.includes('name') },attrs:{"href":"javascript:;"},on:{"click":function($event){return _vm.changeSorted('name')}}},[_vm._v("名称")])]),_vm._v(" "),_c('li',[_c('a',{class:{ 'isSelected': _vm.sortedField.includes('update_time') },attrs:{"href":"javascript:;"},on:{"click":function($event){return _vm.changeSorted('update_time')}}},[_vm._v("修改时间")])]),_vm._v(" "),_c('li',[_c('a',{class:{ 'isSelected': _vm.sortedField.includes('size') },attrs:{"href":"javascript:;"},on:{"click":function($event){return _vm.changeSorted('size')}}},[_vm._v("大小")])])])],2)],1),_vm._v(" "),_c('div',{staticStyle:{"margin-left":"5px"},attrs:{"title":"刷新列表"}},[_c('bk-button',{attrs:{"theme":'default',"icon":'refresh'},on:{"click":_vm.handleSearchFile}})],1)],1),_vm._v(" "),_c('transition',{attrs:{"name":"bk-slide-fade-down"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.fadeShowDir),expression:"fadeShowDir"}],staticStyle:{"margin-top":"10px"}},[_c('bk-tree',{ref:"tree1",attrs:{"data":_vm.treeListOne,"multiple":true,"node-key":'id',"has-border":true,"tpl":_vm.tpl,"draggable":true,"drag-sort":true},on:{"on-click":_vm.nodeClickOne,"on-check":_vm.nodeCheckTwo,"on-expanded":_vm.nodeExpandedOne}})],1)])],1)]),_vm._v(" "),_c('div',{staticClass:"edit-section"},[(_vm.isScraping)?_c('div',{staticStyle:{"padding":"20px","width":"100%","text-align":"center","color":"#3c96ff","font-weight":"bold","font-size":"16px","background-color":"#f0f8ff"}},[_c('bk-icon',{staticStyle:{"display":"inline-block","animation":"spin 2s linear infinite","margin-right":"8px"},attrs:{"type":"refresh"}}),_vm._v("\n            "+_vm._s(_vm.progressText)+"\n        ")],1):_vm._e(),_vm._v(" "),_c('transition',{attrs:{"name":"bk-slide-fade-left"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.musicInfo.title && _vm.checkedIds.length === 0),expression:"musicInfo.title && checkedIds.length === 0"}],staticStyle:{"margin-left":"40px","width":"500px","height":"100%","overflow-y":"auto","overscroll-behavior":"none","padding-top":"20px","box-sizing":"border-box","background-color":"#fff"}},[_c('div',{staticStyle:{"width":"100%","display":"flex","align-items":"center"}},[_c('bk-button',{staticClass:"mr10",staticStyle:{"width":"87%"},attrs:{"theme":'success',"loading":_vm.isLoading},on:{"click":_vm.handleClick}},[_vm._v("\n                        保存信息\n                    ")]),_vm._v(" "),_c('div',{staticStyle:{"margin-left":"6px","cursor":"pointer"},on:{"click":function($event){_vm.exampleSetting3.primary.visible = true}}},[_c('bk-icon',{attrs:{"type":"cog-shape"}})],1)],1),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","margin-bottom":"10px","align-items":"center","margin-top":"10px"}},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${title}'),expression:"'变量名:${title}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${title}'),expression:"'${title}'"}],staticClass:"label1 can-copy"},[_vm._v("标题：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%","display":"flex"}},[_c('bk-input',{staticStyle:{"flex":"1"},attrs:{"clearable":true},model:{value:(_vm.musicInfo.title),callback:function ($$v) {_vm.$set(_vm.musicInfo, "title", $$v)},expression:"musicInfo.title"}}),_vm._v(" "),_c('bk-button',{staticStyle:{"margin-left":"5px"},attrs:{"theme":'primary',"text":true,"size":"small"},on:{"click":function($event){return _vm.toggleLock('title')}}},[_c('bk-icon',{attrs:{"type":"search"}})],1)],1)]),_vm._v(" "),_vm._l((_vm.showFields),function(item,index){return _c('div',{key:'l1' + index},[(item === 'filename')?_c('div',{staticClass:"edit-item"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${filename}'),expression:"'变量名:${filename}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${filename}'),expression:"'${filename}'"}],staticClass:"label1 can-copy"},[_vm._v("\n                            文件名：\n                        ")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfo.filename),callback:function ($$v) {_vm.$set(_vm.musicInfo, "filename", $$v)},expression:"musicInfo.filename"}})],1)]):(item === 'artist')?_c('div',{staticClass:"edit-item can-copy"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${artist}'),expression:"'变量名:${artist}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${artist}'),expression:"'${artist}'"}],staticClass:"label1"},[_vm._v("艺术家：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfo.artist),callback:function ($$v) {_vm.$set(_vm.musicInfo, "artist", $$v)},expression:"musicInfo.artist"}})],1)]):(item === 'album')?_c('div',{staticClass:"edit-item can-copy"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${album}'),expression:"'变量名:${album}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${album}'),expression:"'${album}'"}],staticClass:"label1"},[_vm._v("专辑：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%","display":"flex"}},[_c('bk-input',{staticStyle:{"flex":"1"},attrs:{"clearable":true},model:{value:(_vm.musicInfo.album),callback:function ($$v) {_vm.$set(_vm.musicInfo, "album", $$v)},expression:"musicInfo.album"}}),_vm._v(" "),_c('bk-button',{staticStyle:{"margin-left":"5px"},attrs:{"theme":'primary',"text":true,"size":"small"},on:{"click":_vm.openAlbumSearch}},[_c('bk-icon',{attrs:{"type":"search"}})],1)],1)]):(item === 'albumartist')?_c('div',{staticClass:"edit-item can-copy"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${albumartist}'),expression:"'变量名:${albumartist}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${albumartist}'),expression:"'${albumartist}'"}],staticClass:"label1"},[_vm._v("\n                            专辑艺术家：\n                        ")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfo.albumartist),callback:function ($$v) {_vm.$set(_vm.musicInfo, "albumartist", $$v)},expression:"musicInfo.albumartist"}})],1)]):(item === 'genre')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("风格：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-select',{staticStyle:{"width":"100%","background":"#fff"},attrs:{"disabled":false,"ext-cls":"select-custom","ext-popover-cls":"select-popover-custom","placeholder":'请选择歌曲风格',"searchable":""},model:{value:(_vm.musicInfo.genre),callback:function ($$v) {_vm.$set(_vm.musicInfo, "genre", $$v)},expression:"musicInfo.genre"}},_vm._l((_vm.genreList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1)]):(item === 'language')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("语言：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-select',{staticStyle:{"width":"100%","background":"#fff"},attrs:{"disabled":false,"ext-cls":"select-custom","ext-popover-cls":"select-popover-custom","placeholder":'请选择歌曲语言',"searchable":""},model:{value:(_vm.musicInfo.language),callback:function ($$v) {_vm.$set(_vm.musicInfo, "language", $$v)},expression:"musicInfo.language"}},_vm._l((_vm.languageList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1)]):(item === 'year')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("年份：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfo.year),callback:function ($$v) {_vm.$set(_vm.musicInfo, "year", $$v)},expression:"musicInfo.year"}})],1)]):(item === 'lyrics')?_c('div',{staticStyle:{"display":"flex","margin-bottom":"10px","flex-direction":"column"}},[_c('div',{staticStyle:{"display":"flex"}},[_c('div',{staticClass:"label1"},[_vm._v("歌词：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true,"type":"textarea","rows":15},model:{value:(_vm.musicInfo.lyrics),callback:function ($$v) {_vm.$set(_vm.musicInfo, "lyrics", $$v)},expression:"musicInfo.lyrics"}})],1)]),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","margin-top":"10px"}},[_c('div',{staticClass:"label1"},[_vm._v("保存歌词：")]),_vm._v(" "),_c('bk-switcher',{model:{value:(_vm.musicInfo.is_save_lyrics_file),callback:function ($$v) {_vm.$set(_vm.musicInfo, "is_save_lyrics_file", $$v)},expression:"musicInfo.is_save_lyrics_file"}})],1)]):(item === 'comment')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("描述：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true,"type":"textarea"},model:{value:(_vm.musicInfo.comment),callback:function ($$v) {_vm.$set(_vm.musicInfo, "comment", $$v)},expression:"musicInfo.comment"}})],1)]):(item === 'album_img')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("专辑封面：")]),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","flex-direction":"column"}},[(_vm.reloadImg)?_c('div',{staticStyle:{"width":"70%","display":"flex","flex-direction":"column"}},[_c('div',[_c('bk-upload',{attrs:{"files":_vm.files1,"theme":'picture',"multiple":false,"with-credentials":true,"header":_vm.uploadHeader,"handle-res-code":_vm.handleRes,"size":{ maxFileSize: 5, maxImgSize: 5 },"url":_vm.uploadUrl,"name":"upload_file"}})],1),_vm._v(" "),_c('div',{staticStyle:{"color":"#63656e","font-size":"12px","display":"flex"}},[_c('div',[_vm._v("("+_vm._s(_vm.musicInfo.artwork_w)+"*"+_vm._s(_vm.musicInfo.artwork_h)+")")]),_vm._v(" "),_c('div',[_vm._v(_vm._s(_vm.musicInfo.artwork_size)+"MB")])])]):_vm._e(),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","margin-top":"10px"}},[_c('div',{staticClass:"label1"},[_vm._v("保存图片：")]),_vm._v(" "),_c('bk-switcher',{model:{value:(_vm.musicInfo.is_save_album_cover),callback:function ($$v) {_vm.$set(_vm.musicInfo, "is_save_album_cover", $$v)},expression:"musicInfo.is_save_album_cover"}})],1)])]):(item === 'discnumber')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("光盘编号：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfo.discnumber),callback:function ($$v) {_vm.$set(_vm.musicInfo, "discnumber", $$v)},expression:"musicInfo.discnumber"}})],1)]):(item === 'tracknumber')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("音轨号：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfo.tracknumber),callback:function ($$v) {_vm.$set(_vm.musicInfo, "tracknumber", $$v)},expression:"musicInfo.tracknumber"}})],1)]):(item === 'duration')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("时长：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%","color":"#63656e","font-size":"14px"}},[_vm._v("\n                            "+_vm._s(_vm.musicInfo.duration)+" s\n                        ")])]):(item === 'bit_rate')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("比特率：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%","color":"#63656e","font-size":"14px"}},[_vm._v("\n                            "+_vm._s(_vm.musicInfo.bit_rate)+" kbps\n                        ")])]):(item === 'size')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("文件大小：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%","color":"#63656e","font-size":"14px"}},[_vm._v("\n                            "+_vm._s(_vm.musicInfo.size)+" MB\n                        ")])]):(item === 'album_type')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("专辑类型：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-select',{staticStyle:{"width":"250px","background":"#fff"},attrs:{"disabled":false,"ext-cls":"select-custom","ext-popover-cls":"select-popover-custom","placeholder":'请选择专辑类型',"searchable":""},model:{value:(_vm.musicInfo.album_type),callback:function ($$v) {_vm.$set(_vm.musicInfo, "album_type", $$v)},expression:"musicInfo.album_type"}},_vm._l((_vm.albumTypeList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1)]):_vm._e()])})],2)]),_vm._v(" "),_c('transition',{attrs:{"name":"bk-slide-fade-left"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.checkedIds.length > 0),expression:"checkedIds.length > 0"}],staticStyle:{"margin-left":"40px","width":"500px","margin-top":"20px"}},[_c('div',{staticStyle:{"width":"100%","display":"flex"}},[_c('bk-button',{staticClass:"mr10",staticStyle:{"flex":"1"},attrs:{"theme":'success',"loading":_vm.isLoading},on:{"click":function($event){_vm.exampleSetting1.primary.visible = true}}},[_vm._v("\n                        自动刮削\n                    ")]),_vm._v(" "),_c('bk-button',{staticClass:"mr10",staticStyle:{"flex":"1"},attrs:{"theme":'primary',"loading":_vm.isLoading},on:{"click":_vm.handleBatch}},[_vm._v("\n                        手动批量调整\n                    ")]),_vm._v(" "),_c('bk-button',{staticClass:"mr10",staticStyle:{"flex":"1"},attrs:{"theme":'success',"loading":_vm.isLoading},on:{"click":function($event){_vm.exampleSetting2.primary.visible = true}}},[_vm._v("\n                        整理文件夹\n                    ")])],1),_vm._v(" "),_c('bk-divider',[_c('div',{staticStyle:{"color":"gray","font-size":"12px"}},[_vm._v("手动刮削参数")])]),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","margin-bottom":"10px","align-items":"center","margin-top":"10px"}},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${title}'),expression:"'变量名:${title}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${title}'),expression:"'${title}'"}],staticClass:"label1 can-copy"},[_vm._v("标题：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true,"placeholder":'支持变量批量修改'},model:{value:(_vm.musicInfoManual.title),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "title", $$v)},expression:"musicInfoManual.title"}})],1)]),_vm._v(" "),_vm._l((_vm.showFields),function(item,index){return _c('div',{key:'l2' + index},[(item === 'filename')?_c('div',{staticClass:"edit-item"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${filename}'),expression:"'变量名:${filename}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${filename}'),expression:"'${filename}'"}],staticClass:"label1 can-copy"},[_vm._v("\n                            文件名：\n                        ")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true,"placeholder":'例如：${title}-${album}'},model:{value:(_vm.musicInfoManual.filename),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "filename", $$v)},expression:"musicInfoManual.filename"}})],1)]):(item === 'artist')?_c('div',{staticClass:"edit-item"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${artist}'),expression:"'变量名:${artist}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${artist}'),expression:"'${artist}'"}],staticClass:"label1 can-copy"},[_vm._v("艺术家：\n                        ")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true,"placeholder":'具体哪些变量,鼠标悬浮在标题上查看'},model:{value:(_vm.musicInfoManual.artist),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "artist", $$v)},expression:"musicInfoManual.artist"}})],1)]):(item === 'album')?_c('div',{staticClass:"edit-item"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${album}'),expression:"'变量名:${album}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${album}'),expression:"'${album}'"}],staticClass:"label1 can-copy"},[_vm._v("专辑：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfoManual.album),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "album", $$v)},expression:"musicInfoManual.album"}})],1)]):(item === 'albumartist')?_c('div',{staticClass:"edit-item"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${albumartist}'),expression:"'变量名:${albumartist}'"},{name:"bk-copy",rawName:"v-bk-copy",value:('${albumartist}'),expression:"'${albumartist}'"}],staticClass:"label1 can-copy"},[_vm._v("专辑艺术家：\n                        ")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfoManual.albumartist),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "albumartist", $$v)},expression:"musicInfoManual.albumartist"}})],1)]):(item === 'genre')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("风格：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-select',{staticStyle:{"width":"250px","background":"#fff"},attrs:{"disabled":false,"ext-cls":"select-custom","ext-popover-cls":"select-popover-custom","placeholder":'请选择歌曲风格',"searchable":""},model:{value:(_vm.musicInfoManual.genre),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "genre", $$v)},expression:"musicInfoManual.genre"}},_vm._l((_vm.genreList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1)]):(item === 'language')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("语言：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-select',{staticStyle:{"width":"250px","background":"#fff"},attrs:{"disabled":false,"ext-cls":"select-custom","ext-popover-cls":"select-popover-custom","placeholder":'请选择歌曲语言',"searchable":""},model:{value:(_vm.musicInfoManual.language),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "language", $$v)},expression:"musicInfoManual.language"}},_vm._l((_vm.languageList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1)]):(item === 'year')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("年份：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfoManual.year),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "year", $$v)},expression:"musicInfoManual.year"}})],1)]):(item === 'lyrics')?_c('div',{staticStyle:{"display":"flex","margin-bottom":"10px","flex-direction":"column"}},[_c('div',{staticStyle:{"display":"flex"}},[_c('div',{staticClass:"label1"},[_vm._v("歌词：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true,"type":"textarea","rows":15},model:{value:(_vm.musicInfoManual.lyrics),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "lyrics", $$v)},expression:"musicInfoManual.lyrics"}})],1)]),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","margin-top":"10px"}},[_c('div',{staticClass:"label1"},[_vm._v("保存歌词：")]),_vm._v(" "),_c('bk-switcher',{model:{value:(_vm.musicInfoManual.is_save_lyrics_file),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "is_save_lyrics_file", $$v)},expression:"musicInfoManual.is_save_lyrics_file"}})],1)]):(item === 'comment')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("描述：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true,"type":"textarea"},model:{value:(_vm.musicInfoManual.comment),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "comment", $$v)},expression:"musicInfoManual.comment"}})],1)]):(item === 'album_img')?_c('div',{staticClass:"edit-item"},[_c('div',{staticClass:"label1"},[_vm._v("专辑封面：")]),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","flex-direction":"column"}},[(_vm.reloadImg)?_c('div',{staticStyle:{"width":"70%","display":"flex","flex-direction":"column"}},[_c('div',[_c('bk-upload',{attrs:{"files":_vm.files1,"theme":'picture',"multiple":false,"with-credentials":true,"header":_vm.uploadHeader,"handle-res-code":_vm.handleResBatch,"size":{ maxFileSize: 5, maxImgSize: 5 },"url":_vm.uploadUrl,"name":"upload_file"}})],1)]):_vm._e(),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","margin-top":"10px"}},[_c('div',{staticClass:"label1"},[_vm._v("保存图片：")]),_vm._v(" "),_c('bk-switcher',{model:{value:(_vm.musicInfoManual.is_save_album_cover),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "is_save_album_cover", $$v)},expression:"musicInfoManual.is_save_album_cover"}})],1)])]):(item === 'discnumber')?_c('div',{staticClass:"edit-item"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${discnumber}'),expression:"'变量名:${discnumber}'"}],staticClass:"label1"},[_vm._v("光盘编号：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfoManual.discnumber),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "discnumber", $$v)},expression:"musicInfoManual.discnumber"}})],1)]):(item === 'tracknumber')?_c('div',{staticClass:"edit-item"},[_c('div',{directives:[{name:"bk-tooltips",rawName:"v-bk-tooltips",value:('变量名:${tracknumber}'),expression:"'变量名:${tracknumber}'"}],staticClass:"label1"},[_vm._v("音轨号：")]),_vm._v(" "),_c('div',{staticStyle:{"width":"70%"}},[_c('bk-input',{attrs:{"clearable":true},model:{value:(_vm.musicInfoManual.tracknumber),callback:function ($$v) {_vm.$set(_vm.musicInfoManual, "tracknumber", $$v)},expression:"musicInfoManual.tracknumber"}})],1)]):_vm._e()])})],2)])],1),_vm._v(" "),_c('div',{staticClass:"resource-section"},[_c('transition',{attrs:{"name":"bk-slide-fade-left"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.fadeShowDetail),expression:"fadeShowDetail"}],staticStyle:{"display":"flex","flex-direction":"column","margin-top":"20px","flex":"1","margin-right":"20px","margin-left":"20px"}},[(_vm.SongList.length === 0)?_c('div',[(_vm.currentPlayingFile)?_c('div',{staticStyle:{"padding":"10px","display":"flex","flex-direction":"column","height":"calc(100vh - 140px)","overflow":"hidden"}},[_c('div',{staticStyle:{"display":"flex","align-items":"center","gap":"12px","margin-bottom":"10px"}},[(_vm.musicInfo.artwork)?_c('img',{staticStyle:{"width":"60px","height":"60px","object-fit":"cover","border-radius":"6px","flex-shrink":"0"},attrs:{"src":_vm.musicInfo.artwork}}):_c('div',{staticStyle:{"width":"60px","height":"60px","background":"linear-gradient(135deg, #667eea 0%, #764ba2 100%)","border-radius":"6px","display":"flex","align-items":"center","justify-content":"center","flex-shrink":"0"}},[_c('bk-icon',{staticStyle:{"font-size":"24px","color":"#fff"},attrs:{"type":"music"}})],1),_vm._v(" "),_c('div',{staticStyle:{"flex":"1","min-width":"0"}},[_c('div',{staticStyle:{"font-weight":"bold","font-size":"15px","color":"#333","white-space":"nowrap","overflow":"hidden","text-overflow":"ellipsis"}},[_vm._v(_vm._s(_vm.musicInfo.title || _vm.fileName))]),_vm._v(" "),_c('div',{staticStyle:{"color":"#666","font-size":"13px","margin-top":"2px","white-space":"nowrap","overflow":"hidden","text-overflow":"ellipsis"}},[_vm._v(_vm._s(_vm.musicInfo.artist || '未知艺术家')+" - "+_vm._s(_vm.musicInfo.album || '未知专辑'))])])]),_vm._v(" "),_c('audio',{ref:"audioPlayer",staticStyle:{"width":"100%","margin-bottom":"10px","flex-shrink":"0"},attrs:{"src":_vm.audioSrc,"controls":""},on:{"timeupdate":_vm.onAudioTimeUpdate,"loadedmetadata":_vm.onAudioLoaded,"error":_vm.onAudioError}}),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","align-items":"center","justify-content":"space-between","margin-bottom":"8px","flex-shrink":"0","font-size":"12px","background":"#f0f8ff","padding":"4px 8px","border-radius":"4px"}},[_c('div',{staticStyle:{"display":"flex","align-items":"center"}},[_c('span',{staticStyle:{"margin-right":"5px"}},[_vm._v("偏移:")]),_vm._v(" "),_c('bk-button',{attrs:{"text":true,"size":"small","title":"延迟 -50ms"},on:{"click":function($event){return _vm.adjustLyricsOffset(-0.05)}}},[_c('bk-icon',{staticStyle:{"font-size":"14px"},attrs:{"type":"minus-circle-shape"}})],1),_vm._v(" "),_c('span',{staticStyle:{"margin":"0 5px","min-width":"50px","text-align":"center"}},[_vm._v(_vm._s(_vm.lyricsOffset > 0 ? '+' : '')+_vm._s(Math.round(_vm.lyricsOffset * 1000))+"ms")]),_vm._v(" "),_c('bk-button',{attrs:{"text":true,"size":"small","title":"延迟 +50ms"},on:{"click":function($event){return _vm.adjustLyricsOffset(0.05)}}},[_c('bk-icon',{staticStyle:{"font-size":"14px"},attrs:{"type":"plus-circle-shape"}})],1)],1),_vm._v(" "),(_vm.lyricsOffset !== 0)?_c('bk-button',{attrs:{"theme":'primary',"text":true,"size":"small"},on:{"click":_vm.applyLyricsOffset}},[_vm._v("\n                                应用到文本\n                            ")]):_vm._e()],1),_vm._v(" "),(_vm.parsedLyrics.length)?_c('div',{ref:"lyricsContainer",staticStyle:{"flex":"1","overflow-y":"auto","background":"linear-gradient(to bottom, #f8f9fa, #fff)","border-radius":"8px","padding":"12px","border":"1px solid #eee","scroll-behavior":"smooth"}},[_c('div',{staticStyle:{"text-align":"center","line-height":"2","font-size":"13px"}},_vm._l((_vm.parsedLyrics),function(lyric,idx){return _c('div',{key:idx,ref:'lyricLine' + idx,refInFor:true,style:({
+                                        padding: '4px 8px',
+                                        borderRadius: '4px',
+                                        transition: 'all 0.3s ease',
+                                        color: idx === _vm.currentLyricIndex ? '#3a84ff' : '#666',
+                                        fontWeight: idx === _vm.currentLyricIndex ? '600' : '400',
+                                        fontSize: idx === _vm.currentLyricIndex ? '15px' : '13px',
+                                        background: idx === _vm.currentLyricIndex ? 'rgba(58, 132, 255, 0.1)' : 'transparent'
+                                    })},[_vm._v(_vm._s(lyric.text))])}),0)]):_c('div',{staticStyle:{"flex":"1","display":"flex","align-items":"center","justify-content":"center","color":"#999","font-size":"13px","background":"#f8f9fa","border-radius":"8px"}},[_vm._v("\n                            暂无歌词\n                        ")])]):_c('span',{staticStyle:{"margin-left":"30%","margin-top":"30%"}},[_vm._v("暂无歌曲信息")])]):_c('div',[_c('div',{staticClass:"parent"},[_c('div',{staticClass:"title2"},[_vm._v("应用")]),_vm._v(" "),_c('div',{staticClass:"title2"},[_vm._v("封面")]),_vm._v(" "),_c('div',{staticClass:"title2"},[_vm._v("标题")]),_vm._v(" "),_c('div',{staticClass:"title2"},[_vm._v("艺术家")]),_vm._v(" "),_c('div',{staticClass:"title2"},[_vm._v("专辑")]),_vm._v(" "),_c('div',{staticClass:"title2"},[_vm._v("歌词")]),_vm._v(" "),_c('div',{staticClass:"title2"},[_vm._v("年份")])]),_vm._v(" "),_vm._l((_vm.SongList),function(item,index){return _c('div',{key:index,staticClass:"parent",staticStyle:{"margin-bottom":"10px"}},[_c('bk-icon',{staticStyle:{"margin-right":"5px","cursor":"pointer"},attrs:{"type":"arrows-left-shape"},on:{"click":function($event){return _vm.copyAll(item)}}}),_vm._v(" "),(_vm.resource === 'smart_tag')?_c('div',[_c('bk-badge',{staticClass:"mr40",attrs:{"theme":'warning',"val":item.score,"radius":"20%"}},[_c('bk-image',{staticStyle:{"width":"64px","cursor":"pointer"},attrs:{"fit":"contain","src":item.album_img},on:{"click":function($event){return _vm.handleCopy('album_img',item.album_img)}}})],1)],1):_c('div',[_c('bk-image',{staticStyle:{"width":"64px","cursor":"pointer"},attrs:{"fit":"contain","src":item.album_img},on:{"click":function($event){return _vm.handleCopy('album_img',item.album_img, item.source)}}})],1),_vm._v(" "),_c('div',{staticClass:"music-item",on:{"click":function($event){return _vm.handleCopy('title',item.name, item.source)}}},[(item.source)?_c('span',{style:({ background: item.source === 'netease' ? '#c20c0c' : '#31c27c', color: 'white', padding: '1px 4px', borderRadius: '3px', fontSize: '10px', marginRight: '4px' })},[_vm._v(_vm._s(item.source === 'netease' ? '网易云' : 'QQ音乐'))]):_vm._e(),_vm._v("\n                            "+_vm._s(item.name)+"\n                        ")]),_vm._v(" "),_c('div',{staticClass:"music-item",on:{"click":function($event){return _vm.handleCopy('artist',item.artist, item.source)}}},[_vm._v("\n                            "+_vm._s(item.artist)+"\n                        ")]),_vm._v(" "),_c('div',{staticClass:"music-item",on:{"click":function($event){return _vm.handleCopy('album',item.album, item.source)}}},[_vm._v("\n                            "+_vm._s(item.album)+"\n                        ")]),_vm._v(" "),_c('div',{staticClass:"music-item",on:{"click":function($event){return _vm.handleCopy('lyric',item)}}},[_vm._v("加载歌词")]),_vm._v(" "),_c('div',{staticClass:"music-item",on:{"click":function($event){return _vm.handleCopy('year',item.year)}}},[_vm._v("\n                            "+_vm._s(item.year)+"\n                        ")]),_vm._v(" "),_c('bk-divider'),_vm._v(" "),_c('bk-divider'),_vm._v(" "),_c('bk-divider'),_vm._v(" "),_c('bk-divider'),_vm._v(" "),_c('bk-divider'),_vm._v(" "),_c('bk-divider'),_vm._v(" "),_c('bk-divider')],1)})],2)])]),_vm._v(" "),_c('transition',{attrs:{"name":"bk-slide-fade-left"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.showTranslation),expression:"showTranslation"}]},[_c('div',{staticStyle:{"display":"flex","height":"100%"}},[_c('bk-icon',{staticStyle:{"margin-right":"5px","margin-left":"15px","margin-top":"50%","cursor":"pointer"},attrs:{"type":"arrows-left-shape"},on:{"click":function($event){return _vm.handleCopy('lyric_tran',_vm.translationText)}}}),_vm._v(" "),_c('div',{staticStyle:{"width":"100%","height":"100%"}},[_c('bk-input',{staticStyle:{"height":"100%"},attrs:{"clearable":true,"type":"textarea","rows":50},model:{value:(_vm.translationText),callback:function ($$v) {_vm.translationText=$$v},expression:"translationText"}})],1)],1)])]),_vm._v(" "),_c('div',{directives:[{name:"show",rawName:"v-show",value:(!_vm.fadeShowDetail && !_vm.showTranslation),expression:"!fadeShowDetail && !showTranslation"}],staticStyle:{"width":"90%","height":"90%","margin":"50px 20px 20px 50px"}},[_c('bk-image',{staticStyle:{"width":"100%","height":"98%"},attrs:{"fit":"contain","src":'/static/img/bg.png'}})],1)],1),_vm._v(" "),_c('bk-dialog',{attrs:{"theme":"primary","mask-close":false,"header-position":_vm.exampleSetting1.primary.headerPosition,"title":"自动批量修改"},on:{"confirm":_vm.handleBatchAuto},model:{value:(_vm.exampleSetting1.primary.visible),callback:function ($$v) {_vm.$set(_vm.exampleSetting1.primary, "visible", $$v)},expression:"exampleSetting1.primary.visible"}},[_c('p',[_vm._v("宽松模式: 只根据标题匹配元数据, 可能存在同名或翻唱歌曲。")]),_vm._v(" "),_c('p',[_vm._v("严格模式: 根据标题和歌手或标题和专辑匹配元数据, 准确性更高。")]),_vm._v(" "),_c('bk-radio-group',{model:{value:(_vm.selectAutoMode),callback:function ($$v) {_vm.selectAutoMode=$$v},expression:"selectAutoMode"}},[_c('bk-radio-button',{attrs:{"value":"simple"}},[_vm._v("\n                宽松模式\n            ")]),_vm._v(" "),_c('bk-radio-button',{attrs:{"value":"hard"}},[_vm._v("\n                严格模式\n            ")]),_vm._v(" "),_c('bk-radio-button',{attrs:{"value":"strict_album"}},[_vm._v("\n                严格专辑模式 (按文件夹)\n            ")])],1),_vm._v(" "),_c('div',[_vm._v("音乐源顺序")]),_vm._v(" "),_c('bk-select',{staticStyle:{"width":"250px"},attrs:{"searchable":"","multiple":"","show-select-all":""},model:{value:(_vm.sourceList),callback:function ($$v) {_vm.sourceList=$$v},expression:"sourceList"}},_vm._l((_vm.resourceListBatch),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"10px"}},[_vm._v("覆盖策略")]),_vm._v(" "),_c('bk-radio-group',{staticStyle:{"margin-top":"5px"},model:{value:(_vm.overwritePolicy),callback:function ($$v) {_vm.overwritePolicy=$$v},expression:"overwritePolicy"}},[_c('bk-radio-button',{attrs:{"value":"overwrite_all"}},[_vm._v("\n                完全覆盖 (默认)\n            ")]),_vm._v(" "),_c('bk-radio-button',{attrs:{"value":"overwrite_missing"}},[_vm._v("\n                仅补充缺失\n            ")])],1),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"15px"}},[_c('bk-checkbox',{model:{value:(_vm.skipScraped),callback:function ($$v) {_vm.skipScraped=$$v},expression:"skipScraped"}},[_vm._v("跳过已刮削文件 (历史记录中存在即跳过)")])],1)],1),_vm._v(" "),_c('bk-dialog',{attrs:{"theme":"primary","mask-close":false,"header-position":_vm.exampleSetting2.primary.headerPosition,"title":"整理文件夹"},on:{"confirm":_vm.handleTidy},model:{value:(_vm.exampleSetting2.primary.visible),callback:function ($$v) {_vm.$set(_vm.exampleSetting2.primary, "visible", $$v)},expression:"exampleSetting2.primary.visible"}},[_c('p',[_vm._v("整理文件夹，按一级目录，二级目录选定的信息分类。")]),_vm._v(" "),_c('p',{staticStyle:{"color":"#666","font-size":"12px","margin-top":"5px"}},[_vm._v("注意：整理完成后，未成功刮削的文件及残留文件夹将自动移动到当前目录下的【未整理文件】中。")]),_vm._v(" "),_c('div',[_vm._v("整理后的根目录")]),_vm._v(" "),_c('div',{staticClass:"input-demo"},[_c('bk-input',{model:{value:(_vm.tidyFormData.root_path),callback:function ($$v) {_vm.$set(_vm.tidyFormData, "root_path", $$v)},expression:"tidyFormData.root_path"}})],1),_vm._v(" "),_c('div',[_vm._v("一级目录")]),_vm._v(" "),_c('bk-select',{staticStyle:{"width":"250px"},attrs:{"clearable":false},model:{value:(_vm.tidyFormData.first_dir),callback:function ($$v) {_vm.$set(_vm.tidyFormData, "first_dir", $$v)},expression:"tidyFormData.first_dir"}},_vm._l((_vm.tidyList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1),_vm._v(" "),_c('div',[_vm._v("二级目录")]),_vm._v(" "),_c('bk-select',{staticStyle:{"width":"250px"},model:{value:(_vm.tidyFormData.second_dir),callback:function ($$v) {_vm.$set(_vm.tidyFormData, "second_dir", $$v)},expression:"tidyFormData.second_dir"}},_vm._l((_vm.tidyList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1),_vm._v(" "),_c('bk-dialog',{attrs:{"theme":"primary","mask-close":false,"width":"600","title":"定时刮削配置"},on:{"confirm":_vm.saveScheduleConfig},model:{value:(_vm.scheduleVisible),callback:function ($$v) {_vm.scheduleVisible=$$v},expression:"scheduleVisible"}},[_c('div',{staticStyle:{"margin-bottom":"20px"}},[_c('p',{staticStyle:{"color":"#666","margin-bottom":"10px"}},[_vm._v("定时任务将自动扫描媒体库新增文件，并执行刮削。")])]),_vm._v(" "),_c('div',{staticStyle:{"display":"flex","flex-direction":"column"}},[_c('div',{staticStyle:{"margin-bottom":"15px","display":"flex","align-items":"center"}},[_c('span',{staticStyle:{"width":"100px","text-align":"right","margin-right":"20px"}},[_vm._v("开启任务")]),_vm._v(" "),_c('bk-switcher',{model:{value:(_vm.scheduleConfig.enabled),callback:function ($$v) {_vm.$set(_vm.scheduleConfig, "enabled", $$v)},expression:"scheduleConfig.enabled"}})],1),_vm._v(" "),_c('div',{staticStyle:{"margin-bottom":"15px","display":"flex","align-items":"center"}},[_c('span',{staticStyle:{"width":"100px","text-align":"right","margin-right":"20px"}},[_vm._v("执行间隔")]),_vm._v(" "),_c('bk-input',{staticStyle:{"width":"160px","margin-right":"10px"},attrs:{"type":"number","min":1},model:{value:(_vm.scheduleConfig.interval_hours),callback:function ($$v) {_vm.$set(_vm.scheduleConfig, "interval_hours", $$v)},expression:"scheduleConfig.interval_hours"}}),_vm._v(" "),_c('bk-select',{staticStyle:{"width":"80px"},attrs:{"clearable":false},model:{value:(_vm.scheduleConfig.interval_unit),callback:function ($$v) {_vm.$set(_vm.scheduleConfig, "interval_unit", $$v)},expression:"scheduleConfig.interval_unit"}},[_c('bk-option',{attrs:{"id":"hours","name":"小时"}}),_vm._v(" "),_c('bk-option',{attrs:{"id":"minutes","name":"分钟"}})],1)],1),_vm._v(" "),_c('div',{staticStyle:{"margin-bottom":"15px","display":"flex","align-items":"center"}},[_c('span',{staticStyle:{"width":"100px","text-align":"right","margin-right":"20px"}},[_vm._v("刮削模式")]),_vm._v(" "),_c('bk-select',{staticStyle:{"width":"250px"},model:{value:(_vm.scheduleConfig.select_mode),callback:function ($$v) {_vm.$set(_vm.scheduleConfig, "select_mode", $$v)},expression:"scheduleConfig.select_mode"}},_vm._l((_vm.selectAutoModeList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1),_vm._v(" "),_c('div',{staticStyle:{"margin-bottom":"15px","display":"flex","align-items":"center"}},[_c('span',{staticStyle:{"width":"100px","text-align":"right","margin-right":"20px"}},[_vm._v("覆盖策略")]),_vm._v(" "),_c('bk-select',{staticStyle:{"width":"250px"},model:{value:(_vm.scheduleConfig.overwrite_policy),callback:function ($$v) {_vm.$set(_vm.scheduleConfig, "overwrite_policy", $$v)},expression:"scheduleConfig.overwrite_policy"}},_vm._l((_vm.overwritePolicyList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1),_vm._v(" "),_c('div',{staticStyle:{"margin-bottom":"15px","display":"flex","align-items":"center"}},[_c('span',{staticStyle:{"width":"100px","text-align":"right","margin-right":"20px"}},[_vm._v("数据源")]),_vm._v(" "),_c('bk-checkbox-group',{model:{value:(_vm.scheduleConfig.source_list),callback:function ($$v) {_vm.$set(_vm.scheduleConfig, "source_list", $$v)},expression:"scheduleConfig.source_list"}},[_c('bk-checkbox',{staticStyle:{"margin-right":"20px"},attrs:{"value":'netease'}},[_vm._v("网易云音乐")]),_vm._v(" "),_c('bk-checkbox',{attrs:{"value":'qmusic'}},[_vm._v("QQ音乐")])],1)],1),_vm._v(" "),_c('div',{staticStyle:{"margin-bottom":"15px","margin-left":"120px"}},[_c('bk-checkbox',{model:{value:(_vm.scheduleConfig.skip_scraped),callback:function ($$v) {_vm.$set(_vm.scheduleConfig, "skip_scraped", $$v)},expression:"scheduleConfig.skip_scraped"}},[_vm._v("跳过已刮削文件 (历史记录中存在的)")])],1)])]),_vm._v(" "),_c('bk-dialog',{attrs:{"theme":"primary","mask-close":false,"header-position":_vm.exampleSetting3.primary.headerPosition,"title":"配置"},on:{"confirm":_vm.handleSettings},model:{value:(_vm.exampleSetting3.primary.visible),callback:function ($$v) {_vm.$set(_vm.exampleSetting3.primary, "visible", $$v)},expression:"exampleSetting3.primary.visible"}},[_c('p',[_vm._v("选择你的配置，浏览器会保存你的默认值")]),_vm._v(" "),_c('div',[_vm._v("标签来源")]),_vm._v(" "),_c('bk-select',{staticStyle:{"width":"200px"},attrs:{"disabled":false,"clearable":false,"ext-cls":"select-custom","ext-popover-cls":"select-popover-custom"},model:{value:(_vm.resource),callback:function ($$v) {_vm.resource=$$v},expression:"resource"}},_vm._l((_vm.resourceList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1),_vm._v(" "),_c('div',[_vm._v("展示的字段以及顺序")]),_vm._v(" "),_c('bk-select',{staticStyle:{"width":"350px","margin-top":"10px"},attrs:{"searchable":"","clearable":false,"multiple":"","display-tag":""},model:{value:(_vm.showFields),callback:function ($$v) {_vm.showFields=$$v},expression:"showFields"}},_vm._l((_vm.fieldList),function(option){return _c('bk-option',{key:option.id,attrs:{"id":option.id,"name":option.name}})}),1)],1),_vm._v(" "),_c('bk-dialog',{attrs:{"theme":"primary","mask-close":false,"width":"800","show-footer":false,"title":"刮削结果"},model:{value:(_vm.logVisible),callback:function ($$v) {_vm.logVisible=$$v},expression:"logVisible"}},[_c('div',{staticStyle:{"margin-bottom":"10px"}},[_c('bk-alert',{attrs:{"type":"success","title":'成功: ' + (_vm.summaryData.success_count || 0)}}),_vm._v(" "),_c('bk-alert',{staticStyle:{"margin-top":"5px"},attrs:{"type":"error","title":'失败: ' + (_vm.summaryData.fail_count || 0)}}),_vm._v(" "),(_vm.summaryData.cookie_warning)?_c('bk-alert',{staticStyle:{"margin-top":"5px"},attrs:{"type":"warning","title":"警告: 网易云音乐由于缺少Cookie导致搜索失败，请配置Cookie!"}}):_vm._e()],1),_vm._v(" "),(_vm.failedItems.length > 0)?_c('div',{staticStyle:{"margin-top":"10px","max-height":"200px","overflow-y":"auto"}},[_c('p',[_c('strong',[_vm._v("失败列表 (点击跳转):")])]),_vm._v(" "),_vm._l((_vm.failedItems),function(item,idx){return _c('div',{key:'fail-' + idx,staticStyle:{"cursor":"pointer","color":"red"},on:{"click":function($event){return _vm.handleJump(item)}}},[_vm._v("\n                "+_vm._s(item.name)+"\n            ")])})],2):_vm._e(),_vm._v(" "),_c('div',{staticStyle:{"max-height":"500px","overflow-y":"auto","background":"#f5f5f5","padding":"10px","border-radius":"4px","font-family":"monospace","margin-top":"10px"}},_vm._l((_vm.scrapeLogs),function(log,idx){return _c('div',{key:idx,staticStyle:{"margin-bottom":"2px"},style:({ color: log.type === 'error' ? 'red' : (log.type === 'warning' ? '#ff9c01' : 'black') })},[_vm._v("\n                "+_vm._s(log.msg)+"\n            ")])}),0),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"10px","text-align":"right"}},[_c('bk-button',{on:{"click":function($event){_vm.logVisible = false}}},[_vm._v("关闭")])],1)]),_vm._v(" "),_c('bk-dialog',{attrs:{"theme":"primary","mask-close":true,"width":"800","show-footer":false,"title":"刮削记录"},model:{value:(_vm.historyVisible),callback:function ($$v) {_vm.historyVisible=$$v},expression:"historyVisible"}},[_c('div',{staticStyle:{"margin-bottom":"15px"}},[_c('bk-button-group',[_c('bk-button',{attrs:{"theme":_vm.historyFilter === 'all' ? 'primary' : 'default'},on:{"click":function($event){_vm.historyFilter = 'all'}}},[_vm._v("\n                    全部 ("+_vm._s(_vm.successItems.length + _vm.failedItems.length + _vm.skippedItems.length)+")\n                ")]),_vm._v(" "),_c('bk-button',{attrs:{"theme":_vm.historyFilter === 'success' ? 'primary' : 'default'},on:{"click":function($event){_vm.historyFilter = 'success'}}},[_vm._v("\n                    成功 ("+_vm._s(_vm.successItems.length)+")\n                ")]),_vm._v(" "),_c('bk-button',{attrs:{"theme":_vm.historyFilter === 'failed' ? 'primary' : 'default'},on:{"click":function($event){_vm.historyFilter = 'failed'}}},[_vm._v("\n                    失败 ("+_vm._s(_vm.failedItems.length)+")\n                ")]),_vm._v(" "),_c('bk-button',{attrs:{"theme":_vm.historyFilter === 'skipped' ? 'primary' : 'default'},on:{"click":function($event){_vm.historyFilter = 'skipped'}}},[_vm._v("\n                    跳过 ("+_vm._s(_vm.skippedItems.length)+")\n                ")])],1)],1),_vm._v(" "),(_vm.filteredHistoryItems.length > 0)?_c('div',{staticStyle:{"max-height":"400px","overflow-y":"auto"}},_vm._l((_vm.filteredHistoryItems),function(item,idx){return _c('div',{key:'hist-' + idx,style:({ cursor: 'pointer', padding: '8px 12px', borderBottom: '1px solid #eee', color: item.type === 'failed' ? '#ea3636' : (item.type === 'skipped' ? '#ff9c01' : '#2dcb56') }),on:{"click":function($event){return _vm.handleJump(item)}}},[_c('div',{staticStyle:{"display":"flex","justify-content":"space-between","align-items":"center"}},[_c('div',[_c('span',{staticStyle:{"margin-right":"8px"}},[(item.type === 'success')?_c('bk-icon',{attrs:{"type":"check-circle-shape"}}):(item.type === 'failed')?_c('bk-icon',{attrs:{"type":"close-circle-shape"}}):_c('bk-icon',{attrs:{"type":"exclamation-circle-shape"}})],1),_vm._v("\n                        "+_vm._s(item.name)+"\n                    ")]),_vm._v(" "),_c('div',{staticStyle:{"font-size":"12px","color":"#999","min-width":"140px","text-align":"right"}},[_vm._v("\n                        "+_vm._s(item.display_time)+"\n                    ")])]),_vm._v(" "),(item.detail_msg && item.type === 'success')?_c('div',{staticStyle:{"color":"#2dcb56","font-size":"12px","margin-left":"24px","margin-top":"4px"}},[_vm._v("\n                    "+_vm._s(item.detail_msg)+"\n                ")]):_vm._e(),_vm._v(" "),(item.error_msg && item.type === 'failed')?_c('div',{staticStyle:{"color":"#ea3636","font-size":"12px","margin-left":"24px","margin-top":"4px"}},[_vm._v("\n                    "+_vm._s(item.error_msg)+"\n                ")]):_vm._e()])}),0):_c('div',{staticStyle:{"text-align":"center","padding":"40px","color":"#999"}},[_vm._v("\n            暂无记录\n        ")]),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"15px","text-align":"right"}},[_c('bk-button',{on:{"click":function($event){_vm.historyVisible = false}}},[_vm._v("关闭")])],1)]),_vm._v(" "),_c('bk-dialog',{attrs:{"theme":"primary","mask-close":true,"width":"1000","show-footer":false,"title":"媒体统计"},model:{value:(_vm.statsVisible),callback:function ($$v) {_vm.statsVisible=$$v},expression:"statsVisible"}},[(_vm.statsLoading)?_c('div',{staticStyle:{"text-align":"center","padding":"40px"}},[_c('bk-icon',{staticStyle:{"animation":"spin 2s linear infinite","font-size":"24px"},attrs:{"type":"refresh"}}),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"10px"}},[_vm._v("正在扫描媒体库...")])],1):(_vm.statsData || _vm.statsDetailData)?_c('div',[_c('div',{staticStyle:{"margin-bottom":"15px","display":"flex","align-items":"center","gap":"8px"}},[_c('span',{staticStyle:{"cursor":"pointer","color":"#3a84ff"},on:{"click":_vm.resetStatsView}},[_vm._v("首页")]),_vm._v(" "),(_vm.statsBreadcrumb.length > 0)?_c('span',{staticStyle:{"color":"#999"}},[_vm._v("→")]):_vm._e(),_vm._v(" "),_vm._l((_vm.statsBreadcrumb),function(crumb,idx){return _c('span',{key:idx,staticStyle:{"display":"flex","align-items":"center","gap":"8px"}},[_c('span',{style:({ cursor: idx < _vm.statsBreadcrumb.length - 1 ? 'pointer' : 'default', color: idx < _vm.statsBreadcrumb.length - 1 ? '#3a84ff' : '#333' }),on:{"click":function($event){return _vm.navigateBreadcrumb(idx)}}},[_vm._v("\n                        "+_vm._s(crumb.label)+"\n                    ")]),_vm._v(" "),(idx < _vm.statsBreadcrumb.length - 1)?_c('span',{staticStyle:{"color":"#999"}},[_vm._v("→")]):_vm._e()])})],2),_vm._v(" "),(_vm.statsDetailData === null && _vm.statsData)?_c('div',[_c('div',{staticStyle:{"margin-bottom":"15px","color":"#666"}},[_vm._v("\n                    共扫描 "),_c('strong',[_vm._v(_vm._s(_vm.statsData.total_files))]),_vm._v(" 个文件\n                ")]),_vm._v(" "),_c('bk-button-group',{staticStyle:{"margin-bottom":"15px"}},[_c('bk-button',{attrs:{"theme":_vm.statsTab === 'albums' ? 'primary' : 'default'},on:{"click":function($event){_vm.statsTab = 'albums'}}},[_vm._v("\n                        📀 专辑 ("+_vm._s(_vm.statsData.albums_count)+")\n                    ")]),_vm._v(" "),_c('bk-button',{attrs:{"theme":_vm.statsTab === 'artists' ? 'primary' : 'default'},on:{"click":function($event){_vm.statsTab = 'artists'}}},[_vm._v("\n                        🎤 艺术家 ("+_vm._s(_vm.statsData.artists_count)+")\n                    ")]),_vm._v(" "),_c('bk-button',{attrs:{"theme":_vm.statsTab === 'album_artists' ? 'primary' : 'default'},on:{"click":function($event){_vm.statsTab = 'album_artists'}}},[_vm._v("\n                        👥 专辑艺术家 ("+_vm._s(_vm.statsData.album_artists_count)+")\n                    ")]),_vm._v(" "),_c('bk-button',{attrs:{"theme":_vm.statsTab === 'has_info' ? 'primary' : 'default'},on:{"click":function($event){_vm.statsTab = 'has_info'}}},[_vm._v("\n                        ✅ 有信息 ("+_vm._s(_vm.statsData.has_info_count)+")\n                    ")]),_vm._v(" "),_c('bk-button',{attrs:{"theme":_vm.statsTab === 'no_info' ? 'primary' : 'default'},on:{"click":function($event){_vm.statsTab = 'no_info'}}},[_vm._v("\n                        ❌ 无信息 ("+_vm._s(_vm.statsData.no_info_count)+")\n                    ")])],1),_vm._v(" "),_c('div',{staticStyle:{"max-height":"400px","overflow-y":"auto"}},[(_vm.statsTab === 'albums')?_c('div',[_c('table',{staticStyle:{"width":"100%","border-collapse":"collapse","font-size":"13px"}},[_c('thead',[_c('tr',{staticStyle:{"background":"#f5f5f5","text-align":"left"}},[_c('th',{staticStyle:{"padding":"10px","border-bottom":"2px solid #ddd"}},[_vm._v("专辑")]),_vm._v(" "),_c('th',{staticStyle:{"padding":"10px","border-bottom":"2px solid #ddd"}},[_vm._v("专辑艺术家")]),_vm._v(" "),_c('th',{staticStyle:{"padding":"10px","border-bottom":"2px solid #ddd","width":"80px"}},[_vm._v("歌曲数")]),_vm._v(" "),_c('th',{staticStyle:{"padding":"10px","border-bottom":"2px solid #ddd","width":"100px"}},[_vm._v("刮削信息")])])]),_vm._v(" "),_c('tbody',_vm._l((_vm.statsData.albums),function(item,idx){return _c('tr',{key:'album-' + idx,staticStyle:{"cursor":"pointer"},style:({ background: idx % 2 === 0 ? '#fff' : '#fafafa' }),on:{"click":function($event){return _vm.drillDownAlbum(item.name)}}},[_c('td',{staticStyle:{"padding":"10px","border-bottom":"1px solid #eee","font-weight":"500"}},[_vm._v(_vm._s(item.name))]),_vm._v(" "),_c('td',{staticStyle:{"padding":"10px","border-bottom":"1px solid #eee","color":"#666"}},[_vm._v(_vm._s(item.albumartist || '-'))]),_vm._v(" "),_c('td',{staticStyle:{"padding":"10px","border-bottom":"1px solid #eee"}},[_vm._v(_vm._s(item.count))]),_vm._v(" "),_c('td',{staticStyle:{"padding":"10px","border-bottom":"1px solid #eee"}},[_c('span',{style:({ color: item.scraped_count === item.count ? '#2dcb56' : '#ff9c01' })},[_vm._v("\n                                            "+_vm._s(item.scraped_count)+"/"+_vm._s(item.count)+"\n                                        ")])])])}),0)])]):_vm._e(),_vm._v(" "),(_vm.statsTab === 'artists')?_c('div',_vm._l((_vm.statsData.artists),function(item,idx){return _c('div',{key:'artist-' + idx,staticStyle:{"padding":"10px 12px","border-bottom":"1px solid #eee","cursor":"pointer","display":"flex","justify-content":"space-between","align-items":"center"},style:({ background: idx % 2 === 0 ? '#fff' : '#fafafa' }),on:{"click":function($event){return _vm.drillDownArtist(item.name)}}},[_c('span',{staticStyle:{"font-weight":"500"}},[_vm._v(_vm._s(item.name))]),_vm._v(" "),_c('span',{staticStyle:{"color":"#999","font-size":"13px"}},[_vm._v(_vm._s(item.count)+" 首")])])}),0):_vm._e(),_vm._v(" "),(_vm.statsTab === 'album_artists')?_c('div',_vm._l((_vm.statsData.album_artists),function(item,idx){return _c('div',{key:'aa-' + idx,staticStyle:{"padding":"10px 12px","border-bottom":"1px solid #eee","cursor":"pointer","display":"flex","justify-content":"space-between","align-items":"center"},style:({ background: idx % 2 === 0 ? '#fff' : '#fafafa' }),on:{"click":function($event){return _vm.drillDownAlbumArtist(item.name)}}},[_c('span',{staticStyle:{"font-weight":"500"}},[_vm._v(_vm._s(item.name))]),_vm._v(" "),_c('span',{staticStyle:{"color":"#999","font-size":"13px"}},[_vm._v(_vm._s(item.count)+" 首")])])}),0):_vm._e(),_vm._v(" "),(_vm.statsTab === 'has_info')?_c('div',_vm._l((_vm.statsData.has_info),function(item,idx){return _c('div',{key:'hi-' + idx,staticStyle:{"padding":"8px 12px","border-bottom":"1px solid #eee","cursor":"pointer"},on:{"click":function($event){return _vm.navigateToStatsItem(item)}}},[_c('div',[_vm._v(_vm._s(item.filename))]),_vm._v(" "),_c('div',{staticStyle:{"font-size":"12px","color":"#666"}},[_vm._v("\n                                "+_vm._s(item.artist)+" - "+_vm._s(item.album)+"\n                                "),(item.has_lyrics)?_c('span',{staticStyle:{"color":"#2dcb56","margin-left":"8px"}},[_vm._v("有歌词")]):_vm._e(),_vm._v(" "),(item.has_cover)?_c('span',{staticStyle:{"color":"#2dcb56","margin-left":"8px"}},[_vm._v("有封面")]):_vm._e()])])}),0):_vm._e(),_vm._v(" "),(_vm.statsTab === 'no_info')?_c('div',_vm._l((_vm.statsData.no_info),function(item,idx){return _c('div',{key:'ni-' + idx,staticStyle:{"padding":"8px 12px","border-bottom":"1px solid #eee","cursor":"pointer","color":"#ea3636"},on:{"click":function($event){return _vm.navigateToStatsItem(item)}}},[_c('div',[_vm._v(_vm._s(item.filename))]),_vm._v(" "),_c('div',{staticStyle:{"font-size":"12px","color":"#999"}},[_vm._v(_vm._s(item.parent_path))])])}),0):_vm._e()])],1):_vm._e(),_vm._v(" "),(_vm.statsDetailData && _vm.statsDetailData.type === 'albums')?_c('div',[_c('div',{staticStyle:{"margin-bottom":"15px","color":"#666"}},[_vm._v("\n                    "+_vm._s(_vm.statsDetailData.name)+" 共有 "),_c('strong',[_vm._v(_vm._s(_vm.statsDetailData.albums.length))]),_vm._v(" 张专辑，"),_c('strong',[_vm._v(_vm._s(_vm.statsDetailData.total_songs))]),_vm._v(" 首歌\n                ")]),_vm._v(" "),_c('div',{staticStyle:{"max-height":"400px","overflow-y":"auto"}},[_c('table',{staticStyle:{"width":"100%","border-collapse":"collapse"}},[_c('thead',[_c('tr',{staticStyle:{"background":"#f5f5f5","text-align":"left"}},[_c('th',{staticStyle:{"padding":"10px","border-bottom":"2px solid #ddd"}},[_vm._v("专辑")]),_vm._v(" "),_c('th',{staticStyle:{"padding":"10px","border-bottom":"2px solid #ddd","width":"80px"}},[_vm._v("歌曲数")]),_vm._v(" "),_c('th',{staticStyle:{"padding":"10px","border-bottom":"2px solid #ddd","width":"100px"}},[_vm._v("有刮削信息")]),_vm._v(" "),_c('th',{staticStyle:{"padding":"10px","border-bottom":"2px solid #ddd","width":"80px"}},[_vm._v("年份")])])]),_vm._v(" "),_c('tbody',_vm._l((_vm.statsDetailData.albums),function(album,idx){return _c('tr',{key:idx,staticStyle:{"cursor":"pointer"},style:({ background: idx % 2 === 0 ? '#fff' : '#fafafa' }),on:{"click":function($event){return _vm.drillDownAlbum(album.name)}}},[_c('td',{staticStyle:{"padding":"10px","border-bottom":"1px solid #eee"}},[_vm._v(_vm._s(album.name))]),_vm._v(" "),_c('td',{staticStyle:{"padding":"10px","border-bottom":"1px solid #eee"}},[_vm._v(_vm._s(album.song_count))]),_vm._v(" "),_c('td',{staticStyle:{"padding":"10px","border-bottom":"1px solid #eee"}},[_c('span',{style:({ color: album.scraped_count === album.song_count ? '#2dcb56' : '#ff9c01' })},[_vm._v("\n                                        "+_vm._s(album.scraped_count)+"/"+_vm._s(album.song_count)+"\n                                    ")])]),_vm._v(" "),_c('td',{staticStyle:{"padding":"10px","border-bottom":"1px solid #eee"}},[_vm._v(_vm._s(album.year || '-'))])])}),0)])])]):_vm._e(),_vm._v(" "),(_vm.statsDetailData && _vm.statsDetailData.type === 'songs')?_c('div',[_c('div',{staticStyle:{"margin-bottom":"15px","color":"#666"}},[_vm._v("\n                    专辑《"+_vm._s(_vm.statsDetailData.name)+"》共有 "),_c('strong',[_vm._v(_vm._s(_vm.statsDetailData.total_songs))]),_vm._v(" 首歌\n                ")]),_vm._v(" "),_c('div',{staticStyle:{"max-height":"400px","overflow-y":"auto"}},[_c('table',{staticStyle:{"width":"100%","border-collapse":"collapse","font-size":"13px"}},[_c('thead',[_c('tr',{staticStyle:{"background":"#f5f5f5","text-align":"left"}},[_c('th',{staticStyle:{"padding":"8px","border-bottom":"2px solid #ddd"}},[_vm._v("标题")]),_vm._v(" "),_c('th',{staticStyle:{"padding":"8px","border-bottom":"2px solid #ddd"}},[_vm._v("艺术家")]),_vm._v(" "),_c('th',{staticStyle:{"padding":"8px","border-bottom":"2px solid #ddd"}},[_vm._v("专辑艺术家")]),_vm._v(" "),_c('th',{staticStyle:{"padding":"8px","border-bottom":"2px solid #ddd"}},[_vm._v("年份")]),_vm._v(" "),_c('th',{staticStyle:{"padding":"8px","border-bottom":"2px solid #ddd"}},[_vm._v("流派")]),_vm._v(" "),_c('th',{staticStyle:{"padding":"8px","border-bottom":"2px solid #ddd","text-align":"center"}},[_vm._v("歌词")]),_vm._v(" "),_c('th',{staticStyle:{"padding":"8px","border-bottom":"2px solid #ddd","text-align":"center"}},[_vm._v("封面")])])]),_vm._v(" "),_c('tbody',_vm._l((_vm.statsDetailData.songs),function(song,idx){return _c('tr',{key:idx,staticStyle:{"cursor":"pointer"},style:({ background: idx % 2 === 0 ? '#fff' : '#fafafa' }),on:{"click":function($event){return _vm.navigateToStatsItem(song)}}},[_c('td',{staticStyle:{"padding":"8px","border-bottom":"1px solid #eee"}},[_vm._v(_vm._s(song.title))]),_vm._v(" "),_c('td',{staticStyle:{"padding":"8px","border-bottom":"1px solid #eee"}},[_vm._v(_vm._s(song.artist || '-'))]),_vm._v(" "),_c('td',{staticStyle:{"padding":"8px","border-bottom":"1px solid #eee"}},[_vm._v(_vm._s(song.albumartist || '-'))]),_vm._v(" "),_c('td',{staticStyle:{"padding":"8px","border-bottom":"1px solid #eee"}},[_vm._v(_vm._s(song.year || '-'))]),_vm._v(" "),_c('td',{staticStyle:{"padding":"8px","border-bottom":"1px solid #eee"}},[_vm._v(_vm._s(song.genre || '-'))]),_vm._v(" "),_c('td',{staticStyle:{"padding":"8px","border-bottom":"1px solid #eee","text-align":"center"}},[_c('span',{style:({ color: song.has_lyrics ? '#2dcb56' : '#ccc' })},[_vm._v(_vm._s(song.has_lyrics ? '✓' : '✗'))])]),_vm._v(" "),_c('td',{staticStyle:{"padding":"8px","border-bottom":"1px solid #eee","text-align":"center"}},[_c('span',{style:({ color: song.has_cover ? '#2dcb56' : '#ccc' })},[_vm._v(_vm._s(song.has_cover ? '✓' : '✗'))])])])}),0)])])]):_vm._e()]):_c('div',{staticStyle:{"text-align":"center","padding":"40px","color":"#999"}},[_vm._v("\n            请先选择一个媒体目录\n        ")]),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"15px","text-align":"right"}},[_c('bk-button',{on:{"click":function($event){_vm.statsVisible = false}}},[_vm._v("关闭")])],1)]),_vm._v(" "),_c('bk-dialog',{attrs:{"theme":"primary","mask-close":false,"width":"900","show-footer":false,"title":"搜索专辑"},model:{value:(_vm.albumSearchVisible),callback:function ($$v) {_vm.albumSearchVisible=$$v},expression:"albumSearchVisible"}},[_c('div',{staticStyle:{"display":"flex","margin-bottom":"10px"}},[_c('bk-input',{staticStyle:{"flex":"1","margin-right":"10px"},attrs:{"placeholder":"输入专辑名称"},on:{"enter":_vm.searchAlbum},model:{value:(_vm.albumSearchQuery),callback:function ($$v) {_vm.albumSearchQuery=$$v},expression:"albumSearchQuery"}}),_vm._v(" "),_c('bk-button',{attrs:{"theme":'primary',"loading":_vm.isAlbumSearching},on:{"click":_vm.searchAlbum}},[_vm._v("搜索")]),_vm._v(" "),(_vm.selectedAlbum)?_c('bk-button',{staticStyle:{"margin-left":"10px"},on:{"click":_vm.backToAlbumList}},[_vm._v("返回专辑列表")]):_vm._e()],1),_vm._v(" "),(!_vm.selectedAlbum && _vm.albumList.length > 0)?_c('div',{staticStyle:{"max-height":"450px","overflow-y":"auto"}},[_c('div',{staticStyle:{"margin-bottom":"10px","color":"#666"}},[_vm._v("\n                找到 "+_vm._s(_vm.albumList.length)+" 个专辑\n                "),_c('span',{style:({ background: _vm.resource === 'netease' ? '#c20c0c' : '#31c27c', color: 'white', padding: '2px 6px', borderRadius: '3px', fontSize: '12px', marginLeft: '8px' })},[_vm._v("\n                    "+_vm._s(_vm.resource === 'netease' ? '网易云' : 'QQ音乐')+"\n                ")])]),_vm._v(" "),_vm._l((_vm.albumList),function(album,idx){return _c('div',{key:'album-' + idx,staticStyle:{"padding":"12px","border":"1px solid #eee","border-radius":"4px","margin-bottom":"8px","cursor":"pointer","display":"flex","align-items":"center","transition":"background 0.2s"},on:{"click":function($event){return _vm.selectAlbum(album)},"mouseover":function($event){$event.target.style.background = '#f5f7fa'},"mouseout":function($event){$event.target.style.background = 'white'}}},[_c('img',{staticStyle:{"width":"60px","height":"60px","object-fit":"cover","border-radius":"4px","margin-right":"12px"},attrs:{"src":album.cover}}),_vm._v(" "),_c('div',{staticStyle:{"flex":"1"}},[_c('div',{staticStyle:{"font-weight":"bold","font-size":"14px"}},[_vm._v(_vm._s(album.name))]),_vm._v(" "),_c('div',{staticStyle:{"color":"#666","font-size":"12px","margin-top":"4px"}},[_vm._v(_vm._s(album.artist))]),_vm._v(" "),_c('div',{staticStyle:{"color":"#999","font-size":"12px"}},[_vm._v(_vm._s(album.year)+" · "+_vm._s(album.size)+" 首")])])])})],2):_vm._e(),_vm._v(" "),(_vm.selectedAlbum && _vm.albumSearchResults)?_c('div',{staticStyle:{"max-height":"450px","overflow-y":"auto"}},[_c('div',{staticStyle:{"display":"flex","align-items":"center","margin-bottom":"15px","padding":"10px","background":"#f5f7fa","border-radius":"4px"}},[_c('img',{staticStyle:{"width":"80px","height":"80px","object-fit":"cover","border-radius":"4px","margin-right":"15px"},attrs:{"src":_vm.albumSearchResults.album_img}}),_vm._v(" "),_c('div',[_c('div',{staticStyle:{"font-weight":"bold","font-size":"16px"}},[_vm._v("\n                        "+_vm._s(_vm.albumSearchResults.album_name)+"\n                        "),_c('span',{style:({ background: _vm.resource === 'netease' ? '#c20c0c' : '#31c27c', color: 'white', padding: '2px 6px', borderRadius: '3px', fontSize: '11px', marginLeft: '8px' })},[_vm._v("\n                            "+_vm._s(_vm.resource === 'netease' ? '网易云' : 'QQ音乐')+"\n                        ")])]),_vm._v(" "),_c('div',{staticStyle:{"color":"#666","margin-top":"4px"}},[_vm._v(_vm._s(_vm.albumSearchResults.album_artist))]),_vm._v(" "),_c('div',{staticStyle:{"color":"#999","font-size":"12px"}},[_vm._v(_vm._s(_vm.albumSearchResults.year)+" · "+_vm._s(_vm.albumSearchResults.tracks.length)+" 首")])]),_vm._v(" "),_c('div',{staticStyle:{"margin-left":"auto"}},[_c('bk-button',{attrs:{"theme":'success',"size":"small"},on:{"click":_vm.handleAutoMatchScores}},[_vm._v("一键自动匹配")])],1)]),_vm._v(" "),_vm._l((_vm.albumSearchResults.tracks),function(track,idx){return _c('div',{key:'track-' + idx,staticStyle:{"padding":"10px 12px","border-bottom":"1px solid #eee","cursor":"pointer","display":"flex","align-items":"center"},on:{"click":function($event){return _vm.applyAlbumTrack(track)},"mouseover":function($event){$event.target.style.background = '#f5f7fa'},"mouseout":function($event){$event.target.style.background = 'white'}}},[_c('div',{staticStyle:{"width":"30px","color":"#999"}},[_vm._v(_vm._s(track.idx))]),_vm._v(" "),_c('div',{staticStyle:{"flex":"1"}},[_c('div',[_vm._v(_vm._s(track.name))]),_vm._v(" "),_c('div',{staticStyle:{"color":"#999","font-size":"12px"}},[_vm._v(_vm._s(track.artist))])]),_vm._v(" "),_c('bk-button',{attrs:{"theme":'primary',"text":true,"size":"small"}},[_vm._v("应用")])],1)})],2):_vm._e(),_vm._v(" "),(_vm.albumList.length === 0 && !_vm.selectedAlbum && !_vm.isAlbumSearching)?_c('div',{staticStyle:{"text-align":"center","color":"#999","padding":"40px"}},[_vm._v("\n            输入专辑名称搜索\n        ")]):_vm._e(),_vm._v(" "),_c('div',{staticStyle:{"margin-top":"15px","text-align":"right"}},[_c('bk-button',{on:{"click":function($event){_vm.albumSearchVisible = false}}},[_vm._v("关闭")])],1)])],1)}
 var home_staticRenderFns = []
 var home_esExports = { render: home_render, staticRenderFns: home_staticRenderFns }
 /* harmony default export */ var home_home = (home_esExports);
 // CONCATENATED MODULE: ./src/views/home/home.vue
 function home_injectStyle (ssrContext) {
-  __webpack_require__("f83P")
+  __webpack_require__("46wR")
 }
 var home_normalizeComponent = __webpack_require__("VU/8")
 /* script */
@@ -3828,6 +4431,13 @@ new vue_esm["default"]({
 
 /***/ }),
 
+/***/ "R6Gb":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ "TNEH":
 /***/ (function(module, exports) {
 
@@ -3839,13 +4449,6 @@ new vue_esm["default"]({
 /***/ (function(module, exports) {
 
 module.exports = "data:application/font-woff;base64,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"
-
-/***/ }),
-
-/***/ "W5Kj":
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ }),
 
@@ -3888,13 +4491,6 @@ var update = __webpack_require__("rjj0")("3b84dffe", content, true, {});
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAKCAYAAABv7tTEAAAAV0lEQVQokZXQQQrAIAxE0W/JvU3O1nXXHqdd1EBbqYwDIgGfMCn70RBSgchhUwTgHQJgwLkAAcJE8IIGlEUodxqQc/eST6IYvpskF+H9rggdn9vzv0ffXGG8Ffrmgf5jAAAAAElFTkSuQmCC"
-
-/***/ }),
-
-/***/ "f83P":
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ }),
 

@@ -22,9 +22,32 @@
             <bk-button :text="true" title="停止刮削" @click="handleStopTasks" style="color: #ff5656; margin-right: 20px;">
                 <bk-icon type="close-circle-shape"></bk-icon> 停止刮削
             </bk-button>
-            <bk-button :text="true" title="刮削记录" @click="openHistory" style="color: #63656E;">
+            <bk-button :text="true" title="刮削记录" @click="openHistory" style="color: #63656E; margin-right: 20px;">
                 <bk-icon type="list"></bk-icon> 历史记录
             </bk-button>
+            <bk-button :text="true" title="媒体统计" @click="openStats" style="color: #63656E;">
+                <bk-icon type="pie-chart"></bk-icon> 统计
+            </bk-button>
+        </div>
+        
+        <div style="margin-right: 24px; display: flex; align-items: center; z-index: 2000;">
+            <bk-dropdown-menu align="right" ref="userDropdown">
+                <template slot="dropdown-trigger">
+                    <div style="cursor: pointer; display: flex; align-items: center; color: #63656E;">
+                        <bk-icon type="user" style="margin-right: 5px; font-size: 16px;"></bk-icon>
+                         <span>{{ userData.username || 'User' }}</span>
+                        <bk-icon type="angle-down" style="margin-left: 5px; font-size: 12px;"></bk-icon>
+                    </div>
+                </template>
+                <ul class="bk-dropdown-list" slot="dropdown-content" style="background-color: white; border: 1px solid #dcdee5; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+                    <li style="height: 32px; line-height: 32px; padding: 0 10px;">
+                        <a href="javascript:;" @click="openChangePassword" style="color: #63656e; display: block; width: 100%;">修改密码</a>
+                    </li>
+                    <li style="height: 32px; line-height: 32px; padding: 0 10px;">
+                        <a href="javascript:;" @click="handleLogout" style="color: #63656e; display: block; width: 100%;">退出登录</a>
+                    </li>
+                </ul>
+            </bk-dropdown-menu>
         </div>
 
 
@@ -37,6 +60,25 @@
             @confirm="handleUpdateCookies">
             <p style="margin-bottom: 10px;">粘贴完整的 Cookie 字符串 (key=value; key2=value2) 或 JSON 格式。</p>
             <bk-input type="textarea" :rows="5" v-model="cookieStr" placeholder="MUSIC_U=...; __csrf=..."></bk-input>
+        </bk-dialog>
+
+        <!-- Change Password Dialog -->
+        <bk-dialog v-model="changePasswordVisible"
+            theme="primary"
+            :mask-close="false"
+            title="修改密码"
+            @confirm="handleChangePassword">
+            <bk-form :label-width="100">
+                <bk-form-item label="旧密码" :required="true">
+                    <bk-input type="password" v-model="passwordForm.old" placeholder="请输入当前密码"></bk-input>
+                </bk-form-item>
+                <bk-form-item label="新密码" :required="true">
+                    <bk-input type="password" v-model="passwordForm.new" placeholder="请输入新密码"></bk-input>
+                </bk-form-item>
+                <bk-form-item label="确认密码" :required="true">
+                    <bk-input type="password" v-model="passwordForm.confirm" placeholder="请再次输入新密码"></bk-input>
+                </bk-form-item>
+            </bk-form>
         </bk-dialog>
     </div>
 </template>
@@ -62,6 +104,12 @@
                     list: [
                         '关于作者'
                     ]
+                },
+                changePasswordVisible: false,
+                passwordForm: {
+                    old: '',
+                    new: '',
+                    confirm: ''
                 }
             }
         },
@@ -259,6 +307,46 @@
             openSchedule() {
                 this.$store.commit('setShowSchedule', true)
             },
+            openStats() {
+                this.$store.commit('setShowStats', true)
+            },
+            openChangePassword() {
+                this.passwordForm = {
+                    old: '',
+                    new: '',
+                    confirm: ''
+                }
+                this.changePasswordVisible = true
+            },
+            handleChangePassword() {
+                const { old, new: newPass, confirm } = this.passwordForm
+                if (!old || !newPass || !confirm) {
+                    this.$cwMessage('请填写所有字段', 'error')
+                    return
+                }
+                if (newPass !== confirm) {
+                    this.$cwMessage('两次输入的新密码不一致', 'error')
+                    return
+                }
+                this.$api.Task.changePassword({ old_password: old, new_password: newPass }).then((res) => {
+                    if (res.result) {
+                        this.$cwMessage(res.message, 'success')
+                        this.changePasswordVisible = false
+                        // Optional: Logout user after password change
+                        setTimeout(() => {
+                            this.handleLogout()
+                        }, 1500)
+                    } else {
+                        this.$cwMessage(res.message, 'error')
+                    }
+                })
+            },
+            handleLogout() {
+                this.$api.Task.logout().then(() => {
+                    clearStore()
+                    this.$router.push({ name: 'login' })
+                })
+            }
         }
     }
 </script>
@@ -277,6 +365,7 @@
     align-items: center;
     justify-content: space-between;
     font-size: 14px;
+    overflow: visible !important;
 }
 
 .monitor-navigation-header .header-title {

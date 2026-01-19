@@ -65,14 +65,23 @@ class NetEaseMusicClient:
         return data.json().get("lrc", {}).get("lyric")
 
     def fetch_id3_by_title(self, title):
-        data = send({'s': title, 'type': '1', 'limit': '10', 'offset': '0'}).POST("weapi/cloudsearch/get/web")
+        # Switch to linuxapi to avoid 50000005 error
+        data = send({
+            "url": self.BASE_URL + "api/cloudsearch/pc",
+            "params": {'s': title, 'type': '1', 'limit': '10', 'offset': '0', 'total': 'true'}
+        }, "linuxapi").POST("")
         try:
             json_data = data.json()
+            print(f"DEBUG_NETEASE_SEARCH_TITLE: {title}")
+            print(f"DEBUG_NETEASE_RESPONSE_CODE: {json_data.get('code')}")
+            # print(f"DEBUG_NETEASE_RESPONSE_FULL: {json_data}") 
+            
             if json_data.get('code') == 400 or json_data.get('code') == 401:
                 # Assuming 400/401 from Netease often means cookie issues or anti-bot
                 print("Netease API Error (Cookie?):", json_data)
                 raise Exception("Netease Cookie Invalid")
             songs = json_data.get("result", {}).get("songs", [])
+            print(f"DEBUG_NETEASE_SONGS_COUNT: {len(songs)}")
         except Exception as e:
             print("网易云音乐搜索失败", e, data.text)
             if "Cookie Invalid" in str(e):
@@ -104,7 +113,11 @@ class NetEaseMusicClient:
 
     def fetch_album_by_name(self, album_name):
         # type=10 means Album search
-        data = send({'s': album_name, 'type': '10', 'limit': '5', 'offset': '0'}).POST("weapi/cloudsearch/get/web")
+        # Switch to linuxapi to avoid 50000005 error
+        data = send({
+            "url": self.BASE_URL + "api/cloudsearch/pc",
+            "params": {'s': album_name, 'type': '10', 'limit': '5', 'offset': '0', 'total': 'true'}
+        }, "linuxapi").POST("")
         try:
             albums = data.json().get("result", {}).get("albums", [])
         except Exception as e:
@@ -112,7 +125,10 @@ class NetEaseMusicClient:
             return None
         
         if not albums:
+            print(f"DEBUG_NETEASE_ALBUM: found 0 albums for {album_name}")
             return None
+        
+        print(f"DEBUG_NETEASE_ALBUM: found {len(albums)} albums for {album_name}. Picking first: {albums[0].get('name')}")
             
         # Use the first match or best match? For now, first match.
         target_album = albums[0]
@@ -160,9 +176,28 @@ class NetEaseMusicClient:
                 "idx": song.get("no", 0)  # Track number
             })
             
+            # Get detailed info
+            disc_idx = song.get("cd", "1")
+            
+            processed_songs.append({
+                "id": song.get("id"),
+                "name": song_name,
+                "artist": artist,
+                "album": album_info.get("name", ""),
+                "albumartist": ",".join([ar.get("name","") for ar in album_info.get("artists",[])]),
+                "album_id": album_info.get("id", ""),
+                "album_img": album_info.get("picUrl", ""),
+                "year": year or "",
+                "genre": album_info.get("subType", "") or album_info.get("type", ""),
+                "duration": song.get("duration") or song.get("dt", 0),  # Duration in ms
+                "idx": song.get("no", 0),  # Track number
+                "disc": disc_idx
+            })
+            
         return {
             "album_name": album_info.get("name", ""),
             "album_artist": ",".join([ar.get("name","") for ar in album_info.get("artists",[])]),
+            "genre": album_info.get("subType", "") or album_info.get("type", ""),
             "album_id": album_info.get("id", ""),
             "album_img": album_info.get("picUrl", ""),
             "year": timestamp_to_dt(album_info.get("publishTime", 0) / 1000, "%Y") if album_info.get("publishTime") else "",
@@ -171,7 +206,11 @@ class NetEaseMusicClient:
 
     def search_albums(self, album_name):
         """搜索专辑列表，不获取详细曲目"""
-        data = send({'s': album_name, 'type': '10', 'limit': '10', 'offset': '0'}).POST("weapi/cloudsearch/get/web")
+        # Switch to linuxapi to avoid 50000005 error
+        data = send({
+            "url": self.BASE_URL + "api/cloudsearch/pc",
+            "params": {'s': album_name, 'type': '10', 'limit': '10', 'offset': '0', 'total': 'true'}
+        }, "linuxapi").POST("")
         try:
             albums = data.json().get("result", {}).get("albums", [])
         except Exception as e:
@@ -286,6 +325,12 @@ class QmusicClient:
             song["source"] = "qmusic"
         return songs
 
+    def fetch_album_by_name(self, album_name):
+        albums = self.search_albums(album_name)
+        if not albums:
+            return None
+        return self.fetch_album_by_id(albums[0]['id'])
+
     def search_albums(self, album_name):
         """搜索专辑列表"""
         import requests
@@ -340,6 +385,7 @@ class QmusicClient:
             print("QQ音乐专辑详情获取失败", e)
             return None
 
+        print(f"DEBUG_QMUSIC_ALBUM_INFO: {data}") # Debug raw response
         album_info = data
         songs = data.get("list", [])
 
@@ -356,14 +402,20 @@ class QmusicClient:
                 "album_img": self.QQMUSIC_ALBUM_COVER.format(id=album_id),
                 "year": album_info.get("aDate", "")[:4] if album_info.get("aDate") else "",
                 "duration": song.get("interval", 0) * 1000,
-                "idx": song.get("index", 0)
+                "idx": song.get("index", 0),
+                "disc": song.get("cdIdx", 0),
+                "genre": album_info.get("genre", "") or album_info.get("genreName", ""),
+                "albumartist": album_info.get("singername", "") or ",".join([s.get("name", "") for s in album_info.get("singer_list", [])]) if album_info.get("singer_list") else ""
             })
+            print(f"DEBUG_QMUSIC_SONG: {song['songname']} - Disc: {song.get('cdIdx')} - Genre: {album_info.get('genre')} | {album_info.get('genreName')}")
 
         return {
             "album_name": album_info.get("name", ""),
             "album_artist": ",".join([s.get("name", "") for s in album_info.get("singer_list", [])]) if album_info.get("singer_list") else "",
+            "album_artist": ",".join([s.get("name", "") for s in album_info.get("singer_list", [])]) if album_info.get("singer_list") else "",
             "album_id": album_id,
             "album_img": self.QQMUSIC_ALBUM_COVER.format(id=album_id),
+            "genre": album_info.get("genre", "") or album_info.get("genreName", ""),
             "year": album_info.get("aDate", "")[:4] if album_info.get("aDate") else "",
             "tracks": processed_songs
         }

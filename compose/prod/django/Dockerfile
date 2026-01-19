@@ -45,7 +45,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   # Translations dependencies
   gettext \
   default-libmysqlclient-dev \
-  nodejs\
+  nodejs \
+  npm \
   # cleaning up unused files
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && rm -rf /var/lib/apt/lists/*
@@ -56,7 +57,7 @@ COPY --from=python-build-stage /usr/src/app/wheels  /wheels/
 
 # use wheels to install python dependencies
 RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
-	&& rm -rf /wheels/
+  && rm -rf /wheels/
 
 
 COPY ./compose/prod/django/start /start
@@ -74,4 +75,12 @@ RUN chmod +x /start-celerybeat
 # copy application code to WORKDIR
 COPY . ${APP_HOME}
 RUN python setup_in_docker.py
+
+# Build frontend
+WORKDIR ${APP_HOME}/web
+RUN npm config set registry https://registry.npmmirror.com
+RUN rm -f package-lock.json && npm install --legacy-peer-deps
+RUN npm run build
+WORKDIR ${APP_HOME}
+
 CMD ["/start"]

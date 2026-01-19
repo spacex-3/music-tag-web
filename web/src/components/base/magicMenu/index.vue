@@ -77,5 +77,8 @@
 .bk-navigation-header {
     background-color: #ffffff !important;
     border-bottom: 1px solid #dcdee5;
+    position: relative;
+    z-index: 2000 !important;
+    overflow: visible !important;
 }
 </style>

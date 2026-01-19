@@ -33,6 +33,7 @@ class MusicId3Serializer(serializers.Serializer):
     album_img = serializers.CharField(required=False, allow_null=True, allow_blank=True)
     filename = serializers.CharField(required=False, allow_null=True, allow_blank=True)
     file_full_path = serializers.CharField(required=True)
+    source = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
 
 class UpdateId3Serializer(serializers.Serializer):

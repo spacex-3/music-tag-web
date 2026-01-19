@@ -58,7 +58,7 @@
                 {{ progressText }}
             </div>
             <transition name="bk-slide-fade-left">
-                <div style="margin-left: 40px;width: 500px;margin-top: 20px;"
+                <div style="margin-left: 40px;width: 500px;height: 100%;overflow-y: auto;overscroll-behavior: none;padding-top: 20px;box-sizing: border-box; background-color: #fff;"
                     v-show="musicInfo.title && checkedIds.length === 0">
                     <div style="width: 100%;display: flex;align-items: center;">
                         <bk-button :theme="'success'" :loading="isLoading" @click="handleClick" class="mr10"
@@ -73,13 +73,11 @@
 
                     <div style="display: flex;margin-bottom: 10px;align-items: center;margin-top: 10px;">
                         <div class="label1 can-copy" v-bk-tooltips="'变量名:${title}'" v-bk-copy="'${title}'">标题：</div>
-                        <div style="width: 70%;">
-                            <bk-input :clearable="true" v-model="musicInfo.title"></bk-input>
-                        </div>
-                        <div>
-                            <bk-icon type="arrows-right-shape" @click="toggleLock('title')"
-                                style="cursor: pointer;color: #64c864;margin-left: 20px;">
-                            </bk-icon>
+                        <div style="width: 70%; display: flex;">
+                            <bk-input :clearable="true" v-model="musicInfo.title" style="flex: 1;"></bk-input>
+                            <bk-button :theme="'primary'" :text="true" size="small" style="margin-left: 5px;" @click="toggleLock('title')">
+                                <bk-icon type="search" />
+                            </bk-button>
                         </div>
                     </div>
                     <div v-for="(item, index) in showFields" :key="'l1' + index">
@@ -120,7 +118,7 @@
                                 <bk-select
                                     :disabled="false"
                                     v-model="musicInfo.genre"
-                                    style="width: 250px;background: #fff;"
+                                    style="width: 100%;background: #fff;"
                                     ext-cls="select-custom"
                                     ext-popover-cls="select-popover-custom"
                                     :placeholder="'请选择歌曲风格'"
@@ -139,7 +137,7 @@
                                 <bk-select
                                     :disabled="false"
                                     v-model="musicInfo.language"
-                                    style="width: 250px;background: #fff;"
+                                    style="width: 100%;background: #fff;"
                                     ext-cls="select-custom"
                                     ext-popover-cls="select-popover-custom"
                                     :placeholder="'请选择歌曲语言'"
@@ -165,11 +163,6 @@
                                 <div style="width: 70%;">
                                     <bk-input :clearable="true" v-model="musicInfo.lyrics" type="textarea" :rows="15">
                                     </bk-input>
-                                </div>
-                                <div>
-                                    <bk-icon type="arrows-right-shape" @click="translation()"
-                                        style="cursor: pointer;color: #64c864;margin-left: 20px;">
-                                    </bk-icon>
                                 </div>
                             </div>
                             <div style="display: flex;margin-top: 10px;">
@@ -435,7 +428,58 @@
                     style="display: flex;flex-direction: column;margin-top: 20px;flex: 1;margin-right: 20px;margin-left: 20px;"
                     v-show="fadeShowDetail">
                     <div v-if="SongList.length === 0">
-                        <span style="margin-left: 30%;margin-top: 30%;">暂无歌曲信息</span>
+                        <!-- Music Player Section -->
+                        <div v-if="currentPlayingFile" style="padding: 10px; display: flex; flex-direction: column; height: calc(100vh - 140px); overflow: hidden;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+                                <img v-if="musicInfo.artwork" :src="musicInfo.artwork" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; flex-shrink: 0;" />
+                                <div v-else style="width: 60px; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <bk-icon type="music" style="font-size: 24px; color: #fff;"></bk-icon>
+                                </div>
+                                <div style="flex: 1; min-width: 0;">
+                                    <div style="font-weight: bold; font-size: 15px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ musicInfo.title || fileName }}</div>
+                                    <div style="color: #666; font-size: 13px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ musicInfo.artist || '未知艺术家' }} - {{ musicInfo.album || '未知专辑' }}</div>
+                                </div>
+                            </div>
+                            <audio ref="audioPlayer" :src="audioSrc" controls style="width: 100%; margin-bottom: 10px; flex-shrink: 0;"
+                                @timeupdate="onAudioTimeUpdate" @loadedmetadata="onAudioLoaded" @error="onAudioError"></audio>
+
+                            <!-- Lyrics Offset Controls -->
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-shrink: 0; font-size: 12px; background: #f0f8ff; padding: 4px 8px; border-radius: 4px;">
+                                <div style="display: flex; align-items: center;">
+                                    <span style="margin-right: 5px;">偏移:</span>
+                                    <bk-button :text="true" size="small" @click="adjustLyricsOffset(-0.05)" title="延迟 -50ms">
+                                        <bk-icon type="minus-circle-shape" style="font-size: 14px;" />
+                                    </bk-button>
+                                    <span style="margin: 0 5px; min-width: 50px; text-align: center;">{{ lyricsOffset > 0 ? '+' : '' }}{{ Math.round(lyricsOffset * 1000) }}ms</span>
+                                    <bk-button :text="true" size="small" @click="adjustLyricsOffset(0.05)" title="延迟 +50ms">
+                                        <bk-icon type="plus-circle-shape" style="font-size: 14px;" />
+                                    </bk-button>
+                                </div>
+                                <bk-button :theme="'primary'" :text="true" size="small" v-if="lyricsOffset !== 0" @click="applyLyricsOffset">
+                                    应用到文本
+                                </bk-button>
+                            </div>
+
+                            <div v-if="parsedLyrics.length" ref="lyricsContainer" style="flex: 1; overflow-y: auto; background: linear-gradient(to bottom, #f8f9fa, #fff); border-radius: 8px; padding: 12px; border: 1px solid #eee; scroll-behavior: smooth;">
+                                <div style="text-align: center; line-height: 2; font-size: 13px;">
+                                    <div v-for="(lyric, idx) in parsedLyrics" :key="idx"
+                                        :ref="'lyricLine' + idx"
+                                        :style="{
+                                            padding: '4px 8px',
+                                            borderRadius: '4px',
+                                            transition: 'all 0.3s ease',
+                                            color: idx === currentLyricIndex ? '#3a84ff' : '#666',
+                                            fontWeight: idx === currentLyricIndex ? '600' : '400',
+                                            fontSize: idx === currentLyricIndex ? '15px' : '13px',
+                                            background: idx === currentLyricIndex ? 'rgba(58, 132, 255, 0.1)' : 'transparent'
+                                        }">{{ lyric.text }}</div>
+                                </div>
+                            </div>
+                            <div v-else style="flex: 1; display: flex; align-items: center; justify-content: center; color: #999; font-size: 13px; background: #f8f9fa; border-radius: 8px;">
+                                暂无歌词
+                            </div>
+                        </div>
+                        <span v-else style="margin-left: 30%;margin-top: 30%;">暂无歌曲信息</span>
                     </div>
                     <div v-else>
                         <div class="parent">
@@ -461,19 +505,19 @@
                             <div v-else>
                                 <bk-image fit="contain" :src="item.album_img"
                                     style="width: 64px;cursor: pointer;"
-                                    @click="handleCopy('album_img',item.album_img)">
+                                    @click="handleCopy('album_img',item.album_img, item.source)">
                                 </bk-image>
                             </div>
-                            <div @click="handleCopy('title',item.name)" class="music-item">
+                            <div @click="handleCopy('title',item.name, item.source)" class="music-item">
                                 <span v-if="item.source" :style="{ background: item.source === 'netease' ? '#c20c0c' : '#31c27c', color: 'white', padding: '1px 4px', borderRadius: '3px', fontSize: '10px', marginRight: '4px' }">{{ item.source === 'netease' ? '网易云' : 'QQ音乐' }}</span>
                                 {{
                                     item.name
                                 }}
                             </div>
-                            <div @click="handleCopy('artist',item.artist)" class="music-item">
+                            <div @click="handleCopy('artist',item.artist, item.source)" class="music-item">
                                 {{ item.artist }}
                             </div>
-                            <div @click="handleCopy('album',item.album)" class="music-item">
+                            <div @click="handleCopy('album',item.album, item.source)" class="music-item">
                                 {{
                                     item.album
                                 }}
@@ -749,7 +793,10 @@
                             {{ item.display_time }}
                         </div>
                     </div>
-                    <div v-if="item.error_msg" style="color: #ea3636; font-size: 12px; margin-left: 24px; margin-top: 4px;">
+                    <div v-if="item.detail_msg && item.type === 'success'" style="color: #2dcb56; font-size: 12px; margin-left: 24px; margin-top: 4px;">
+                        {{ item.detail_msg }}
+                    </div>
+                    <div v-if="item.error_msg && item.type === 'failed'" style="color: #ea3636; font-size: 12px; margin-left: 24px; margin-top: 4px;">
                         {{ item.error_msg }}
                     </div>
                 </div>
@@ -759,6 +806,208 @@
             </div>
             <div style="margin-top: 15px; text-align: right;">
                 <bk-button @click="historyVisible = false">关闭</bk-button>
+            </div>
+        </bk-dialog>
+
+        <!-- Statistics Dialog -->
+        <bk-dialog v-model="statsVisible"
+            theme="primary"
+            :mask-close="true"
+            width="1000"
+            :show-footer="false"
+            title="媒体统计">
+            <div v-if="statsLoading" style="text-align: center; padding: 40px;">
+                <bk-icon type="refresh" style="animation: spin 2s linear infinite; font-size: 24px;"></bk-icon>
+                <div style="margin-top: 10px;">正在扫描媒体库...</div>
+            </div>
+            <div v-else-if="statsData || statsDetailData">
+                <!-- Breadcrumb Navigation -->
+                <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                    <span @click="resetStatsView" style="cursor: pointer; color: #3a84ff;">首页</span>
+                    <span v-if="statsBreadcrumb.length > 0" style="color: #999;">→</span>
+                    <span v-for="(crumb, idx) in statsBreadcrumb" :key="idx" style="display: flex; align-items: center; gap: 8px;">
+                        <span @click="navigateBreadcrumb(idx)" :style="{ cursor: idx < statsBreadcrumb.length - 1 ? 'pointer' : 'default', color: idx < statsBreadcrumb.length - 1 ? '#3a84ff' : '#333' }">
+                            {{ crumb.label }}
+                        </span>
+                        <span v-if="idx < statsBreadcrumb.length - 1" style="color: #999;">→</span>
+                    </span>
+                </div>
+
+                <!-- Level 0: Main Stats View -->
+                <div v-if="statsDetailData === null && statsData">
+                    <div style="margin-bottom: 15px; color: #666;">
+                        共扫描 <strong>{{ statsData.total_files }}</strong> 个文件
+                    </div>
+                    <bk-button-group style="margin-bottom: 15px;">
+                        <bk-button :theme="statsTab === 'albums' ? 'primary' : 'default'" @click="statsTab = 'albums'">
+                            📀 专辑 ({{ statsData.albums_count }})
+                        </bk-button>
+                        <bk-button :theme="statsTab === 'artists' ? 'primary' : 'default'" @click="statsTab = 'artists'">
+                            🎤 艺术家 ({{ statsData.artists_count }})
+                        </bk-button>
+                        <bk-button :theme="statsTab === 'album_artists' ? 'primary' : 'default'" @click="statsTab = 'album_artists'">
+                            👥 专辑艺术家 ({{ statsData.album_artists_count }})
+                        </bk-button>
+                        <bk-button :theme="statsTab === 'has_info' ? 'primary' : 'default'" @click="statsTab = 'has_info'">
+                            ✅ 有信息 ({{ statsData.has_info_count }})
+                        </bk-button>
+                        <bk-button :theme="statsTab === 'no_info' ? 'primary' : 'default'" @click="statsTab = 'no_info'">
+                            ❌ 无信息 ({{ statsData.no_info_count }})
+                        </bk-button>
+                    </bk-button-group>
+
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        <!-- Albums Tab - Direct to songs -->
+                        <div v-if="statsTab === 'albums'">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                                <thead>
+                                    <tr style="background: #f5f5f5; text-align: left;">
+                                        <th style="padding: 10px; border-bottom: 2px solid #ddd;">专辑</th>
+                                        <th style="padding: 10px; border-bottom: 2px solid #ddd;">专辑艺术家</th>
+                                        <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 80px;">歌曲数</th>
+                                        <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 100px;">刮削信息</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, idx) in statsData.albums" :key="'album-' + idx"
+                                        style="cursor: pointer;" :style="{ background: idx % 2 === 0 ? '#fff' : '#fafafa' }"
+                                        @click="drillDownAlbum(item.name)">
+                                        <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: 500;">{{ item.name }}</td>
+                                        <td style="padding: 10px; border-bottom: 1px solid #eee; color: #666;">{{ item.albumartist || '-' }}</td>
+                                        <td style="padding: 10px; border-bottom: 1px solid #eee;">{{ item.count }}</td>
+                                        <td style="padding: 10px; border-bottom: 1px solid #eee;">
+                                            <span :style="{ color: item.scraped_count === item.count ? '#2dcb56' : '#ff9c01' }">
+                                                {{ item.scraped_count }}/{{ item.count }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Artists Tab - Drill to albums -->
+                        <div v-if="statsTab === 'artists'">
+                            <div v-for="(item, idx) in statsData.artists" :key="'artist-' + idx"
+                                style="padding: 10px 12px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; justify-content: space-between; align-items: center;"
+                                @click="drillDownArtist(item.name)" :style="{ background: idx % 2 === 0 ? '#fff' : '#fafafa' }">
+                                <span style="font-weight: 500;">{{ item.name }}</span>
+                                <span style="color: #999; font-size: 13px;">{{ item.count }} 首</span>
+                            </div>
+                        </div>
+
+                        <!-- Album Artists Tab - Drill to albums -->
+                        <div v-if="statsTab === 'album_artists'">
+                            <div v-for="(item, idx) in statsData.album_artists" :key="'aa-' + idx"
+                                style="padding: 10px 12px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; justify-content: space-between; align-items: center;"
+                                @click="drillDownAlbumArtist(item.name)" :style="{ background: idx % 2 === 0 ? '#fff' : '#fafafa' }">
+                                <span style="font-weight: 500;">{{ item.name }}</span>
+                                <span style="color: #999; font-size: 13px;">{{ item.count }} 首</span>
+                            </div>
+                        </div>
+
+                        <!-- Has Info Tab -->
+                        <div v-if="statsTab === 'has_info'">
+                            <div v-for="(item, idx) in statsData.has_info" :key="'hi-' + idx"
+                                style="padding: 8px 12px; border-bottom: 1px solid #eee; cursor: pointer;"
+                                @click="navigateToStatsItem(item)">
+                                <div>{{ item.filename }}</div>
+                                <div style="font-size: 12px; color: #666;">
+                                    {{ item.artist }} - {{ item.album }}
+                                    <span v-if="item.has_lyrics" style="color: #2dcb56; margin-left: 8px;">有歌词</span>
+                                    <span v-if="item.has_cover" style="color: #2dcb56; margin-left: 8px;">有封面</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- No Info Tab -->
+                        <div v-if="statsTab === 'no_info'">
+                            <div v-for="(item, idx) in statsData.no_info" :key="'ni-' + idx"
+                                style="padding: 8px 12px; border-bottom: 1px solid #eee; cursor: pointer; color: #ea3636;"
+                                @click="navigateToStatsItem(item)">
+                                <div>{{ item.filename }}</div>
+                                <div style="font-size: 12px; color: #999;">{{ item.parent_path }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Level 1: Albums List (from Artist/AlbumArtist drill-down) -->
+                <div v-if="statsDetailData && statsDetailData.type === 'albums'">
+                    <div style="margin-bottom: 15px; color: #666;">
+                        {{ statsDetailData.name }} 共有 <strong>{{ statsDetailData.albums.length }}</strong> 张专辑，<strong>{{ statsDetailData.total_songs }}</strong> 首歌
+                    </div>
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: #f5f5f5; text-align: left;">
+                                    <th style="padding: 10px; border-bottom: 2px solid #ddd;">专辑</th>
+                                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 80px;">歌曲数</th>
+                                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 100px;">有刮削信息</th>
+                                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 80px;">年份</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(album, idx) in statsDetailData.albums" :key="idx"
+                                    style="cursor: pointer;" :style="{ background: idx % 2 === 0 ? '#fff' : '#fafafa' }"
+                                    @click="drillDownAlbum(album.name)">
+                                    <td style="padding: 10px; border-bottom: 1px solid #eee;">{{ album.name }}</td>
+                                    <td style="padding: 10px; border-bottom: 1px solid #eee;">{{ album.song_count }}</td>
+                                    <td style="padding: 10px; border-bottom: 1px solid #eee;">
+                                        <span :style="{ color: album.scraped_count === album.song_count ? '#2dcb56' : '#ff9c01' }">
+                                            {{ album.scraped_count }}/{{ album.song_count }}
+                                        </span>
+                                    </td>
+                                    <td style="padding: 10px; border-bottom: 1px solid #eee;">{{ album.year || '-' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Level 2: Songs List (from Album drill-down) -->
+                <div v-if="statsDetailData && statsDetailData.type === 'songs'">
+                    <div style="margin-bottom: 15px; color: #666;">
+                        专辑《{{ statsDetailData.name }}》共有 <strong>{{ statsDetailData.total_songs }}</strong> 首歌
+                    </div>
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                            <thead>
+                                <tr style="background: #f5f5f5; text-align: left;">
+                                    <th style="padding: 8px; border-bottom: 2px solid #ddd;">标题</th>
+                                    <th style="padding: 8px; border-bottom: 2px solid #ddd;">艺术家</th>
+                                    <th style="padding: 8px; border-bottom: 2px solid #ddd;">专辑艺术家</th>
+                                    <th style="padding: 8px; border-bottom: 2px solid #ddd;">年份</th>
+                                    <th style="padding: 8px; border-bottom: 2px solid #ddd;">流派</th>
+                                    <th style="padding: 8px; border-bottom: 2px solid #ddd; text-align: center;">歌词</th>
+                                    <th style="padding: 8px; border-bottom: 2px solid #ddd; text-align: center;">封面</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(song, idx) in statsDetailData.songs" :key="idx"
+                                    style="cursor: pointer;" :style="{ background: idx % 2 === 0 ? '#fff' : '#fafafa' }"
+                                    @click="navigateToStatsItem(song)">
+                                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ song.title }}</td>
+                                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ song.artist || '-' }}</td>
+                                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ song.albumartist || '-' }}</td>
+                                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ song.year || '-' }}</td>
+                                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ song.genre || '-' }}</td>
+                                    <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: center;">
+                                        <span :style="{ color: song.has_lyrics ? '#2dcb56' : '#ccc' }">{{ song.has_lyrics ? '✓' : '✗' }}</span>
+                                    </td>
+                                    <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: center;">
+                                        <span :style="{ color: song.has_cover ? '#2dcb56' : '#ccc' }">{{ song.has_cover ? '✓' : '✗' }}</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div v-else style="text-align: center; padding: 40px; color: #999;">
+                请先选择一个媒体目录
+            </div>
+            <div style="margin-top: 15px; text-align: right;">
+                <bk-button @click="statsVisible = false">关闭</bk-button>
             </div>
         </bk-dialog>
 
@@ -921,12 +1170,14 @@
                 musicInfo: {
                     'genre': '流行',
                     'is_save_lyrics_file': false,
-                    'is_save_album_cover': false
+                    'is_save_album_cover': false,
+                    'source': ''
                 },
                 musicInfoManual: {
                     'genre': '流行',
                     'is_save_lyrics_file': false,
-                    'is_save_album_cover': false
+                    'is_save_album_cover': false,
+                    'source': ''
                 },
                 fadeShowDir: false,
                 fadeShowDetail: false,
@@ -1002,6 +1253,17 @@
                 albumList: [],
                 selectedAlbum: null,
                 timer: null,
+                statsVisible: false,
+                statsLoading: false,
+                statsData: null,
+                statsTab: 'albums',
+                statsDetailData: null,
+                statsBreadcrumb: [],
+                statsRootPath: '',
+                currentPlayingFile: '',
+                currentLyrics: '',
+                lyricsOffset: 0, // In seconds
+                audioCurrentTime: 0,
                 exampleSetting2: {
                     primary: {
                         visible: false,
@@ -1020,7 +1282,7 @@
             }
         },
         computed: {
-            ...mapGetters(['geFullPath', 'getShowHistory', 'getShowSchedule']),
+            ...mapGetters(['geFullPath', 'getShowHistory', 'getShowSchedule', 'getShowStats']),
             filePath: {
                 get() {
                     if (this.geFullPath) {
@@ -1052,9 +1314,73 @@
                 })
                 if (this.historyFilter === 'all') return all
                 return all.filter(i => i.type === this.historyFilter)
+            },
+            audioSrc() {
+                if (!this.currentPlayingFile) return ''
+                return this.$api.Task.streamAudioUrl(this.currentPlayingFile)
+            },
+            lyricsLines() {
+                // For backward compatibility - just text lines
+                return this.parsedLyrics.map(l => l.text)
+            },
+            parsedLyrics() {
+                if (!this.currentLyrics) return []
+                const lines = this.currentLyrics.split('\n')
+                const result = []
+                for (const line of lines) {
+                    // Match LRC format: [mm:ss.xx] or [mm:ss]
+                    const match = line.match(/^\[(\d{2}):(\d{2})(?:[.:])(\d{2,3})?\](.*)$/)
+                    if (match) {
+                        const min = parseInt(match[1], 10)
+                        const sec = parseInt(match[2], 10)
+                        const ms = match[3] ? parseInt(match[3].padEnd(3, '0'), 10) : 0
+                        // Apply offset here. If offset is +0.05s, we want the lyric to appear 0.05s LATER.
+                        // So the lyric's time should be increased by offset.
+                        const time = min * 60 + sec + ms / 1000 + this.lyricsOffset
+                        const text = match[4].trim()
+                        if (text.length > 0) {
+                            result.push({ time, text })
+                        }
+                    } else {
+                        // Non-timestamped line, skip metadata like [ar:Artist]
+                        const text = line.replace(/\[.*?\]/g, '').trim()
+                        if (text.length > 0 && !line.startsWith('[')) {
+                            result.push({ time: -1, text })
+                        }
+                    }
+                }
+                // Sort by time
+                return result.sort((a, b) => a.time - b.time)
+            },
+            currentLyricIndex() {
+                if (!this.parsedLyrics.length) return -1
+                const currentTime = this.audioCurrentTime
+                // Find the last lyric that has started
+                let idx = -1
+                for (let i = 0; i < this.parsedLyrics.length; i++) {
+                    if (this.parsedLyrics[i].time >= 0 && this.parsedLyrics[i].time <= currentTime) {
+                        idx = i
+                    }
+                }
+                return idx
             }
         },
         watch: {
+            currentLyricIndex(newIdx) {
+                // Auto-scroll to current lyric
+                if (newIdx >= 0 && this.$refs['lyricLine' + newIdx]) {
+                    this.$nextTick(() => {
+                        const el = this.$refs['lyricLine' + newIdx]
+                        const target = Array.isArray(el) ? el[0] : el
+                        if (target && this.$refs.lyricsContainer) {
+                            const container = this.$refs.lyricsContainer
+                            const lineTop = target.offsetTop - container.offsetTop
+                            const scrollTo = lineTop - container.clientHeight / 2 + target.clientHeight / 2
+                            container.scrollTop = Math.max(0, scrollTo)
+                        }
+                    })
+                }
+            },
             getShowSchedule(val) {
                 if (val) {
                     this.openScheduleDialog()
@@ -1065,6 +1391,17 @@
                 if (val) {
                     this.historyVisible = true
                     this.$store.commit('setShowHistory', false)
+                }
+            },
+            getShowStats(val) {
+                if (val) {
+                    this.statsVisible = true
+                    this.$store.commit('setShowStats', false)
+                }
+            },
+            statsVisible(val) {
+                if (val) {
+                    this.loadStats()
                 }
             },
             historyVisible(val) {
@@ -1086,7 +1423,7 @@
                     <span class={titleClass} domPropsInnerHTML={node.title.slice(0, 25)}
                         onClick={() => {
                             this.nodeClickOne(node)
-                        }} v-bk-tooltips={node.title}>
+                        }}>
                     </span>
                     </span>
                 } else {
@@ -1136,6 +1473,12 @@
                     this.fileName = node.name
                     const separator = this.filePath.endsWith('/') ? '' : '/'
                     this.fullPath = this.filePath + separator + node.name
+
+                    // Set current playing file for the audio player
+                    this.currentPlayingFile = this.fullPath
+                    // Clear search results so player UI shows
+                    this.SongList = []
+
                     this.$api.Task.musicId3({'file_path': this.filePath, 'file_name': node.name}).then((res) => {
                         console.log(res)
                         if (res.result) {
@@ -1149,6 +1492,9 @@
                                     url: this.musicInfo.artwork
                                 }
                             ]
+
+                            // Load lyrics for the player
+                            this.loadFileLyrics(this.fullPath)
                         } else {
                             this.$cwMessage(res.message, 'error')
                         }
@@ -1197,7 +1543,10 @@
                 }
                 console.log(this.checkedIds)
             },
-            handleCopy(k, v) {
+            handleCopy(k, v, source) {
+                if (source) {
+                    this.musicInfo.source = source
+                }
                 if (k === 'lyric') {
                     const resurce = this.resource !== 'smart_tag' ? this.resource : v.resource
                     this.$api.Task.fetchLyric({'song_id': v.id, 'resource': resurce}).then((res) => {
@@ -1227,12 +1576,15 @@
                 }
             },
             copyAll(item) {
-                this.handleCopy('title', item.name)
-                this.handleCopy('year', item.year)
-                this.handleCopy('lyric', item)
-                this.handleCopy('album', item.album)
-                this.handleCopy('artist', item.artist)
-                this.handleCopy('album_img', item.album_img)
+                console.log('DEBUG: copyAll item:', item)
+                const s = item.source || ''
+                this.handleCopy('title', item.name, s)
+                this.handleCopy('year', item.year, s)
+                this.handleCopy('lyric', item, s)
+                this.handleCopy('album', item.album, s)
+                this.handleCopy('artist', item.artist, s)
+                this.handleCopy('album_img', item.album_img, s)
+                this.musicInfo.source = s
             },
             nodeExpandedOne(node, expanded) {
             },
@@ -1252,6 +1604,9 @@
                     }).then((res) => {
                         this.fadeShowDetail = true
                         this.SongList = res.data
+                        if (!res.data || res.data.length === 0) {
+                            this.$cwMessage('未找到相关歌曲', 'warning')
+                        }
                     })
                 }
             },
@@ -1495,6 +1850,7 @@
                 this.musicInfo.year = this.albumSearchResults.year
                 this.musicInfo.album_img = this.albumSearchResults.album_img
                 this.musicInfo.tracknumber = track.idx
+                this.musicInfo.source = this.resource || 'netease' // Default to current resource
 
                 // Update Cover Preview
                 this.files1 = [{
@@ -1693,11 +2049,12 @@
                                     album_img: this.albumSearchResults.album_img,
                                     tracknumber: m.track.idx,
                                     lyrics: lyrics,
-                                    genre: '',
+                                    genre: m.track.genre || this.albumSearchResults.genre || '',
                                     comment: '',
-                                    discnumber: null,
+                                    discnumber: m.track.disc || null,
                                     is_save_lyrics_file: true,
-                                    is_save_album_cover: true
+                                    is_save_album_cover: true,
+                                    source: resource
                                 })
                             }
                             this.isScraping = false
@@ -1834,7 +2191,7 @@
                                 parent_path: t.parent_path,
                                 created_at: t.created_at,
                                 display_time: time,
-                                error_msg: ''
+                                detail_msg: t.detail_msg || ''
                             }
                         })
                         this.failedItems = tasks.filter(t => t.state === 'failed' || t.state === 'fail').map(t => {
@@ -1873,12 +2230,176 @@
                     // Close the history dialog if open
                     this.scheduleVisible = false
                 }
+            },
+            loadStats() {
+                if (!this.filePath) {
+                    this.statsData = null
+                    return
+                }
+                this.statsLoading = true
+                this.statsData = null
+                this.statsDetailData = null
+                this.statsBreadcrumb = []
+                this.statsRootPath = this.filePath
+                this.$api.Task.mediaStats({ folder_path: this.filePath }).then((res) => {
+                    this.statsLoading = false
+                    if (res.result) {
+                        this.statsData = res.data
+                    } else {
+                        this.$cwMessage(res.message || '加载统计失败', 'error')
+                    }
+                }).catch(() => {
+                    this.statsLoading = false
+                    this.$cwMessage('加载统计失败', 'error')
+                })
+            },
+            navigateToStatsItem(item) {
+                if (item && item.parent_path) {
+                    this.filePath = item.parent_path
+                    this.handleSearchFile()
+                    this.statsVisible = false
+                }
+            },
+            resetStatsView() {
+                this.statsDetailData = null
+                this.statsBreadcrumb = []
+            },
+            navigateBreadcrumb(idx) {
+                if (idx < this.statsBreadcrumb.length - 1) {
+                    // Navigate to that level
+                    const crumb = this.statsBreadcrumb[idx]
+                    if (crumb.type === 'root') {
+                        this.resetStatsView()
+                    } else if (crumb.type === 'artist') {
+                        this.drillDownArtist(crumb.name, false)
+                    } else if (crumb.type === 'album_artist') {
+                        this.drillDownAlbumArtist(crumb.name, false)
+                    }
+                }
+            },
+            drillDownArtist(name, updateBreadcrumb = true) {
+                this.statsLoading = true
+                this.$api.Task.mediaStatsDetail({
+                    folder_path: this.statsRootPath,
+                    view_type: 'artist_albums',
+                    name: name
+                }).then((res) => {
+                    this.statsLoading = false
+                    if (res.result) {
+                        this.statsDetailData = res.data
+                        if (updateBreadcrumb) {
+                            this.statsBreadcrumb = [{ type: 'artist', name: name, label: '🎤 ' + name }]
+                        }
+                    }
+                }).catch(() => {
+                    this.statsLoading = false
+                })
+            },
+            drillDownAlbumArtist(name, updateBreadcrumb = true) {
+                this.statsLoading = true
+                this.$api.Task.mediaStatsDetail({
+                    folder_path: this.statsRootPath,
+                    view_type: 'album_artist_albums',
+                    name: name
+                }).then((res) => {
+                    this.statsLoading = false
+                    if (res.result) {
+                        this.statsDetailData = res.data
+                        if (updateBreadcrumb) {
+                            this.statsBreadcrumb = [{ type: 'album_artist', name: name, label: '👥 ' + name }]
+                        }
+                    }
+                }).catch(() => {
+                    this.statsLoading = false
+                })
+            },
+            drillDownAlbum(name) {
+                this.statsLoading = true
+                this.$api.Task.mediaStatsDetail({
+                    folder_path: this.statsRootPath,
+                    view_type: 'album_songs',
+                    name: name
+                }).then((res) => {
+                    this.statsLoading = false
+                    if (res.result) {
+                        this.statsDetailData = res.data
+                        // Add to breadcrumb if coming from artist view
+                        if (this.statsBreadcrumb.length > 0 && this.statsBreadcrumb[this.statsBreadcrumb.length - 1].type !== 'album') {
+                            this.statsBreadcrumb.push({ type: 'album', name: name, label: '📀 ' + name })
+                        } else if (this.statsBreadcrumb.length === 0) {
+                            this.statsBreadcrumb = [{ type: 'album', name: name, label: '📀 ' + name }]
+                        }
+                    }
+                }).catch(() => {
+                    this.statsLoading = false
+                })
+            },
+            loadFileLyrics(filePath) {
+                this.currentLyrics = ''
+                this.$api.Task.getLyrics({ file_path: filePath }).then((res) => {
+                    if (res.result) {
+                        // Prefer embedded lyrics, fallback to lrc file
+                        this.currentLyrics = res.data.embedded || res.data.lrc_file || ''
+                    }
+                }).catch(() => {
+                    this.currentLyrics = ''
+                })
+            },
+            adjustLyricsOffset(delta) {
+                this.lyricsOffset += delta
+            },
+            applyLyricsOffset() {
+                if (this.lyricsOffset === 0) return
+
+                const lines = this.musicInfo.lyrics.split('\n')
+                const newLines = lines.map(line => {
+                    const match = line.match(/^\[(\d{2}):(\d{2})(?:[.:])(\d{2,3})?\](.*)$/)
+                    if (match) {
+                        const min = parseInt(match[1], 10)
+                        const sec = parseInt(match[2], 10)
+                        const ms = match[3] ? parseInt(match[3].padEnd(3, '0'), 10) : 0
+                        let totalSeconds = min * 60 + sec + ms / 1000
+                        totalSeconds += this.lyricsOffset
+
+                        if (totalSeconds < 0) totalSeconds = 0
+
+                        const newMin = Math.floor(totalSeconds / 60)
+                        const newSec = Math.floor(totalSeconds % 60)
+                        const newMs = Math.round((totalSeconds - newMin * 60 - newSec) * 1000)
+
+                        const minStr = String(newMin).padStart(2, '0')
+                        const secStr = String(newSec).padStart(2, '0')
+                        const msStr = String(newMs).padStart(3, '0')
+                        const text = match[4] // Preserve original spacing
+
+                        return `[${minStr}:${secStr}.${msStr}]${text}`
+                    }
+                    return line
+                })
+
+                this.musicInfo.lyrics = newLines.join('\n')
+                this.lyricsOffset = 0
+                this.$cwMessage('已应用歌词偏移', 'success')
+            },
+            onAudioTimeUpdate(event) {
+                this.audioCurrentTime = event.target.currentTime
+            },
+            onAudioLoaded(event) {
+                console.log('Audio loaded, duration:', event.target.duration)
+            },
+            onAudioError(event) {
+                console.error('Audio error:', event.target.error)
+                console.error('Audio src was:', event.target.src)
+                this.$cwMessage('音频加载失败，请检查文件格式或浏览器兼容性', 'error')
             }
 
         }
     }
 </script>
 <style lang="postcss">
+    html, body {
+        overscroll-behavior: none;
+    }
 .bk-table-header .custom-header-cell {
     color: inherit;
     text-decoration: underline;
@@ -1966,7 +2487,8 @@
     .edit-section {
         background: #fff;
         height: calc(100vh - 75px);
-        overflow: scroll;
+        overflow: hidden;
+        overscroll-behavior: none;
         width: 100vh;
         border: 1px solid #173769;
         margin: 10px 10px 10px 10px;
@@ -2000,7 +2522,8 @@
     .edit-section {
         background: #fff;
         height: calc(100vh - 75px);
-        overflow: scroll;
+        overflow: hidden;
+        overscroll-behavior: none;
         border: 1px solid #173769;
         margin: 10px 10px 10px 10px;
         border-radius: 20px;

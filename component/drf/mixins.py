@@ -16,6 +16,12 @@ class ApiGenericMixin(object):
     def finalize_response(self, request, response, *args, **kwargs):
         """统一返回数据格式"""
 
+        # Skip transformation for non-DRF Response objects (e.g., FileResponse, HttpResponse)
+        if not isinstance(response, Response):
+            return super(ApiGenericMixin, self).finalize_response(
+                request, response, *args, **kwargs
+            )
+
         if response.status_code == 403:
             pass
         if response.data is None:

@@ -9,7 +9,9 @@
 .travis.yml
 venv
 .git
-/web/
+# /web/  <-- Removed to allow frontend build
+web/node_modules
+web/dist
 /build/
 /media/
 db.sqlite3

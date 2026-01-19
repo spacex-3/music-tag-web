@@ -297,18 +297,12 @@ def batch_auto_tag_task(self, batch=None, source_list=None, select_mode=None, ov
                     continue
                 full_path = os.path.join(root, file)
                 
-                # Skip if already scraped (any state)
+                # Skip if already scraped (any state) - DON'T update the record, preserve original state
                 if skip_scraped:
                     existing = Task.objects.filter(full_path=full_path).exists()
                     if existing:
                         log(f"Skipping (already in history): {file}")
                         skip_count += 1
-                        Task.objects.update_or_create(full_path=full_path, defaults={
-                            "state": "skipped",
-                            "parent_path": root,
-                            "filename": file,
-                            "updated_at": datetime.datetime.now()
-                        })
                         skipped_items.append({"name": file, "full_path": full_path})
                         continue
                 
@@ -338,20 +332,15 @@ def batch_auto_tag_task(self, batch=None, source_list=None, select_mode=None, ov
                 file_name = ".".join(each.split(".")[:-1])
                 if file_type not in ALLOW_TYPE:
                     continue
-                full_path = f"{folder.full_path}/{each}"
+                # Normalize path to match DB (remove double slashes etc)
+                full_path = os.path.normpath(f"{folder.full_path}/{each}")
                 
-                # Skip if already scraped (any state)
+                # Skip if already scraped (any state) - DON'T update the record, preserve original state
                 if skip_scraped:
                     existing = Task.objects.filter(full_path=full_path).exists()
                     if existing:
                         log(f"Skipping (already in history): {each}")
                         skip_count += 1
-                        Task.objects.update_or_create(full_path=full_path, defaults={
-                            "state": "skipped",
-                            "parent_path": folder.full_path,
-                            "filename": each,
-                            "updated_at": datetime.datetime.now()
-                        })
                         skipped_items.append({"name": each, "full_path": full_path})
                         continue
                 
@@ -364,6 +353,23 @@ def batch_auto_tag_task(self, batch=None, source_list=None, select_mode=None, ov
             TaskRecord.objects.bulk_create(bulk_set)
 
     task_list = TaskRecord.objects.filter(batch=batch).exclude(icon="icon-folder").all()
+    
+    # Apply skip_scraped to the final task list (handles direct file selection case)
+    if skip_scraped:
+        filtered_tasks = []
+        for task in task_list:
+            # Normalize path for check
+            full_path = os.path.normpath(task.full_path)
+            existing = Task.objects.filter(full_path=full_path).exists()
+            
+            if existing:
+                log(f"Skipping (already in history): {task.song_name}")
+                skip_count += 1
+                skipped_items.append({"name": task.song_name, "full_path": full_path})
+            else:
+                filtered_tasks.append(task)
+        task_list = filtered_tasks
+
     total_tasks = len(task_list)
     current_index = 0
     
@@ -487,9 +493,36 @@ def batch_auto_tag_task(self, batch=None, source_list=None, select_mode=None, ov
                                 except Exception as e:
                                     log(f"Overwrite check error: {e}")
 
+                            matched_song['source'] = resource
                             save_music(f, matched_song, False)
+                        
+                            # Build detail message for logging
+                            written_fields = []
+                            if matched_song.get("title"): written_fields.append("标题")
+                            if matched_song.get("artist"): written_fields.append("艺术家")
+                            if matched_song.get("album"): written_fields.append("专辑")
+                            if matched_song.get("albumartist"): written_fields.append("专辑艺术家")
+                            if matched_song.get("lyrics"): written_fields.append("歌词")
+                            if matched_song.get("album_img"): written_fields.append("封面")
+                            if matched_song.get("year"): written_fields.append("年份")
+                            if matched_song.get("genre"): written_fields.append("风格")
+                            if matched_song.get("tracknumber"): written_fields.append("音轨号")
+                            if matched_song.get("discnumber"): written_fields.append("碟片号")
+
+                            source_map = {
+                                "netease": "网易云音乐",
+                                "qmusic": "QQ音乐",
+                                "migu": "咪咕音乐",
+                                "kugou": "酷狗音乐",
+                                "kuwo": "酷我音乐",
+                            }
+                            source_name = source_map.get(resource, resource)
+                            detail_msg = "写入: " + ", ".join(written_fields) if written_fields else ""
+                            if source_name:
+                                detail_msg += f", 来源: {source_name}"
                         except Exception as e:
                             log(f"Save ID3 Error: {e}")
+                            detail_msg = f"保存部分失败: {e}"
 
                         parent_path = os.path.dirname(task.full_path)
                         Task.objects.update_or_create(full_path=task.full_path, defaults={
@@ -498,7 +531,9 @@ def batch_auto_tag_task(self, batch=None, source_list=None, select_mode=None, ov
                             "filename": os.path.basename(task.full_path),
                             "song_name": task.song_name,
                             "artist_name": task.artist_name,
+                            "artist_name": task.artist_name,
                             "error_msg": "",
+                            "detail_msg": detail_msg,
                             "updated_at": datetime.datetime.now()
                         })
                     else:
@@ -616,6 +651,7 @@ def _process_single_task(task, source_list, select_mode, log=print, overwrite_po
                 "song_name": task.song_name,
                 "artist_name": task.artist_name,
                 "error_msg": "",  # Clear error on success
+                "detail_msg": "写入: 标题, 艺术家, 专辑, 歌词, 封面, 年份, 音轨号, 来源: " + {"netease": "网易云音乐", "qmusic": "QQ音乐"}.get(resource, resource), # Simple log for single mode
                 "updated_at": datetime.datetime.now() # Force update timestamp
             })
             log(f"Success: {os.path.basename(task.full_path)}")
